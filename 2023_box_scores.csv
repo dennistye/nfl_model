@@ -1,0 +1,286 @@
+Date,Visitor,Visitor_score,Home,Home_score,OTFlag,Box Score
+09/07/2023,Detroit Lions,21,Kansas City Chiefs,20,,Box Score
+09/10/2023,Tampa Bay Buccaneers,20,Minnesota Vikings,17,,Box Score
+09/10/2023,Tennessee Titans,15,New Orleans Saints,16,,Box Score
+09/10/2023,Carolina Panthers,10,Atlanta Falcons,24,,Box Score
+09/10/2023,Houston Texans,9,Baltimore Ravens,25,,Box Score
+09/10/2023,San Francisco 49ers,30,Pittsburgh Steelers,7,,Box Score
+09/10/2023,Arizona Cardinals,16,Washington Commanders,20,,Box Score
+09/10/2023,Cincinnati Bengals,3,Cleveland Browns,24,,Box Score
+09/10/2023,Jacksonville Jaguars,31,Indianapolis Colts,21,,Box Score
+09/10/2023,Miami Dolphins,36,Los Angeles Chargers,34,,Box Score
+09/10/2023,Los Angeles Rams,30,Seattle Seahawks,13,,Box Score
+09/10/2023,Las Vegas Raiders,17,Denver Broncos,16,,Box Score
+09/10/2023,Green Bay Packers,38,Chicago Bears,20,,Box Score
+09/10/2023,Philadelphia Eagles,25,New England Patriots,20,,Box Score
+09/10/2023,Dallas Cowboys,40,New York Giants,0,,Box Score
+09/11/2023,Buffalo Bills,16,New York Jets,22,OT,Box Score
+09/14/2023,Minnesota Vikings,28,Philadelphia Eagles,34,,Box Score
+09/17/2023,Indianapolis Colts,31,Houston Texans,20,,Box Score
+09/17/2023,Los Angeles Chargers,24,Tennessee Titans,27,OT,Box Score
+09/17/2023,Seattle Seahawks,37,Detroit Lions,31,OT,Box Score
+09/17/2023,Green Bay Packers,24,Atlanta Falcons,25,,Box Score
+09/17/2023,Las Vegas Raiders,10,Buffalo Bills,38,,Box Score
+09/17/2023,Baltimore Ravens,27,Cincinnati Bengals,24,,Box Score
+09/17/2023,Kansas City Chiefs,17,Jacksonville Jaguars,9,,Box Score
+09/17/2023,Chicago Bears,17,Tampa Bay Buccaneers,27,,Box Score
+09/17/2023,New York Giants,31,Arizona Cardinals,28,,Box Score
+09/17/2023,San Francisco 49ers,30,Los Angeles Rams,23,,Box Score
+09/17/2023,Washington Commanders,35,Denver Broncos,33,,Box Score
+09/17/2023,New York Jets,10,Dallas Cowboys,30,,Box Score
+09/17/2023,Miami Dolphins,24,New England Patriots,17,,Box Score
+09/18/2023,New Orleans Saints,20,Carolina Panthers,17,,Box Score
+09/18/2023,Cleveland Browns,22,Pittsburgh Steelers,26,,Box Score
+09/21/2023,New York Giants,12,San Francisco 49ers,30,,Box Score
+09/24/2023,New Orleans Saints,17,Green Bay Packers,18,,Box Score
+09/24/2023,Los Angeles Chargers,28,Minnesota Vikings,24,,Box Score
+09/24/2023,New England Patriots,15,New York Jets,10,,Box Score
+09/24/2023,Denver Broncos,20,Miami Dolphins,70,,Box Score
+09/24/2023,Indianapolis Colts,22,Baltimore Ravens,19,OT,Box Score
+09/24/2023,Atlanta Falcons,6,Detroit Lions,20,,Box Score
+09/24/2023,Buffalo Bills,37,Washington Commanders,3,,Box Score
+09/24/2023,Houston Texans,37,Jacksonville Jaguars,17,,Box Score
+09/24/2023,Tennessee Titans,3,Cleveland Browns,27,,Box Score
+09/24/2023,Carolina Panthers,27,Seattle Seahawks,37,,Box Score
+09/24/2023,Dallas Cowboys,16,Arizona Cardinals,28,,Box Score
+09/24/2023,Chicago Bears,10,Kansas City Chiefs,41,,Box Score
+09/24/2023,Pittsburgh Steelers,23,Las Vegas Raiders,18,,Box Score
+09/25/2023,Philadelphia Eagles,25,Tampa Bay Buccaneers,11,,Box Score
+09/25/2023,Los Angeles Rams,16,Cincinnati Bengals,19,,Box Score
+09/28/2023,Detroit Lions,34,Green Bay Packers,20,,Box Score
+10/01/2023,Atlanta Falcons,7,Jacksonville Jaguars,23,,Box Score
+10/01/2023,Cincinnati Bengals,3,Tennessee Titans,27,,Box Score
+10/01/2023,Denver Broncos,31,Chicago Bears,28,,Box Score
+10/01/2023,Tampa Bay Buccaneers,26,New Orleans Saints,9,,Box Score
+10/01/2023,Pittsburgh Steelers,6,Houston Texans,30,,Box Score
+10/01/2023,Baltimore Ravens,28,Cleveland Browns,3,,Box Score
+10/01/2023,Washington Commanders,31,Philadelphia Eagles,34,OT,Box Score
+10/01/2023,Minnesota Vikings,21,Carolina Panthers,13,,Box Score
+10/01/2023,Miami Dolphins,20,Buffalo Bills,48,,Box Score
+10/01/2023,Los Angeles Rams,29,Indianapolis Colts,23,OT,Box Score
+10/01/2023,Las Vegas Raiders,17,Los Angeles Chargers,24,,Box Score
+10/01/2023,Arizona Cardinals,16,San Francisco 49ers,35,,Box Score
+10/01/2023,New England Patriots,3,Dallas Cowboys,38,,Box Score
+10/01/2023,Kansas City Chiefs,23,New York Jets,20,,Box Score
+10/02/2023,Seattle Seahawks,24,New York Giants,3,,Box Score
+10/05/2023,Chicago Bears,40,Washington Commanders,20,,Box Score
+10/08/2023,Jacksonville Jaguars,25,Buffalo Bills,20,,Box Score
+10/08/2023,New Orleans Saints,34,New England Patriots,0,,Box Score
+10/08/2023,Baltimore Ravens,10,Pittsburgh Steelers,17,,Box Score
+10/08/2023,Houston Texans,19,Atlanta Falcons,21,,Box Score
+10/08/2023,Carolina Panthers,24,Detroit Lions,42,,Box Score
+10/08/2023,Tennessee Titans,16,Indianapolis Colts,23,,Box Score
+10/08/2023,New York Giants,16,Miami Dolphins,31,,Box Score
+10/08/2023,Philadelphia Eagles,23,Los Angeles Rams,14,,Box Score
+10/08/2023,Cincinnati Bengals,34,Arizona Cardinals,20,,Box Score
+10/08/2023,New York Jets,31,Denver Broncos,21,,Box Score
+10/08/2023,Kansas City Chiefs,27,Minnesota Vikings,20,,Box Score
+10/08/2023,Dallas Cowboys,10,San Francisco 49ers,42,,Box Score
+10/09/2023,Green Bay Packers,13,Las Vegas Raiders,17,,Box Score
+10/12/2023,Denver Broncos,8,Kansas City Chiefs,19,,Box Score
+10/15/2023,Baltimore Ravens,24,Tennessee Titans,16,,Box Score
+10/15/2023,Minnesota Vikings,19,Chicago Bears,13,,Box Score
+10/15/2023,New Orleans Saints,13,Houston Texans,20,,Box Score
+10/15/2023,Indianapolis Colts,20,Jacksonville Jaguars,37,,Box Score
+10/15/2023,San Francisco 49ers,17,Cleveland Browns,19,,Box Score
+10/15/2023,Seattle Seahawks,13,Cincinnati Bengals,17,,Box Score
+10/15/2023,Washington Commanders,24,Atlanta Falcons,16,,Box Score
+10/15/2023,Carolina Panthers,21,Miami Dolphins,42,,Box Score
+10/15/2023,New England Patriots,17,Las Vegas Raiders,21,,Box Score
+10/15/2023,Detroit Lions,20,Tampa Bay Buccaneers,6,,Box Score
+10/15/2023,Arizona Cardinals,9,Los Angeles Rams,26,,Box Score
+10/15/2023,Philadelphia Eagles,14,New York Jets,20,,Box Score
+10/15/2023,New York Giants,9,Buffalo Bills,14,,Box Score
+10/16/2023,Dallas Cowboys,20,Los Angeles Chargers,17,,Box Score
+10/19/2023,Jacksonville Jaguars,31,New Orleans Saints,24,,Box Score
+10/22/2023,Las Vegas Raiders,12,Chicago Bears,30,,Box Score
+10/22/2023,Detroit Lions,6,Baltimore Ravens,38,,Box Score
+10/22/2023,Cleveland Browns,39,Indianapolis Colts,38,,Box Score
+10/22/2023,Washington Commanders,7,New York Giants,14,,Box Score
+10/22/2023,Buffalo Bills,25,New England Patriots,29,,Box Score
+10/22/2023,Atlanta Falcons,16,Tampa Bay Buccaneers,13,,Box Score
+10/22/2023,Arizona Cardinals,10,Seattle Seahawks,20,,Box Score
+10/22/2023,Pittsburgh Steelers,24,Los Angeles Rams,17,,Box Score
+10/22/2023,Green Bay Packers,17,Denver Broncos,19,,Box Score
+10/22/2023,Los Angeles Chargers,17,Kansas City Chiefs,31,,Box Score
+10/22/2023,Miami Dolphins,17,Philadelphia Eagles,31,,Box Score
+10/23/2023,San Francisco 49ers,17,Minnesota Vikings,22,,Box Score
+10/26/2023,Tampa Bay Buccaneers,18,Buffalo Bills,24,,Box Score
+10/29/2023,Los Angeles Rams,20,Dallas Cowboys,43,,Box Score
+10/29/2023,Minnesota Vikings,24,Green Bay Packers,10,,Box Score
+10/29/2023,Atlanta Falcons,23,Tennessee Titans,28,,Box Score
+10/29/2023,New Orleans Saints,38,Indianapolis Colts,27,,Box Score
+10/29/2023,New England Patriots,17,Miami Dolphins,31,,Box Score
+10/29/2023,New York Jets,13,New York Giants,10,OT,Box Score
+10/29/2023,Jacksonville Jaguars,20,Pittsburgh Steelers,10,,Box Score
+10/29/2023,Philadelphia Eagles,38,Washington Commanders,31,,Box Score
+10/29/2023,Houston Texans,13,Carolina Panthers,15,,Box Score
+10/29/2023,Cleveland Browns,20,Seattle Seahawks,24,,Box Score
+10/29/2023,Cincinnati Bengals,31,San Francisco 49ers,17,,Box Score
+10/29/2023,Baltimore Ravens,31,Arizona Cardinals,24,,Box Score
+10/29/2023,Kansas City Chiefs,9,Denver Broncos,24,,Box Score
+10/29/2023,Chicago Bears,13,Los Angeles Chargers,30,,Box Score
+10/30/2023,Las Vegas Raiders,14,Detroit Lions,26,,Box Score
+11/02/2023,Tennessee Titans,16,Pittsburgh Steelers,20,,Box Score
+11/05/2023,Miami Dolphins,14,Kansas City Chiefs,21,,Box Score
+11/05/2023,Tampa Bay Buccaneers,37,Houston Texans,39,,Box Score
+11/05/2023,Los Angeles Rams,3,Green Bay Packers,20,,Box Score
+11/05/2023,Chicago Bears,17,New Orleans Saints,24,,Box Score
+11/05/2023,Seattle Seahawks,3,Baltimore Ravens,37,,Box Score
+11/05/2023,Minnesota Vikings,31,Atlanta Falcons,28,,Box Score
+11/05/2023,Arizona Cardinals,0,Cleveland Browns,27,,Box Score
+11/05/2023,Washington Commanders,20,New England Patriots,17,,Box Score
+11/05/2023,Indianapolis Colts,27,Carolina Panthers,13,,Box Score
+11/05/2023,New York Giants,6,Las Vegas Raiders,30,,Box Score
+11/05/2023,Dallas Cowboys,23,Philadelphia Eagles,28,,Box Score
+11/05/2023,Buffalo Bills,18,Cincinnati Bengals,24,,Box Score
+11/06/2023,Los Angeles Chargers,27,New York Jets,6,,Box Score
+11/09/2023,Carolina Panthers,13,Chicago Bears,16,,Box Score
+11/12/2023,Indianapolis Colts,10,New England Patriots,6,,Box Score
+11/12/2023,New Orleans Saints,19,Minnesota Vikings,27,,Box Score
+11/12/2023,Houston Texans,30,Cincinnati Bengals,27,,Box Score
+11/12/2023,Cleveland Browns,33,Baltimore Ravens,31,,Box Score
+11/12/2023,Green Bay Packers,19,Pittsburgh Steelers,23,,Box Score
+11/12/2023,Tennessee Titans,6,Tampa Bay Buccaneers,20,,Box Score
+11/12/2023,San Francisco 49ers,34,Jacksonville Jaguars,3,,Box Score
+11/12/2023,Detroit Lions,41,Los Angeles Chargers,38,,Box Score
+11/12/2023,Atlanta Falcons,23,Arizona Cardinals,25,,Box Score
+11/12/2023,Washington Commanders,26,Seattle Seahawks,29,,Box Score
+11/12/2023,New York Giants,17,Dallas Cowboys,49,,Box Score
+11/12/2023,New York Jets,12,Las Vegas Raiders,16,,Box Score
+11/13/2023,Denver Broncos,24,Buffalo Bills,22,,Box Score
+11/16/2023,Cincinnati Bengals,20,Baltimore Ravens,34,,Box Score
+11/19/2023,Los Angeles Chargers,20,Green Bay Packers,23,,Box Score
+11/19/2023,Arizona Cardinals,16,Houston Texans,21,,Box Score
+11/19/2023,New York Giants,31,Washington Commanders,19,,Box Score
+11/19/2023,Dallas Cowboys,33,Carolina Panthers,10,,Box Score
+11/19/2023,Tennessee Titans,14,Jacksonville Jaguars,34,,Box Score
+11/19/2023,Pittsburgh Steelers,10,Cleveland Browns,13,,Box Score
+11/19/2023,Las Vegas Raiders,13,Miami Dolphins,20,,Box Score
+11/19/2023,Chicago Bears,26,Detroit Lions,31,,Box Score
+11/19/2023,Tampa Bay Buccaneers,14,San Francisco 49ers,27,,Box Score
+11/19/2023,Seattle Seahawks,16,Los Angeles Rams,17,,Box Score
+11/19/2023,New York Jets,6,Buffalo Bills,32,,Box Score
+11/19/2023,Minnesota Vikings,20,Denver Broncos,21,,Box Score
+11/20/2023,Philadelphia Eagles,21,Kansas City Chiefs,17,,Box Score
+11/23/2023,Green Bay Packers,29,Detroit Lions,22,,Box Score
+11/23/2023,Washington Commanders,10,Dallas Cowboys,45,,Box Score
+11/23/2023,San Francisco 49ers,31,Seattle Seahawks,13,,Box Score
+11/24/2023,Miami Dolphins,34,New York Jets,13,,Box Score
+11/26/2023,Jacksonville Jaguars,24,Houston Texans,21,,Box Score
+11/26/2023,Carolina Panthers,10,Tennessee Titans,17,,Box Score
+11/26/2023,Tampa Bay Buccaneers,20,Indianapolis Colts,27,,Box Score
+11/26/2023,New Orleans Saints,15,Atlanta Falcons,24,,Box Score
+11/26/2023,Pittsburgh Steelers,16,Cincinnati Bengals,10,,Box Score
+11/26/2023,New England Patriots,7,New York Giants,10,,Box Score
+11/26/2023,Cleveland Browns,12,Denver Broncos,29,,Box Score
+11/26/2023,Los Angeles Rams,37,Arizona Cardinals,14,,Box Score
+11/26/2023,Kansas City Chiefs,31,Las Vegas Raiders,17,,Box Score
+11/26/2023,Buffalo Bills,34,Philadelphia Eagles,37,OT,Box Score
+11/26/2023,Baltimore Ravens,20,Los Angeles Chargers,10,,Box Score
+11/27/2023,Chicago Bears,12,Minnesota Vikings,10,,Box Score
+11/30/2023,Seattle Seahawks,35,Dallas Cowboys,41,,Box Score
+12/03/2023,Indianapolis Colts,31,Tennessee Titans,28,OT,Box Score
+12/03/2023,Detroit Lions,33,New Orleans Saints,28,,Box Score
+12/03/2023,Atlanta Falcons,13,New York Jets,8,,Box Score
+12/03/2023,Los Angeles Chargers,6,New England Patriots,0,,Box Score
+12/03/2023,Arizona Cardinals,24,Pittsburgh Steelers,10,,Box Score
+12/03/2023,Miami Dolphins,45,Washington Commanders,15,,Box Score
+12/03/2023,Denver Broncos,17,Houston Texans,22,,Box Score
+12/03/2023,Carolina Panthers,18,Tampa Bay Buccaneers,21,,Box Score
+12/03/2023,Cleveland Browns,19,Los Angeles Rams,36,,Box Score
+12/03/2023,San Francisco 49ers,42,Philadelphia Eagles,19,,Box Score
+12/03/2023,Kansas City Chiefs,19,Green Bay Packers,27,,Box Score
+12/04/2023,Cincinnati Bengals,34,Jacksonville Jaguars,31,OT,Box Score
+12/07/2023,New England Patriots,21,Pittsburgh Steelers,18,,Box Score
+12/10/2023,Carolina Panthers,6,New Orleans Saints,28,,Box Score
+12/10/2023,Detroit Lions,13,Chicago Bears,28,,Box Score
+12/10/2023,Indianapolis Colts,14,Cincinnati Bengals,34,,Box Score
+12/10/2023,Los Angeles Rams,31,Baltimore Ravens,37,OT,Box Score
+12/10/2023,Tampa Bay Buccaneers,29,Atlanta Falcons,25,,Box Score
+12/10/2023,Houston Texans,6,New York Jets,30,,Box Score
+12/10/2023,Jacksonville Jaguars,27,Cleveland Browns,31,,Box Score
+12/10/2023,Seattle Seahawks,16,San Francisco 49ers,28,,Box Score
+12/10/2023,Minnesota Vikings,3,Las Vegas Raiders,0,,Box Score
+12/10/2023,Denver Broncos,24,Los Angeles Chargers,7,,Box Score
+12/10/2023,Buffalo Bills,20,Kansas City Chiefs,17,,Box Score
+12/10/2023,Philadelphia Eagles,13,Dallas Cowboys,33,,Box Score
+12/11/2023,Tennessee Titans,28,Miami Dolphins,27,,Box Score
+12/11/2023,Green Bay Packers,22,New York Giants,24,,Box Score
+12/14/2023,Los Angeles Chargers,21,Las Vegas Raiders,63,,Box Score
+12/16/2023,Minnesota Vikings,24,Cincinnati Bengals,27,OT,Box Score
+12/16/2023,Pittsburgh Steelers,13,Indianapolis Colts,30,,Box Score
+12/16/2023,Denver Broncos,17,Detroit Lions,42,,Box Score
+12/17/2023,Atlanta Falcons,7,Carolina Panthers,9,,Box Score
+12/17/2023,Chicago Bears,17,Cleveland Browns,20,,Box Score
+12/17/2023,New York Giants,6,New Orleans Saints,24,,Box Score
+12/17/2023,Tampa Bay Buccaneers,34,Green Bay Packers,20,,Box Score
+12/17/2023,Houston Texans,19,Tennessee Titans,16,OT,Box Score
+12/17/2023,New York Jets,0,Miami Dolphins,30,,Box Score
+12/17/2023,Kansas City Chiefs,27,New England Patriots,17,,Box Score
+12/17/2023,Washington Commanders,20,Los Angeles Rams,28,,Box Score
+12/17/2023,San Francisco 49ers,45,Arizona Cardinals,29,,Box Score
+12/17/2023,Dallas Cowboys,10,Buffalo Bills,31,,Box Score
+12/17/2023,Baltimore Ravens,23,Jacksonville Jaguars,7,,Box Score
+12/18/2023,Philadelphia Eagles,17,Seattle Seahawks,20,,Box Score
+12/21/2023,New Orleans Saints,22,Los Angeles Rams,30,,Box Score
+12/23/2023,Cincinnati Bengals,11,Pittsburgh Steelers,34,,Box Score
+12/23/2023,Buffalo Bills,24,Los Angeles Chargers,22,,Box Score
+12/24/2023,Cleveland Browns,36,Houston Texans,22,,Box Score
+12/24/2023,Detroit Lions,30,Minnesota Vikings,24,,Box Score
+12/24/2023,Seattle Seahawks,20,Tennessee Titans,17,,Box Score
+12/24/2023,Indianapolis Colts,10,Atlanta Falcons,29,,Box Score
+12/24/2023,Washington Commanders,28,New York Jets,30,,Box Score
+12/24/2023,Green Bay Packers,33,Carolina Panthers,30,,Box Score
+12/24/2023,Jacksonville Jaguars,12,Tampa Bay Buccaneers,30,,Box Score
+12/24/2023,Arizona Cardinals,16,Chicago Bears,27,,Box Score
+12/24/2023,Dallas Cowboys,20,Miami Dolphins,22,,Box Score
+12/24/2023,New England Patriots,26,Denver Broncos,23,,Box Score
+12/25/2023,Las Vegas Raiders,20,Kansas City Chiefs,14,,Box Score
+12/25/2023,New York Giants,25,Philadelphia Eagles,33,,Box Score
+12/25/2023,Baltimore Ravens,33,San Francisco 49ers,19,,Box Score
+12/28/2023,New York Jets,20,Cleveland Browns,37,,Box Score
+12/30/2023,Detroit Lions,19,Dallas Cowboys,20,,Box Score
+12/31/2023,Atlanta Falcons,17,Chicago Bears,37,,Box Score
+12/31/2023,Tennessee Titans,3,Houston Texans,26,,Box Score
+12/31/2023,New Orleans Saints,23,Tampa Bay Buccaneers,13,,Box Score
+12/31/2023,San Francisco 49ers,27,Washington Commanders,10,,Box Score
+12/31/2023,Carolina Panthers,0,Jacksonville Jaguars,26,,Box Score
+12/31/2023,New England Patriots,21,Buffalo Bills,27,,Box Score
+12/31/2023,Miami Dolphins,19,Baltimore Ravens,56,,Box Score
+12/31/2023,Las Vegas Raiders,20,Indianapolis Colts,23,,Box Score
+12/31/2023,Los Angeles Rams,26,New York Giants,25,,Box Score
+12/31/2023,Arizona Cardinals,35,Philadelphia Eagles,31,,Box Score
+12/31/2023,Pittsburgh Steelers,30,Seattle Seahawks,23,,Box Score
+12/31/2023,Los Angeles Chargers,9,Denver Broncos,16,,Box Score
+12/31/2023,Cincinnati Bengals,17,Kansas City Chiefs,25,,Box Score
+12/31/2023,Green Bay Packers,33,Minnesota Vikings,10,,Box Score
+01/06/2024,Pittsburgh Steelers,17,Baltimore Ravens,10,,Box Score
+01/06/2024,Houston Texans,23,Indianapolis Colts,19,,Box Score
+01/07/2024,Atlanta Falcons,17,New Orleans Saints,48,,Box Score
+01/07/2024,Jacksonville Jaguars,20,Tennessee Titans,28,,Box Score
+01/07/2024,Cleveland Browns,14,Cincinnati Bengals,31,,Box Score
+01/07/2024,Minnesota Vikings,20,Detroit Lions,30,,Box Score
+01/07/2024,New York Jets,17,New England Patriots,3,,Box Score
+01/07/2024,Tampa Bay Buccaneers,9,Carolina Panthers,0,,Box Score
+01/07/2024,Denver Broncos,14,Las Vegas Raiders,27,,Box Score
+01/07/2024,Kansas City Chiefs,13,Los Angeles Chargers,12,,Box Score
+01/07/2024,Los Angeles Rams,21,San Francisco 49ers,20,,Box Score
+01/07/2024,Seattle Seahawks,21,Arizona Cardinals,20,,Box Score
+01/07/2024,Chicago Bears,9,Green Bay Packers,17,,Box Score
+01/07/2024,Philadelphia Eagles,10,New York Giants,27,,Box Score
+01/07/2024,Dallas Cowboys,38,Washington Commanders,10,,Box Score
+01/07/2024,Buffalo Bills,21,Miami Dolphins,14,,Box Score
+01/13/2024,Cleveland Browns,14,Houston Texans,45,,Box Score
+01/13/2024,Miami Dolphins,7,Kansas City Chiefs,26,,Box Score
+01/14/2024,Green Bay Packers,48,Dallas Cowboys,32,,Box Score
+01/14/2024,Los Angeles Rams,23,Detroit Lions,24,,Box Score
+01/15/2024,Pittsburgh Steelers,17,Buffalo Bills,31,,Box Score
+01/15/2024,Philadelphia Eagles,9,Tampa Bay Buccaneers,32,,Box Score
+01/20/2024,Houston Texans,10,Baltimore Ravens,34,,Box Score
+01/20/2024,Green Bay Packers,21,San Francisco 49ers,24,,Box Score
+01/21/2024,Tampa Bay Buccaneers,23,Detroit Lions,31,,Box Score
+01/21/2024,Kansas City Chiefs,27,Buffalo Bills,24,,Box Score
+01/28/2024,Kansas City Chiefs,17,Baltimore Ravens,10,,Box Score
+01/28/2024,Detroit Lions,31,San Francisco 49ers,34,,Box Score
+02/11/2024,San Francisco 49ers,22,Kansas City Chiefs,25,OT,Box Score
