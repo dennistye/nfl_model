@@ -1,23 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>NFL Week 1 Predictor</title>
+    <title>NFL Week Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <h1>NFL Week 1 Matchups</h1>
 
     <form id="prediction-form">
-        <label for="home_team">Home Team:</label>
-        <select id="home_team" name="home_team">
+        <label for="matchup">Select Game:</label>
+        <select id="matchup" name="matchup">
             {% for game in games %}
-                <option value="{{ game.Home }}">{{ game.Home }}</option>
-            {% endfor %}
-        </select>
-
-        <label for="away_team">Visitor Team:</label>
-        <select id="away_team" name="away_team">
-            {% for game in games %}
-                <option value="{{ game.Visitor }}">{{ game.Visitor }}</option>
+                <option value="{{ game.Home }}_{{ game.Visitor }}">{{ game.Visitor }} at {{ game.Home }}</option>
             {% endfor %}
         </select>
 
@@ -26,26 +20,6 @@
 
     <div id="result"></div>
 
-    <script>
-        document.getElementById('prediction-form').addEventListener('submit', async function (e) {
-            e.preventDefault();
-
-            const formData = new FormData(this);
-
-            const response = await fetch('/predict', {
-                method: 'POST',
-                body: formData
-            });
-
-            const result = await response.json();
-
-            if (result.error) {
-                document.getElementById('result').innerText = "Error: " + result.error;
-            } else {
-                document.getElementById('result').innerText =
-                    `Prediction: ${result.home_team} vs ${result.away_team} — Home Win Probability: ${result.probability_home_win}`;
-            }
-        });
-    </script>
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
 </body>
 </html>

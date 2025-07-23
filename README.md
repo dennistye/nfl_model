@@ -1,4 +1,4 @@
-# 🏈 NFL Matchup Predictor
+# 🏈 NFL Match Predictor
 
 This project uses historical NFL play-by-play and box score data to build a logistic regression model that predicts the probability of a home team winning upcoming matchups. The model is deployed using a Flask web app.
 

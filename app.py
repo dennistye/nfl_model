@@ -25,15 +25,12 @@ def predict():
         (week1_predictions['Home'] == home) & (week1_predictions['Visitor'] == away)
     ]
 
-    if match.empty:
-        return jsonify({'error': 'Matchup not found'}), 404
-
     prob = float(match.iloc[0]['HomeWinProbability'])
 
     return jsonify({
         'home_team': home,
         'away_team': away,
-        'probability_home_win': round(prob * 100, 2)
+        'probability_home_win': round(prob, 3)
     })
 
 
