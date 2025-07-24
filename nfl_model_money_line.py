@@ -5,15 +5,15 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import cross_val_score
 
 
-box_scores_2023_df = pd.read_csv("2023_box_scores.csv")
+box_scores_2023_df = pd.read_csv("csv_folder/2023_box_scores.csv")
 
-box_scores_2024_df = pd.read_csv("2024_box_scores.csv")
+box_scores_2024_df = pd.read_csv("csv_folder/2024_box_scores.csv")
 
-schedule_2025_df = pd.read_csv("2025_schedule.csv")
+schedule_2025_df = pd.read_csv("csv_folder/2025_schedule.csv")
 
-pbp_2023_df = pd.read_csv("pbp-2023.csv")
+pbp_2023_df = pd.read_csv("csv_folder/pbp-2023.csv")
 
-pbp_2024_df = pd.read_csv("pbp-2024.csv")
+pbp_2024_df = pd.read_csv("csv_folder/pbp-2024.csv")
 
 #change the box scores from NaN to REG for the OTFLag column
 
@@ -330,13 +330,14 @@ city_abbr = {
     "Jacksonville": "JAX",
     "Kansas City": "KC",
     "Las Vegas": "LV",
-    "Los Angeles1": "LAC",  # could be LAR or LAC, update if needed
-    "Los Angeles2": "LA",  # could be LAR or LAC, update if needed
+    "Los Angeles1": "LAC",  
+    "Los Angeles2": "LA",  
     "Miami": "MIA",
     "Minnesota": "MIN",
     "New England": "NE",
     "New Orleans": "NO",
-    "New York": "NYG",  # could be NYJ or NYG — ambiguous
+    "New York1": "NYG",  
+    "New York2": "NYJ",  
     "Philadelphia": "PHI",
     "Pittsburgh": "PIT",
     "San Francisco": "SF",
@@ -406,4 +407,4 @@ upcoming_predictions = upcoming_encoded_final[['Home', 'Visitor', 'HomeWinProbab
 
 #joblib.dump(logreg, "nfl_model.pkl")
 
-upcoming_predictions.to_csv("week1_predictions.csv", index=False)
+upcoming_predictions.to_csv("csv_folder/week1_predictions.csv", index=False)

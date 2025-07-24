@@ -6,8 +6,8 @@ Date,Visitor,Home,Location,Week,Odds
 "Sunday, September 7, 2025",Miami,@ Indianapolis,"Lucas Oil Stadium, Indianapolis, IN",1,Line: IND -1O/U: 46.5
 "Sunday, September 7, 2025",Las Vegas,@ New England,"Gillette Stadium, Foxborough, MA",1,Line: NE -3O/U: 42.5
 "Sunday, September 7, 2025",Arizona,@ New Orleans,"Caesars Superdome, New Orleans, LA",1,Line: ARI -5.5O/U: 42.5
-"Sunday, September 7, 2025",Pittsburgh,@ New York,"MetLife Stadium, East Rutherford, NJ",1,Line: PIT -3O/U: 39.5
-"Sunday, September 7, 2025",New York,@ Washington,"Northwest Stadium, Landover, MD",1,Line: WSH -6.5O/U: 46.5
+"Sunday, September 7, 2025",Pittsburgh,@ New York2,"MetLife Stadium, East Rutherford, NJ",1,Line: PIT -3O/U: 39.5
+"Sunday, September 7, 2025",New York1,@ Washington,"Northwest Stadium, Landover, MD",1,Line: WSH -6.5O/U: 46.5
 "Sunday, September 7, 2025",Carolina,@ Jacksonville,"EverBank Stadium, Jacksonville, FL",1,Line: JAX -3O/U: 46.5
 "Sunday, September 7, 2025",Tennessee,@ Denver,"Empower Field at Mile High, Denver, CO",1,Line: DEN -8O/U: 41.5
 "Sunday, September 7, 2025",San Francisco,@ Seattle,"Lumen Field, Seattle, WA",1,Line: SF -1.5O/U: 45.5
@@ -19,7 +19,7 @@ Date,Visitor,Home,Location,Week,Odds
 "Sunday, September 14, 2025",Jacksonville,@ Cincinnati,"Paycor Stadium, Cincinnati, OH",2,Line: CIN -5.5O/U: 49.5
 "Sunday, September 14, 2025",New York,@ Dallas,"AT&T Stadium, Arlington, TX",2,Line: DAL -4.5O/U: 44.5
 "Sunday, September 14, 2025",Chicago,@ Detroit,"Ford Field, Detroit, MI",2,Line: DET -4.5O/U: 48.5
-"Sunday, September 14, 2025",Los Angeles,@ Tennessee,"Nissan Stadium, Nashville, TN",2,Line: LAR -5.5O/U: 45.5
+"Sunday, September 14, 2025",Los Angeles2,@ Tennessee,"Nissan Stadium, Nashville, TN",2,Line: LAR -5.5O/U: 45.5
 "Sunday, September 14, 2025",New England,@ Miami,"Hard Rock Stadium, Miami Gardens, FL",2,Line: MIA -2.5O/U: 45.5
 "Sunday, September 14, 2025",San Francisco,@ New Orleans,"Caesars Superdome, New Orleans, LA",2,Line: SF -7O/U: 44.5
 "Sunday, September 14, 2025",Buffalo,@ New York,"MetLife Stadium, East Rutherford, NJ",2,Line: BUF -8.5O/U: 44.5
@@ -30,7 +30,7 @@ Date,Visitor,Home,Location,Week,Odds
 "Sunday, September 14, 2025",Philadelphia,@ Kansas City,"GEHA Field at Arrowhead Stadium, Kansas City, MO",2,Line: KC -1.5O/U: 45.5
 "Sunday, September 14, 2025",Atlanta,@ Minnesota,"U.S. Bank Stadium, Minneapolis, MN",2,Line: MIN -4.5O/U: 45.5
 "Monday, September 15, 2025",Tampa Bay,@ Houston,"NRG Stadium, Houston, TX",2,Line: HOU -1.5O/U: 46.5
-"Monday, September 15, 2025",Los Angeles,@ Las Vegas,"Allegiant Stadium, Las Vegas, NV",2,Line: LAC -3O/U: 44.5
+"Monday, September 15, 2025",Los Angeles1,@ Las Vegas,"Allegiant Stadium, Las Vegas, NV",2,Line: LAC -3O/U: 44.5
 "Thursday, September 18, 2025",Miami,@ Buffalo,"Highmark Stadium, Orchard Park, NY",3,"Line: BUF -8.5O/U: 48.5"
 "Sunday, September 21, 2025",Green Bay,@ Cleveland,"Huntington Bank Field, Cleveland, OH",3,"Line: GB -5.5O/U: 43.5"
 "Sunday, September 21, 2025",Indianapolis,@ Tennessee,"Nissan Stadium, Nashville, TN",3,"Line: TEN -1.5O/U: 45.5"
