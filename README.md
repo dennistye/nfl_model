@@ -14,7 +14,7 @@ This project uses historical NFL play-by-play and box score data to build a logi
   - Completion rates
   - Turnover rates
 - Builds a logistic regression model with cross-validation
-- Predicts the probability of a home win for 2025 Week 1 games
+- Predicts the probability of a home win for 2025 Week 1 game
 - Exposes results through a Flask web app and `week1_predictions.csv`
 
 ---
