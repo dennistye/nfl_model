@@ -3,6 +3,7 @@ import pandas as pd
 import joblib
 import xgboost as xgb
 from xgboost import XGBClassifier
+from sklearn.calibration import CalibratedClassifierCV
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import cross_val_score
 import matplotlib.pyplot as plt
@@ -132,6 +133,8 @@ def clean_data(box_scores_2023_df, box_scores_2024_df, pbp_2023_df, pbp_2024_df)
 
     all_data = pd.concat([merged_2023_df, merged_2024_df])
 
+    all_data['Weight'] = all_data['SeasonYear'].apply(lambda x: 1.5 if x == 2024 else 1)
+
     if all_data.isna().any().any():
         print("DataFrame contains NaN values.")
     else:
@@ -143,20 +146,20 @@ def clean_data(box_scores_2023_df, box_scores_2024_df, pbp_2023_df, pbp_2024_df)
 
 def team_features(all_data):
     # 1. Average Pointes Scored
-    # Calculate the average points scored by the home and visitor teams.
+    # Calculate the average points scored by each team when home and away
     avg_points_scored_home = all_data.groupby('Home')['Home_score'].mean()
     avg_points_scored_visitor = all_data.groupby('Visitor')['Visitor_score'].mean()
 
     # 2. Average Points Allowed
-    # Calculate the average points allowed by the home and visitor teams.
+    # Calculate the average points allowed by each the when home and visitor teams.
     avg_points_allowed_home = all_data.groupby('Home')['Visitor_score'].mean()
     avg_points_allowed_visitor = all_data.groupby('Visitor')['Home_score'].mean()
 
-    # Calculate the overall average points scored 
+    # Calculate the overall average points scored by each team
     overall_avg_points_scored = (avg_points_scored_home + avg_points_scored_visitor) / 2
 
     # 3. Win Rate
-    # Calculate the total number of wins for home and visitor teams
+    # Calculate the total number of wins for each home and visitor teams
     home_wins = all_data.groupby('Home')['HomeWon'].sum()
     visitor_wins = all_data.groupby('Visitor').apply(lambda x: len(x) - x['HomeWon'].sum())
 
@@ -190,16 +193,37 @@ def team_features(all_data):
     # 2. Average conceded plays:
     # A play is considered successful for the offense if it results in a touchdown or doesn't result in a turnover.
     # Create a new column 'SuccessfulPlay' in the all_data DataFrame to represent this.
-    all_data['SuccessfulPlay'] = all_data['IsTouchdown'] | (~all_data['IsInterception'] & ~all_data['IsFumble'])
+    #all_data['SuccessfulPlay'] = all_data['IsTouchdown'] | (~all_data['IsInterception'] & ~all_data['IsFumble'])
+    all_data['SuccessfulPlay'] = (
+    (all_data['IsTouchdown']) |
+    (
+        ~all_data['IsInterception'] & 
+        ~all_data['IsFumble'] & 
+        (
+            ((all_data['PlayType'] == 'Pass') & (all_data['Yards'] >= 10)) |
+            ((all_data['PlayType'] == 'Run') & (all_data['Yards'] >= 4))
+        )
+    )
+    )
 
-    # Calculate the average rate of successful plays conceded when playing at home.
+    # # Calculate the average rate of successful plays conceded when playing at home.
     avg_conceded_plays_home = all_data.groupby('Home')['SuccessfulPlay'].mean()
 
-    # Calculate the average rate of successful plays conceded when playing as a visitor.
+    # # Calculate the average rate of successful plays conceded when playing as a visitor.
     avg_conceded_plays_visitor = all_data.groupby('Visitor')['SuccessfulPlay'].mean()
 
-    # Calculate the overall average rate of successful plays conceded for each team.
-    overall_avg_conceded_plays = (avg_conceded_plays_home + avg_conceded_plays_visitor) / 2
+    # # Calculate the overall average rate of successful plays conceded for each team.
+    # overall_avg_conceded_plays = (avg_conceded_plays_home + avg_conceded_plays_visitor) / 2
+
+    # Count of plays faced at home and away
+    num_plays_home = all_data.groupby('Home').size()
+    num_plays_visitor = all_data.groupby('Visitor').size()
+
+    # Weighted overall average
+    overall_avg_conceded_plays = (
+    (avg_conceded_plays_home * num_plays_home + avg_conceded_plays_visitor * num_plays_visitor)
+    / (num_plays_home + num_plays_visitor)
+    )
 
     # 3. Average forced turnovers:
     # Create a new column 'Turnover' that indicates if a play resulted in a turnover (either interception or fumble).
@@ -212,7 +236,17 @@ def team_features(all_data):
     avg_forced_turnovers_visitor = all_data.groupby('Visitor')['Turnover'].mean()
 
     # Calculate the overall average rate of turnovers forced for each team.
-    overall_avg_forced_turnovers = (avg_forced_turnovers_home + avg_forced_turnovers_visitor) / 2
+    #overall_avg_forced_turnovers = (avg_forced_turnovers_home + avg_forced_turnovers_visitor) / 2
+
+    # Number of plays by each team on defense
+    num_def_plays_home = all_data.groupby('Home').size()
+    num_def_plays_visitor = all_data.groupby('Visitor').size()
+
+    # Weighted turnover rate
+    overall_avg_forced_turnovers = (
+    avg_forced_turnovers_home * num_def_plays_home + 
+    avg_forced_turnovers_visitor * num_def_plays_visitor
+    ) / (num_def_plays_home + num_def_plays_visitor)
 
     # Create a new DataFrame to store the defensive features for each team.
     team_features_defensive = pd.DataFrame({
@@ -278,9 +312,10 @@ def team_features(all_data):
     total_yards_allowed_per_game_visitor = all_data.groupby(['SeasonYear', 'Visitor'])['Yards'].sum() / all_data.groupby(['SeasonYear', 'Visitor']).size()
     overall_avg_yards_allowed_per_game = (total_yards_allowed_per_game_home + total_yards_allowed_per_game_visitor).groupby(level=1).mean()
 
-    # 3. Average pass completion allowed rate
-    avg_pass_completion_allowed_rate_home = all_data.groupby('Home').apply(lambda x: 1 - x['IsIncomplete'].mean())
-    avg_pass_completion_allowed_rate_visitor = all_data.groupby('Visitor').apply(lambda x: 1 - x['IsIncomplete'].mean())
+    # 3. Average pass completion allowed rate (only considering pass plays)
+    pass_plays = all_data[all_data['IsPass'] == 1]
+    avg_pass_completion_allowed_rate_home = pass_plays.groupby('Home').apply(lambda x: 1 - x['IsIncomplete'].mean())
+    avg_pass_completion_allowed_rate_visitor = pass_plays.groupby('Visitor').apply(lambda x: 1 - x['IsIncomplete'].mean())
     overall_avg_pass_completion_allowed_rate = (avg_pass_completion_allowed_rate_home + avg_pass_completion_allowed_rate_visitor) / 2
 
     # 4. Average touchdowns allowed per game
@@ -288,10 +323,12 @@ def team_features(all_data):
     avg_touchdowns_allowed_per_game_visitor = all_data.groupby(['SeasonYear', 'Visitor'])['IsTouchdown'].sum() / all_data.groupby(['SeasonYear', 'Visitor']).size()
     overall_avg_touchdowns_allowed_per_game = (avg_touchdowns_allowed_per_game_home + avg_touchdowns_allowed_per_game_visitor).groupby(level=1).mean()
 
-    # 5. Average rush success allowed rate
-    avg_rush_success_allowed_rate_home = all_data.groupby('Home').apply(lambda x: x['Yards'][x['IsRush'] == 1].mean())
-    avg_rush_success_allowed_rate_visitor = all_data.groupby('Visitor').apply(lambda x: x['Yards'][x['IsRush'] == 1].mean())
+    # 5. Average rush success allowed rate (e.g., rushes > 4 yards)
+    rush_plays = all_data[all_data['IsRush'] == 1]
+    avg_rush_success_allowed_rate_home = rush_plays.groupby('Home').apply(lambda x: (x['Yards'] > 4).mean())
+    avg_rush_success_allowed_rate_visitor = rush_plays.groupby('Visitor').apply(lambda x: (x['Yards'] > 4).mean())
     overall_avg_rush_success_allowed_rate = (avg_rush_success_allowed_rate_home + avg_rush_success_allowed_rate_visitor) / 2
+
 
     # Creating a dataframe for the new defensive features
     new_defensive_features = pd.DataFrame({
@@ -378,47 +415,95 @@ def clean_schedule_merge_with_features(schedule_2025_df, team_features_complete)
         print("No NaN values in DataFrame.")
     return upcoming_encoded_final
 
-# Prepare training data
-def prep_and_train(upcoming_encoded_final, team_features_complete, all_data):
+# # Prepare training data
+# def prep_and_train(upcoming_encoded_final, team_features_complete, all_data):
     
-    # Merge play-by-play data with team features for home teams
+#     # Merge play-by-play data with team features for home teams
+#     training_encoded_home = all_data.merge(team_features_complete, left_on='Home', right_on='Team', how='left')
+#     # Merge the result with team features for visitor teams
+#     training_encoded_both = training_encoded_home.merge(team_features_complete, left_on='Visitor', right_on='Team', suffixes=('_Home', '_Visitor'), how='left')
+
+#     # Calculate the difference in features
+#     for col in ['AvgPointsScored', 'WinRate', 'AvgPointsDefended', 'AvgConcededPlays', 'AvgForcedTurnovers',
+#                 'AvgYardsPerPlay', 'AvgYardsPerGame', 'AvgPassCompletionRate', 'AvgTouchdownsPerGame', 'AvgRushSuccessRate',
+#                 'AvgYardsAllowedPerPlay', 'AvgYardsAllowedPerGame', 'AvgPassCompletionAllowedRate', 'AvgTouchdownsAllowedPerGame', 'AvgRushSuccessAllowedRate']:
+#         training_encoded_both[f'Diff_{col}'] = training_encoded_both[f'{col}_Home'] - training_encoded_both[f'{col}_Visitor']
+
+#     # Filtering out the required columns
+#     training_data = training_encoded_both[[col for col in training_encoded_both.columns if 'Diff_' in col]]
+#     training_labels = training_encoded_both['HomeWon']
+
+#     # Initialize the logistic regression model
+#     logreg = LogisticRegression(max_iter=1000)
+
+#     # Evaluate the model's performance using cross-validation
+#     cross_val_scores = cross_val_score(logreg, training_data, training_labels, cv=5)
+
+#     cross_val_scores_mean = cross_val_scores.mean()
+
+#     print(cross_val_scores_mean)
+
+#     logreg.fit(training_data, training_labels)
+
+#     upcoming_game_probabilities = logreg.predict_proba(upcoming_encoded_final[[col for col in upcoming_encoded_final.columns if 'Diff_' in col]])
+
+#     # Extract the probability that the home team will win (second column of the result)
+#     upcoming_game_prob_home_win = upcoming_game_probabilities[:, 1]
+
+#     # Add the predictions to the upcoming games dataframe
+#     upcoming_encoded_final.loc[:, 'HomeWinProbability'] = upcoming_game_prob_home_win
+
+#     # Sort by the probability of the home team winning for better visualization
+#     upcoming_predictions = upcoming_encoded_final[['Home', 'Visitor', 'HomeWinProbability']].sort_values(by='HomeWinProbability', ascending=False)
+
+#     return upcoming_predictions
+
+# Prep and train data with xgboost
+def prep_and_train(upcoming_encoded_final, team_features_complete, all_data):
+    # Merge play-by-play data with team features for home and visitor teams
     training_encoded_home = all_data.merge(team_features_complete, left_on='Home', right_on='Team', how='left')
-    # Merge the result with team features for visitor teams
     training_encoded_both = training_encoded_home.merge(team_features_complete, left_on='Visitor', right_on='Team', suffixes=('_Home', '_Visitor'), how='left')
 
-    # Calculate the difference in features
-    for col in ['AvgPointsScored', 'WinRate', 'AvgPointsDefended', 'AvgConcededPlays', 'AvgForcedTurnovers',
-                'AvgYardsPerPlay', 'AvgYardsPerGame', 'AvgPassCompletionRate', 'AvgTouchdownsPerGame', 'AvgRushSuccessRate',
-                'AvgYardsAllowedPerPlay', 'AvgYardsAllowedPerGame', 'AvgPassCompletionAllowedRate', 'AvgTouchdownsAllowedPerGame', 'AvgRushSuccessAllowedRate']:
+    # Feature diffs
+    feature_cols = ['AvgPointsScored', 'WinRate', 'AvgPointsDefended', 'AvgConcededPlays', 'AvgForcedTurnovers',
+                    'AvgYardsPerPlay', 'AvgYardsPerGame', 'AvgPassCompletionRate', 'AvgTouchdownsPerGame', 'AvgRushSuccessRate',
+                    'AvgYardsAllowedPerPlay', 'AvgYardsAllowedPerGame', 'AvgPassCompletionAllowedRate', 'AvgTouchdownsAllowedPerGame', 'AvgRushSuccessAllowedRate']
+    
+    for col in feature_cols:
         training_encoded_both[f'Diff_{col}'] = training_encoded_both[f'{col}_Home'] - training_encoded_both[f'{col}_Visitor']
 
-    # Filtering out the required columns
+    # Training set
     training_data = training_encoded_both[[col for col in training_encoded_both.columns if 'Diff_' in col]]
     training_labels = training_encoded_both['HomeWon']
 
-    # Initialize the logistic regression model
-    logreg = LogisticRegression(max_iter=1000)
+    # XGBoost classifier
+    xgb_model = XGBClassifier(use_label_encoder=False,
+    eval_metric='logloss',
+    max_depth=3,
+    learning_rate=0.05,
+    n_estimators=100,
+    subsample=0.8,
+    colsample_bytree=0.8)
 
-    # Evaluate the model's performance using cross-validation
-    cross_val_scores = cross_val_score(logreg, training_data, training_labels, cv=5)
+    # Cross-validation scores
+    cross_val_scores = cross_val_score(xgb_model, training_data, training_labels, cv=5)
+    print("XGBoost CV Accuracy:", cross_val_scores.mean())
 
-    cross_val_scores_mean = cross_val_scores.mean()
+    # Train
+    xgb_model.fit(training_data, training_labels)
 
-    print(cross_val_scores_mean)
+    # Calibrate XGBOOST
 
-    logreg.fit(training_data, training_labels)
+    calibrated_model = CalibratedClassifierCV(estimator=xgb_model, cv=5)
+    calibrated_model.fit(training_data, training_labels)
 
-    upcoming_game_probabilities = logreg.predict_proba(upcoming_encoded_final[[col for col in upcoming_encoded_final.columns if 'Diff_' in col]])
+    # Predict upcoming games
+    feature_diff_cols = [col for col in upcoming_encoded_final.columns if 'Diff_' in col]
+    #upcoming_game_probabilities = xgb_model.predict_proba(upcoming_encoded_final[feature_diff_cols])
+    upcoming_game_probabilities = calibrated_model.predict_proba(upcoming_encoded_final[feature_diff_cols])
+    upcoming_encoded_final['HomeWinProbability'] = upcoming_game_probabilities[:, 1]
 
-    # Extract the probability that the home team will win (second column of the result)
-    upcoming_game_prob_home_win = upcoming_game_probabilities[:, 1]
-
-    # Add the predictions to the upcoming games dataframe
-    upcoming_encoded_final.loc[:, 'HomeWinProbability'] = upcoming_game_prob_home_win
-
-    # Sort by the probability of the home team winning for better visualization
     upcoming_predictions = upcoming_encoded_final[['Home', 'Visitor', 'HomeWinProbability']].sort_values(by='HomeWinProbability', ascending=False)
-
     return upcoming_predictions
 
 def main():
@@ -436,6 +521,7 @@ def main():
 
     # Cleaned data
     all_data = clean_data(box_scores_2023_df, box_scores_2024_df, pbp_2023_df, pbp_2024_df)
+    all_data.to_csv("csv_folder/all_data.csv", index=False)
 
     # Adding team features
     team_features_complete = team_features(all_data)

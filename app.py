@@ -25,16 +25,16 @@ def prob_to_moneyline(prob):
     else:
         return round(100 * ((1-prob) / prob))
     
-def adjust_spread(spread):
-    if spread < 1:
-        spread = spread * -1
+# def adjust_spread(spread):
+#     if spread < 1:
+#         spread = spread * -1
 
-    return spread
+#     return spread
     
 
 
 merged_df['PredictedML'] = merged_df['HomeWinProbability'].apply(prob_to_moneyline)
-merged_df['PredictedSpread'] = merged_df['PredictedSpread'].apply(adjust_spread)
+merged_df['PredictedSpread'] = merged_df['PredictedSpread'].apply(lambda x: x*-1 if x < 1 else x)
 
 
 #print(merged_df)
