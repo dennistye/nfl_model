@@ -410,7 +410,7 @@ upcoming_encoded_final['PredictedSpread'] = predicted_spreads
 upcoming_encoded_final['PredictedTotal'] = predicted_totals
 
 final_predictions = upcoming_encoded_final[['Home', 'Visitor', 'PredictedSpread', 'PredictedTotal']]
-final_predictions.to_csv("csv_folder/week1_spread_total_predictions.csv", index=False)
+final_predictions.to_csv("csv_folder/week1_spread_total_predictions_linear_reg.csv", index=False)
 
 # # Initialize the logistic regression model
 # logreg = LogisticRegression(max_iter=1000)

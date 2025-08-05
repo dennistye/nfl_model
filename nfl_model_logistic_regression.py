@@ -454,7 +454,7 @@ def prep_and_train(upcoming_encoded_final, team_features_complete, all_data):
     upcoming_encoded_final.loc[:, 'HomeWinProbability'] = upcoming_game_prob_home_win
 
     # Sort by the probability of the home team winning for better visualization
-    upcoming_predictions = upcoming_encoded_final[['Home', 'Visitor', 'HomeWinProbability']].sort_values(by='HomeWinProbability', ascending=False)
+    upcoming_predictions = upcoming_encoded_final[['Home', 'Visitor', 'HomeWinProbability']]
 
     return upcoming_predictions
 
@@ -487,7 +487,7 @@ def main():
     upcoming_predictions = prep_and_train(upcoming_encoded_final, team_features_complete, all_data)
 
     # Output prediciton to a csv file, eventually will be ouputing to a database
-    upcoming_predictions.to_csv("csv_folder/week1_predictions.csv", index=False)
+    upcoming_predictions.to_csv("csv_folder/week1_predictions_logistic_reg.csv", index=False)
 
 if __name__ == "__main__":
     main()
