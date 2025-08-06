@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, roc_auc_score
 import pandas as pd
 import random
-import nfl_model_xgBoost
+import nfl_model_spread_total_gradient_boost
 import nfl_model_spread_total_linear_reg
 
 seed = 42
@@ -20,7 +20,7 @@ torch.backends.cudnn.benchmark = False
 
 # Suppose your XGBoost output is saved as CSV with columns: Home, Visitor, Probability
 #gb_output_df = pd.read_csv("csv_folder/week1_spread_total_predictions_gradient_boost.csv")
-gb_output_df = nfl_model_xgBoost.main()
+gb_output_df = nfl_model_spread_total_gradient_boost.main()
 
 # Extract just the probabilities (make sure order matches your logistic regression predictions)
 gb_spread_pred = gb_output_df['Pred_Spread'].values
@@ -108,6 +108,6 @@ output_df = pd.DataFrame({
     "VegasTotal": pinnacle_probs_df['VegasTotal'].values,
 })
 
-output_df.to_csv("csv_folder/week1_stacked_spread_total_predictions.csv", index=False)
+#output_df.to_csv("csv_folder/week1_stacked_spread_total_predictions.csv", index=False)
 
 

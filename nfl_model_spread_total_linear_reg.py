@@ -127,9 +127,15 @@ def clean_data(box_scores_2023_df, box_scores_2024_df, pbp_2023_df, pbp_2024_df)
     merged_2023_df['HomeWon'] = merged_2023_df['Home_score'] > merged_2023_df['Visitor_score']
     merged_2024_df['HomeWon'] = merged_2024_df['Home_score'] > merged_2024_df['Visitor_score']
 
+    merged_2023_df['Spread'] = merged_2023_df['Home_score'] - merged_2023_df['Visitor_score']
+    merged_2023_df['Total'] = merged_2023_df['Home_score'] + merged_2023_df['Visitor_score']
+
+    merged_2024_df['Spread'] = merged_2024_df['Home_score'] - merged_2024_df['Visitor_score']
+    merged_2024_df['Total'] = merged_2024_df['Home_score'] + merged_2024_df['Visitor_score']
+
     all_data = pd.concat([merged_2023_df, merged_2024_df])
 
-    all_data['Weight'] = all_data['SeasonYear'].apply(lambda x: 1.5 if x == 2024 else 1)
+    #all_data['Weight'] = all_data['SeasonYear'].apply(lambda x: 1.5 if x == 2024 else 1)
 
     if all_data.isna().any().any():
         print("DataFrame contains NaN values.")

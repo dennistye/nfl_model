@@ -391,6 +391,7 @@ for col in ['AvgPointsScored', 'AvgPointsAllowed', 'WinRate', 'AvgPointsDefended
 # Feature matrix
 X_train = training_encoded_both[[col for col in training_encoded_both.columns if 'Diff_' in col]]
 
+print(all_data)
 # Target vectors
 y_spread = all_data['Spread']
 y_total = all_data['Total']
