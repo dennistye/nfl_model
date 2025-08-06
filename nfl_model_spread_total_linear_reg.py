@@ -1,12 +1,6 @@
 import numpy as np
 import pandas as pd
-import joblib
-import xgboost as xgb
-from xgboost import XGBClassifier
-from sklearn.calibration import CalibratedClassifierCV
-from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import GradientBoostingRegressor
-from sklearn.metrics import mean_squared_error
+from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import cross_val_score
 import matplotlib.pyplot as plt
 
@@ -418,94 +412,48 @@ def clean_schedule_merge_with_features(schedule_2025_df, team_features_complete)
     return upcoming_encoded_final
 
 # Prepare training data
-
-# Prep and train data with xgboost
-def prep_and_train_xgboost(upcoming_encoded_final, team_features_complete, all_data):
-    # Merge play-by-play data with team features for home and visitor teams
-    training_encoded_home = all_data.merge(team_features_complete, left_on='Home', right_on='Team', how='left')
-    training_encoded_both = training_encoded_home.merge(team_features_complete, left_on='Visitor', right_on='Team', suffixes=('_Home', '_Visitor'), how='left')
-
-    # Feature diffs
-    feature_cols = ['AvgPointsScored', 'WinRate', 'AvgPointsDefended', 'AvgConcededPlays', 'AvgForcedTurnovers',
-                    'AvgYardsPerPlay', 'AvgYardsPerGame', 'AvgPassCompletionRate', 'AvgTouchdownsPerGame', 'AvgRushSuccessRate',
-                    'AvgYardsAllowedPerPlay', 'AvgYardsAllowedPerGame', 'AvgPassCompletionAllowedRate', 'AvgTouchdownsAllowedPerGame', 'AvgRushSuccessAllowedRate']
+def prep_and_train(upcoming_encoded_final, team_features_complete, all_data):
     
-    for col in feature_cols:
-        training_encoded_both[f'Diff_{col}'] = training_encoded_both[f'{col}_Home'] - training_encoded_both[f'{col}_Visitor']
-
-    # Training set
-    training_data = training_encoded_both[[col for col in training_encoded_both.columns if 'Diff_' in col]]
-    training_labels = training_encoded_both['HomeWon']
-
-    # XGBoost classifier
-    xgb_model = XGBClassifier(use_label_encoder=False,
-    eval_metric='logloss',
-    max_depth=3,
-    learning_rate=0.05,
-    n_estimators=100,
-    subsample=0.8,
-    colsample_bytree=0.8)
-
-    # Cross-validation scores
-    cross_val_scores = cross_val_score(xgb_model, training_data, training_labels, cv=5)
-    print("XGBoost CV Accuracy:", cross_val_scores.mean())
-
-    # Train
-    xgb_model.fit(training_data, training_labels)
-
-    # Calibrate XGBOOST
-
-    calibrated_model = CalibratedClassifierCV(estimator=xgb_model, cv=5)
-    calibrated_model.fit(training_data, training_labels)
-
-    # Predict upcoming games
-    feature_diff_cols = [col for col in upcoming_encoded_final.columns if 'Diff_' in col]
-    upcoming_game_probabilities = calibrated_model.predict_proba(upcoming_encoded_final[feature_diff_cols])
-    upcoming_encoded_final['HomeWinProbability'] = upcoming_game_probabilities[:, 1]
-
-    upcoming_predictions = upcoming_encoded_final[['Home', 'Visitor', 'HomeWinProbability']]
-    return upcoming_predictions
-
-def prep_and_train_gradient_boost(upcoming_encoded_final, team_features_complete, all_data):
-    # Merge features
+    # Merge play-by-play data with team features for home teams
     training_encoded_home = all_data.merge(team_features_complete, left_on='Home', right_on='Team', how='left')
+    # Merge the result with team features for visitor teams
     training_encoded_both = training_encoded_home.merge(team_features_complete, left_on='Visitor', right_on='Team', suffixes=('_Home', '_Visitor'), how='left')
 
-    feature_cols = ['AvgPointsScored', 'WinRate', 'AvgPointsDefended', 'AvgConcededPlays', 'AvgForcedTurnovers',
-                    'AvgYardsPerPlay', 'AvgYardsPerGame', 'AvgPassCompletionRate', 'AvgTouchdownsPerGame', 'AvgRushSuccessRate',
-                    'AvgYardsAllowedPerPlay', 'AvgYardsAllowedPerGame', 'AvgPassCompletionAllowedRate', 'AvgTouchdownsAllowedPerGame', 'AvgRushSuccessAllowedRate']
-
-    # Create diffs
-    for col in feature_cols:
+    # Calculate the difference in features
+    for col in ['AvgPointsScored', 'WinRate', 'AvgPointsDefended', 'AvgConcededPlays', 'AvgForcedTurnovers',
+                'AvgYardsPerPlay', 'AvgYardsPerGame', 'AvgPassCompletionRate', 'AvgTouchdownsPerGame', 'AvgRushSuccessRate',
+                'AvgYardsAllowedPerPlay', 'AvgYardsAllowedPerGame', 'AvgPassCompletionAllowedRate', 'AvgTouchdownsAllowedPerGame', 'AvgRushSuccessAllowedRate']:
         training_encoded_both[f'Diff_{col}'] = training_encoded_both[f'{col}_Home'] - training_encoded_both[f'{col}_Visitor']
 
-    training_data = training_encoded_both[[f'Diff_{col}' for col in feature_cols]]
-    home_scores = training_encoded_both['Home_score']
-    visitor_scores = training_encoded_both['Visitor_score']
+    # Filtering out the required columns
+    # Feature matrix
+    X_train = training_encoded_both[[col for col in training_encoded_both.columns if 'Diff_' in col]]
 
-    # Train two separate regressors
-    home_model = GradientBoostingRegressor(n_estimators=100, learning_rate=0.1, max_depth=3)
-    visitor_model = GradientBoostingRegressor(n_estimators=100, learning_rate=0.1, max_depth=3)
+    # Target vectors
+    y_spread = all_data['Spread']
+    y_total = all_data['Total']
 
-    home_model.fit(training_data, home_scores)
-    visitor_model.fit(training_data, visitor_scores)
+    spread_model = LinearRegression()
+    total_model = LinearRegression()
 
-    feature_diff_cols = [col for col in upcoming_encoded_final.columns if 'Diff_' in col]
-    X_pred = upcoming_encoded_final[feature_diff_cols]
+    spread_model.fit(X_train, y_spread)
+    total_model.fit(X_train, y_total)
 
-    predicted_home_scores = home_model.predict(X_pred)
-    predicted_visitor_scores = visitor_model.predict(X_pred)
+    X_upcoming = upcoming_encoded_final[[col for col in upcoming_encoded_final.columns if 'Diff_' in col]]
 
-    upcoming_encoded_final['Pred_Home_Score'] = predicted_home_scores
-    upcoming_encoded_final['Pred_Visitor_Score'] = predicted_visitor_scores
-    upcoming_encoded_final['Pred_Spread'] = predicted_home_scores - predicted_visitor_scores
-    upcoming_encoded_final['Pred_Total'] = predicted_home_scores + predicted_visitor_scores
+    predicted_spreads = spread_model.predict(X_upcoming)
+    predicted_totals = total_model.predict(X_upcoming)
 
-    return upcoming_encoded_final[['Home', 'Visitor', 'Pred_Home_Score', 'Pred_Visitor_Score', 'Pred_Spread', 'Pred_Total']]
+    upcoming_encoded_final['PredictedSpread'] = predicted_spreads
+    upcoming_encoded_final['PredictedTotal'] = predicted_totals
+
+    final_predictions = upcoming_encoded_final[['Home', 'Visitor', 'PredictedSpread', 'PredictedTotal']]
+
+    return final_predictions
+
 
 
 def main():
-    
     # Load data
     box_scores_2023_df = pd.read_csv("csv_folder/2023_box_scores.csv")
 
@@ -527,16 +475,12 @@ def main():
     # Cleaning the schedule and merging with features
     upcoming_encoded_final = clean_schedule_merge_with_features(schedule_2025_df, team_features_complete)
 
-    # Prepares data and uses xgBoost to train 
-    upcoming_predictions = prep_and_train_xgboost(upcoming_encoded_final, team_features_complete, all_data)
-
-    # Prepares data and uses gradient boost to train
-    spread_total_predictions = prep_and_train_gradient_boost(upcoming_encoded_final, team_features_complete, all_data)
+    # Prepares data and uses Logistic Regression to train 
+    upcoming_predictions = prep_and_train(upcoming_encoded_final, team_features_complete, all_data)
 
     # Output prediciton to a csv file, eventually will be ouputing to a database
-    #upcoming_predictions.to_csv("csv_folder/week1_predictions_xgboost.csv", index=False)
-    #spread_total_predictions.to_csv("csv_folder/week1_spread_total_predictions_gradient_boost.csv", index=False)
-    return spread_total_predictions
+    #upcoming_predictions.to_csv("csv_folder/week1_predictions_logistic_reg.csv", index=False)
+    return upcoming_predictions
 
 if __name__ == "__main__":
     main()
