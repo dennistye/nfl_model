@@ -471,9 +471,10 @@ def main():
 
     pbp_2024_df = pd.read_csv("csv_folder/pbp-2024.csv")
 
+    pinnacle_probs_df = pd.read_csv("csv_folder/Pinnacle_odds.csv")
+
     # Cleaned data
     all_data = clean_data(box_scores_2023_df, box_scores_2024_df, pbp_2023_df, pbp_2024_df)
-    all_data.to_csv("csv_folder/all_data.csv", index=False)
 
     # Adding team features
     team_features_complete = team_features(all_data)
@@ -485,7 +486,12 @@ def main():
     upcoming_predictions = prep_and_train(upcoming_encoded_final, team_features_complete, all_data)
 
     # Output prediciton to a csv file, eventually will be ouputing to a database
-    #upcoming_predictions.to_csv("csv_folder/week1_predictions_logistic_reg.csv", index=False)
+
+    upcoming_predictions["VegasSpread"] = pinnacle_probs_df['VegasSpread'].values
+    upcoming_predictions["VegasTotal"] = pinnacle_probs_df['VegasTotal'].values
+    upcoming_predictions.to_csv("csv_folder/week1_predictions_linear_reg.csv", index=False)
+
+
     return upcoming_predictions
 
 if __name__ == "__main__":

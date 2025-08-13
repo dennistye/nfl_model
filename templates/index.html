@@ -1,26 +1,53 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>NFL Week Predictor</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFL Quant</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>NFL Week 1 Matchups</h1>
-
+    <nav class="navbar">
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/best_value">Best Value</a></li>
+        <li><a href="/stats">Stats</a></li>
+        <li><a href="/about">About</a></li>
+    </ul>
+</nav>
+<div class="main-container">
+    <h1 class="predictor-title">NFL Week 1 Matchups</h1>
     <form id="prediction-form">
-        <label for="matchup">Select Game:</label>
-        <select id="matchup" name="matchup">
-            {% for game in games %}
-                <option value="{{ game.Home }}_{{ game.Visitor }}">{{ game.Visitor }} at {{ game.Home }}</option>
-            {% endfor %}
-        </select>
-
-        <button type="submit">Show Prediction</button>
+       <select id="matchup" name="matchup">
+    {% for game in games %}
+        <option value="{{ game.Home }}_{{ game.Visitor }}">{{ game.Visitor }} at {{ game.Home }}</option>
+    {% endfor %}
+</select>
     </form>
 
-    <div id="result"></div>
-    <div id="spread"></div>
+    <div class="team-container">
+    <div class="team-card">
+        <img id="visitor_logo" src="" alt="Visitor Team" class="team-logo">
+        <div id="visitor_spread"></div>
+        <div id="vegas_visitor_spread"></div>
+    </div>
+
+    <div class="team-card">
+        <img id="home_logo" src="" alt="Home Team" class="team-logo">
+        <div id="home_spread"></div>
+        <div id="vegas_home_spread"></div>
+    </div>
+</div>
+
+<div class="totals">
+    <div id="diff_spread"></div>
     <div id="total"></div>
+    <div id="vegas_total"></div>
+    <div id="diff_total"></div>
+</div>
+
+</div>
 
     <script src="{{ url_for('static', filename='main.js') }}"></script>
 </body>

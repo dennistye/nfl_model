@@ -1,9 +1,13 @@
 import numpy as np
 import pandas as pd
 from sklearn.ensemble import GradientBoostingRegressor
-from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import cross_val_score
 import matplotlib.pyplot as plt
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split, cross_val_score
+import json
 
 
 def clean_data(box_scores_2023_df, box_scores_2024_df, pbp_2023_df, pbp_2024_df):
@@ -140,6 +144,33 @@ def clean_data(box_scores_2023_df, box_scores_2024_df, pbp_2023_df, pbp_2024_df)
     #all_data = merged_2024_df
 
     return all_data
+
+def evaluate_model(model, X_test, y_test, name="Model"):
+    # Predict on test set
+    y_pred = model.predict(X_test)
+    # Calculate metrics
+    mse = mean_squared_error(y_test, y_pred)
+    rmse = np.sqrt(mse)
+    mae = mean_absolute_error(y_test, y_pred)
+    r2 = r2_score(y_test, y_pred)
+    print(f"{name} Performance:")
+    print(f"  MSE: {mse:.2f}")
+    print(f"  RMSE: {rmse:.2f} points")
+    print(f"  MAE: {mae:.2f} points")
+    print(f"  R²: {r2:.2f}")
+    return y_pred, mse, rmse, mae, r2
+
+def plot_predictions(y_true, y_pred, title="Predicted vs Actual"):
+    plt.figure(figsize=(10, 6))
+    plt.scatter(y_true, y_pred, alpha=0.5)
+    plt.plot([y_true.min(), y_true.max()], [y_true.min(), y_true.max()], 'r--', lw=2)
+    plt.xlabel("Actual Scores")
+    plt.ylabel("Predicted Scores")
+    plt.title(title)
+    plt.tight_layout()
+    plt.savefig(f"{title.lower().replace(' ', '_')}.png")
+    plt.close()
+
 
 def team_features(all_data):
     # 1. Average Pointes Scored
@@ -412,8 +443,6 @@ def clean_schedule_merge_with_features(schedule_2025_df, team_features_complete)
         print("No NaN values in DataFrame.")
     return upcoming_encoded_final
 
-# Prepare training data
-
 def prep_and_train_gradient_boost(upcoming_encoded_final, team_features_complete, all_data):
     # Merge features
     training_encoded_home = all_data.merge(team_features_complete, left_on='Home', right_on='Team', how='left')
@@ -423,7 +452,6 @@ def prep_and_train_gradient_boost(upcoming_encoded_final, team_features_complete
                     'AvgYardsPerPlay', 'AvgYardsPerGame', 'AvgPassCompletionRate', 'AvgTouchdownsPerGame', 'AvgRushSuccessRate',
                     'AvgYardsAllowedPerPlay', 'AvgYardsAllowedPerGame', 'AvgPassCompletionAllowedRate', 'AvgTouchdownsAllowedPerGame', 'AvgRushSuccessAllowedRate']
 
-    # Create diffs
     for col in feature_cols:
         training_encoded_both[f'Diff_{col}'] = training_encoded_both[f'{col}_Home'] - training_encoded_both[f'{col}_Visitor']
 
@@ -431,23 +459,62 @@ def prep_and_train_gradient_boost(upcoming_encoded_final, team_features_complete
     home_scores = training_encoded_both['Home_score']
     visitor_scores = training_encoded_both['Visitor_score']
 
-    # Train two separate regressors
-    home_model = GradientBoostingRegressor(n_estimators=100, learning_rate=0.1, max_depth=3)
-    visitor_model = GradientBoostingRegressor(n_estimators=100, learning_rate=0.1, max_depth=3)
+    # Scale features
+    scaler = StandardScaler()
+    training_data_scaled = scaler.fit_transform(training_data)
+    X_pred_scaled = scaler.transform(upcoming_encoded_final[[col for col in upcoming_encoded_final.columns if 'Diff_' in col]])
 
-    home_model.fit(training_data, home_scores)
-    visitor_model.fit(training_data, visitor_scores)
+    # Train-test split with subsampling
+    X_train, X_test, y_train_home, y_test_home = train_test_split(
+        training_data_scaled, home_scores, test_size=0.2, train_size=0.5, random_state=42
+    )
+    _, _, y_train_visitor, y_test_visitor = train_test_split(
+        training_data_scaled, visitor_scores, test_size=0.2, train_size=0.5, random_state=42
+    )
 
-    feature_diff_cols = [col for col in upcoming_encoded_final.columns if 'Diff_' in col]
-    X_pred = upcoming_encoded_final[feature_diff_cols]
+    # Hyperparameter tuning
+    param_grid = {
+        'n_estimators': [100, 150],
+        'learning_rate': [0.05, 0.1],
+        'max_depth': [3, 5]
+    }
+    home_model = GridSearchCV(GradientBoostingRegressor(random_state=42), param_grid, cv=5, scoring='neg_mean_squared_error')
+    visitor_model = GridSearchCV(GradientBoostingRegressor(random_state=42), param_grid, cv=5, scoring='neg_mean_squared_error')
 
-    predicted_home_scores = home_model.predict(X_pred)
-    predicted_visitor_scores = visitor_model.predict(X_pred)
+    home_model.fit(X_train, y_train_home)
+    visitor_model.fit(X_train, y_train_visitor)
+
+    print("\nBest Parameters:")
+    print(f"  Home Model: {home_model.best_params_}")
+    print(f"  Visitor Model: {visitor_model.best_params_}")
+
+    # Evaluate models
+    print("\nEvaluating Model Accuracy:")
+    home_pred, home_mse, home_rmse, home_mae, home_r2 = evaluate_model(home_model.best_estimator_, X_test, y_test_home, "Home Score Model")
+    visitor_pred, visitor_mse, visitor_rmse, visitor_mae, visitor_r2 = evaluate_model(visitor_model.best_estimator_, X_test, y_test_visitor, "Visitor Score Model")
+
+    # Cross-validation
+    home_cv_scores = cross_val_score(home_model.best_estimator_, training_data_scaled, home_scores, cv=5, scoring='neg_mean_squared_error')
+    visitor_cv_scores = cross_val_score(visitor_model.best_estimator_, training_data_scaled, visitor_scores, cv=5, scoring='neg_mean_squared_error')
+    print("\nCross-Validation MSE (5-fold):")
+    print(f"  Home Score Model: Mean MSE = {-home_cv_scores.mean():.2f} (± {home_cv_scores.std():.2f})")
+    print(f"  Visitor Score Model: Mean MSE = {-visitor_cv_scores.mean():.2f} (± {visitor_cv_scores.std():.2f})")
+
+    # Visualize predictions
+    plot_predictions(y_test_home, home_pred, "Predicted vs Actual Home Scores")
+    plot_predictions(y_test_visitor, visitor_pred, "Predicted vs Actual Visitor Scores")
+
+    # Predict for 2025 Week 1
+    predicted_home_scores = home_model.best_estimator_.predict(X_pred_scaled)
+    predicted_visitor_scores = visitor_model.best_estimator_.predict(X_pred_scaled)
 
     upcoming_encoded_final['Pred_Home_Score'] = predicted_home_scores
     upcoming_encoded_final['Pred_Visitor_Score'] = predicted_visitor_scores
     upcoming_encoded_final['Pred_Spread'] = predicted_home_scores - predicted_visitor_scores
     upcoming_encoded_final['Pred_Total'] = predicted_home_scores + predicted_visitor_scores
+
+    # Compare to Pinnacle odds
+    # compare_to_pinnacle_odds(upcoming_encoded_final)
 
     return upcoming_encoded_final[['Home', 'Visitor', 'Pred_Home_Score', 'Pred_Visitor_Score', 'Pred_Spread', 'Pred_Total']]
 
@@ -467,7 +534,6 @@ def main():
 
     # Cleaned data
     all_data = clean_data(box_scores_2023_df, box_scores_2024_df, pbp_2023_df, pbp_2024_df)
-    all_data.to_csv("csv_folder/all_data.csv", index=False)
 
     # Adding team features
     team_features_complete = team_features(all_data)
@@ -477,8 +543,7 @@ def main():
 
     # Prepares data and uses gradient boost to train
     spread_total_predictions = prep_and_train_gradient_boost(upcoming_encoded_final, team_features_complete, all_data)
-
-
+    spread_total_predictions.to_csv("csv_folder/week1_predictions_gradient_boost.csv", index=False)
     return spread_total_predictions
 
 if __name__ == "__main__":
