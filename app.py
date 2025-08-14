@@ -16,7 +16,7 @@ app = Flask(__name__)
 
 
 
-prediction_df = pd.read_csv("csv_folder/week1_predictions/week1_predictions_linear_reg.csv")
+prediction_df = pd.read_csv("csv_folder/week1_predictions_linear_reg.csv")
 
 # def prob_to_moneyline(prob):
 #     if prob == 0:
@@ -63,7 +63,12 @@ def index():
 
 @app.route('/best_value')
 def predictions():
-    return render_template('best_value.html')
+    # Read CSV file
+    df = pd.read_csv("csv_folder/week1_predictions_linear_reg.csv")
+
+    # Convert DataFrame to HTML table (Bootstrap-friendly)
+    table_html = df.to_html(classes="table table-striped", index=False)
+    return render_template('best_value.html', table_html=table_html)
 
 @app.route('/stats')
 def stats():

@@ -6,17 +6,18 @@
 </head>
 <body>
     <nav class="navbar">
-    <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/best_value">Best Value</a></li>
-        <li><a href="/stats">Stats</a></li>
-        <li><a href="/about">About</a></li>
-    </ul>
-</nav>
-<div class="main-container"></div>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/best_value">Best Value</a></li>
+            <li><a href="/stats">Stats</a></li>
+            <li><a href="/about">About</a></li>
+        </ul>
+    </nav>
 
-
-</div>
+    <div class="table-container">
+        <h1>Stats Table</h1>
+        {{ table_html|safe }}
+    </div>
 
     <script src="{{ url_for('static', filename='main.js') }}"></script>
 </body>

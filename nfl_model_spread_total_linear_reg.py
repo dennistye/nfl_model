@@ -489,8 +489,10 @@ def main():
 
     upcoming_predictions["VegasSpread"] = pinnacle_probs_df['VegasSpread'].values
     upcoming_predictions["VegasTotal"] = pinnacle_probs_df['VegasTotal'].values
-    upcoming_predictions.to_csv("csv_folder/week1_predictions_linear_reg.csv", index=False)
 
+    upcoming_predictions['PredictedSpread'] = upcoming_predictions['PredictedSpread'].round(1)
+    upcoming_predictions['PredictedTotal'] = upcoming_predictions['PredictedTotal'].round(1)
+    upcoming_predictions.to_csv("csv_folder/week1_predictions_linear_reg.csv", index=False)
 
     return upcoming_predictions
 
