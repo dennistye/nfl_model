@@ -458,6 +458,14 @@ def prep_and_train(upcoming_encoded_final, team_features_complete, all_data):
     return final_predictions
 
 
+def convert_spread_to_reg(spread):
+    if spread > 0:
+        spread = spread * -1
+    elif spread < 0:
+        spread = spread * -1
+    return spread
+
+
 
 def main():
     # Load data
@@ -490,8 +498,28 @@ def main():
     upcoming_predictions["VegasSpread"] = pinnacle_probs_df['VegasSpread'].values
     upcoming_predictions["VegasTotal"] = pinnacle_probs_df['VegasTotal'].values
 
-    upcoming_predictions['PredictedSpread'] = upcoming_predictions['PredictedSpread'].round(1)
+    upcoming_predictions['HomeSpread'] = upcoming_predictions['PredictedSpread'].apply(convert_spread_to_reg)
+    upcoming_predictions['HomeVegasSpread'] = upcoming_predictions['VegasSpread'].apply(convert_spread_to_reg)
+    upcoming_predictions['DiffSpread'] = upcoming_predictions['HomeSpread'] - upcoming_predictions['HomeVegasSpread']
+
+    upcoming_predictions['VisitorSpread'] = upcoming_predictions['HomeSpread'].apply(lambda x: x*-1)
+    upcoming_predictions['VisitorVegasSpread'] = upcoming_predictions['HomeVegasSpread'].apply(lambda x: x*-1)
+    upcoming_predictions['DiffVisitorSpread'] = upcoming_predictions['VisitorSpread'] - upcoming_predictions['VisitorVegasSpread']
+
+    upcoming_predictions['DiffTotal'] = upcoming_predictions['PredictedTotal'] - upcoming_predictions['VegasTotal']
+
+    upcoming_predictions['DiffSpread'] = upcoming_predictions['DiffSpread'].apply(lambda x: x*-1 if x < 0 else x)
+    upcoming_predictions['DiffTotal'] = upcoming_predictions['DiffTotal'].apply(lambda x: x*-1 if x < 0 else x)
+
+    upcoming_predictions = upcoming_predictions.drop(columns=['PredictedSpread', 'VegasSpread']) 
+
+    upcoming_predictions['HomeSpread'] = upcoming_predictions['HomeSpread'].round(1)
+    upcoming_predictions['VisitorSpread'] = upcoming_predictions['VisitorSpread'].round(1)
     upcoming_predictions['PredictedTotal'] = upcoming_predictions['PredictedTotal'].round(1)
+    upcoming_predictions['DiffSpread'] = upcoming_predictions['DiffSpread'].round(1)
+    upcoming_predictions['DiffVisitorSpread'] = upcoming_predictions['DiffVisitorSpread'].round(1)
+    upcoming_predictions['DiffTotal'] = upcoming_predictions['DiffTotal'].round(1)
+
     upcoming_predictions.to_csv("csv_folder/week1_predictions_linear_reg.csv", index=False)
 
     return upcoming_predictions

@@ -20,10 +20,10 @@
     <h1 class="predictor-title">NFL Week 1 Matchups</h1>
     <form id="prediction-form">
        <select id="matchup" name="matchup">
-    {% for game in games %}
-        <option value="{{ game.Home }}_{{ game.Visitor }}">{{ game.Visitor }} at {{ game.Home }}</option>
-    {% endfor %}
-</select>
+            {% for game in games %}
+            <option value="{{ game.Home }}_{{ game.Visitor }}">{{ game.Visitor }} at {{ game.Home }}</option>
+            {% endfor %}
+        </select>
     </form>
 
     <div class="team-container">
@@ -31,23 +31,24 @@
         <img id="visitor_logo" src="" alt="Visitor Team" class="team-logo">
         <div id="visitor_spread"></div>
         <div id="vegas_visitor_spread"></div>
+        <div id="visitor_starters_container"></div> <!-- NEW -->
+    </div>
+    <div class="team-card">
+        <div id="diff_spread"></div>
+        <div id="total"></div>
+        <div id="vegas_total"></div>
+        <div id="diff_total"></div>
     </div>
 
     <div class="team-card">
         <img id="home_logo" src="" alt="Home Team" class="team-logo">
         <div id="home_spread"></div>
         <div id="vegas_home_spread"></div>
+        <div id="home_starters_container"></div> <!-- NEW -->
+
     </div>
 </div>
 
-<div class="totals">
-    <div id="diff_spread"></div>
-    <div id="total"></div>
-    <div id="vegas_total"></div>
-    <div id="diff_total"></div>
-</div>
-
-</div>
 
     <script src="{{ url_for('static', filename='main.js') }}"></script>
 </body>

@@ -1,19 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>NFL Quant</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - NFL Quant</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <nav class="navbar">
-    <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/best_value">Best Value</a></li>
-        <li><a href="/stats">Stats</a></li>
-        <li><a href="/about">About</a></li>
-    </ul>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/best_value">Best Value</a></li>
+            <li><a href="/stats">Stats</a></li>
+            <li><a href="/about">About</a></li>
+        </ul>
+    </nav>
+
+    <div class="main-container about-container">
+        <h1>About NFL Quant</h1>
+        <p>Welcome to <strong>NFL Quant</strong> – your trusted source for data-driven NFL predictions and analytics. Our platform uses advanced statistical models to provide insights into team matchups, spreads, totals, and best value picks for every game.</p>
+
+        <h2>Our Mission</h2>
+        <p>We aim to make NFL betting and fantasy football more strategic by combining historical performance, team stats, and Vegas odds. Whether you’re a casual fan, bettor, or analyst, NFL Quant provides clear, actionable insights to improve your decision-making.</p>
+
+        <h2>How It Works</h2>
+        <p>Our models leverage machine learning and statistical analysis, including regression and neural networks, to forecast outcomes for each game. We continuously update our predictions as new data becomes available, ensuring you always have the latest insights at your fingertips.</p>
+
+        <h2>Contact</h2>
+        <p>If you have any questions or suggestions, feel free to reach out via <a href="mailto:support@nflquant.io">support@nflquant.io</a>.</p>
+    </div>
+
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+</body>
+</html>
+
 </nav>
-<div class="main-container"></div>
 
 
 </div>

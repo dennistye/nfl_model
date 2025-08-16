@@ -50,7 +50,7 @@ function loadMatchupData(matchup) {
     // Apply visitor team style
     if (teamLogos[home_team]) {
         document.getElementById("home_logo").src = teamLogos[home_team].logo;
-        document.querySelector(".team-card:nth-child(2)").style.backgroundColor = teamLogos[home_team].color;
+        document.querySelector(".team-card:nth-child(3)").style.backgroundColor = teamLogos[home_team].color;
     }
 
     fetch('/predict', {
@@ -75,17 +75,51 @@ function loadMatchupData(matchup) {
 
          const spreads = [
                     { id: "diff_spread", value: data.diff_spread },
-                    { id: "diff_total", value: data.diff_total }
+                    { id: "diff_total", value: data.diff_total },
+                    { id: "total", value: data.predicted_total },
+                    { id: "vegas_total", value: data.vegas_total }
                 ];
 
                 spreads.forEach(spread => {
                     const element = document.getElementById(spread.id);
-                    if (spread.value && !isNaN(spread.value) && Math.abs(spread.value) > 3) {
+                    if (spread.value && !isNaN(spread.value) && Math.abs(spread.value) > 3 && spread.id == ("diff_spread" || spread.id == "diff_total")) {
                         element.style.color = '#00f700ff'; // Green for spreads > 3
-                    } else {
+                    }else if(spread.id == "total" || spread.id == "vegas_total"){
+                        element.style.color = 'black'; // Default color
+                    }else {
                         element.style.color = 'black'; // Default color
                     }
                 });
+                // --- NEW: render starters ---
+    function renderStarters(containerId, starters) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = ""; // Clear previous starters
+
+        const offense = starters.filter(p => p.side === "offense");
+        const defense = starters.filter(p => p.side === "defense");
+
+        const offenseDiv = document.createElement("div");
+        offenseDiv.innerHTML = `<h4>Starting Offense</h4>`;
+        offense.forEach(p => {
+            const pDiv = document.createElement("div");
+            pDiv.textContent = `${p.number} - ${p.name} (${p.position})`;
+            offenseDiv.appendChild(pDiv);
+        });
+
+        const defenseDiv = document.createElement("div");
+        defenseDiv.innerHTML = `<h4>Starting Defense</h4>`;
+        defense.forEach(p => {
+            const pDiv = document.createElement("div");
+            pDiv.textContent = `${p.number} - ${p.name} (${p.position})`;
+            defenseDiv.appendChild(pDiv);
+        });
+
+        container.appendChild(offenseDiv);
+        container.appendChild(defenseDiv);
+    }
+
+    renderStarters("home_starters_container", data.home_starters);
+    renderStarters("visitor_starters_container", data.visitor_starters);
     });
 }
 
