@@ -29,25 +29,50 @@
     <div class="team-container">
     <div class="team-card">
         <img id="visitor_logo" src="" alt="Visitor Team" class="team-logo">
-        <div id="visitor_spread"></div>
         <div id="vegas_visitor_spread"></div>
-        <div id="visitor_starters_container"></div> <!-- NEW -->
+         <div id="visitor_spread"></div>
+     
     </div>
     <div class="team-card">
         <div id="diff_spread"></div>
-        <div id="total"></div>
         <div id="vegas_total"></div>
+         <div id="total"></div>
         <div id="diff_total"></div>
     </div>
 
     <div class="team-card">
         <img id="home_logo" src="" alt="Home Team" class="team-logo">
-        <div id="home_spread"></div>
         <div id="vegas_home_spread"></div>
-        <div id="home_starters_container"></div> <!-- NEW -->
-
+        <div id="home_spread"></div>
     </div>
-</div>
+
+    
+    <div class="starters-wrapper">
+    <div id="visitor_starters_container" class="starters-container">
+    <h3>Starting Offense</h3>
+    <div class="starters-grid" id="visitor_offense"></div>
+  
+    <h3>Starting Defense</h3>
+    <div class="starters-grid" id="visitor_defense"></div>
+    </div>
+
+
+    <div class="injury-wrapper">
+      <h3>Home Injury Report</h3>
+     <div class="injury-notification-home"></div>
+       <h3>Visitor Injury Report</h3>
+     <div class="injury-notification-visitor"></div>
+    </div>
+
+    <div id="home_starters_container" class="starters-container">
+    <h3>Starting Offense</h3>
+    <div class="starters-grid" id="home_offense"></div>
+    
+    <h3>Starting Defense</h3>
+    <div class="starters-grid" id="home_defense"></div>
+    </div>
+    </div>
+    </div>
 
 
     <script src="{{ url_for('static', filename='main.js') }}"></script>

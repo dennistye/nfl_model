@@ -76,7 +76,7 @@ def predict():
 
         # Query defensive starters
         cursor.execute("""
-            SELECT name, position, number, side, role
+            SELECT name, position, number, side, role, headshot, acquisition, team_id
             FROM players 
             WHERE team_id = ? AND role = '1 string'
         """, (team_id,))
@@ -86,7 +86,7 @@ def predict():
         conn.close()
 
         # Convert to dict for JSON
-        return [{"name": p[0], "position": p[1], "number": p[2], "side": p[3], "role": p[4]} for p in players]
+        return [{"name": p[0], "position": p[1], "number": p[2], "side": p[3], "role": p[4], "headshot": p[5], "acquisition": p[6], "team_id": p[7]} for p in players]
 
     home_starters = get_starters(home)
     visitor_starters = get_starters(away)

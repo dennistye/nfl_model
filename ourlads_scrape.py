@@ -75,11 +75,11 @@ for idx, (_, acronym) in enumerate(teams):
 
     url = f"https://www.ourlads.com/nfldepthcharts/depthchart/{acronym}"
 
-    team_id = idx+1  # Replace with your team identifier
+    team_id = idx+1  
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'html.parser')
-    print(soup)
-    # Map color class to acquisition type
+    
+
     def parse_draft_info(player_name):
         if not player_name:
             return "", None, None
@@ -105,7 +105,6 @@ for idx, (_, acronym) in enumerate(teams):
         "lc_red": "Injured/Inactive",
         "": "Unknown"
     }
-        
 
     def parse_table(table_id, group_type):
         table_body = soup.find("tbody", id=table_id)
@@ -114,15 +113,15 @@ for idx, (_, acronym) in enumerate(teams):
             print("No reserve/IR table found — skipping")
         else:
             for row in table_body.find_all("tr"):
-                pos = row.find("td").text.strip()  # position
-                tds = row.find_all("td")[1:]  # skip Pos column
+                pos = row.find("td").text.strip()  
+                tds = row.find_all("td")[1:]  
                 for i in range(0, len(tds), 2):
                     num_td = tds[i]
                     player_td = tds[i+1]
                     number = num_td.text.strip() or None
                     player_name = player_td.text.strip() or ""
                     name, draft_year, draft_round = parse_draft_info(player_name)
-                    if not name:  # Skip blank names
+                    if not name:  
                         continue
                     if player_td.a:
                         color_class = player_td.a.get("class")[0] if player_td.a.get("class") else ""
@@ -140,9 +139,8 @@ for idx, (_, acronym) in enumerate(teams):
                     ))
         return players
 
-    print(soup.find("tbody", id="ctl00_phContent_dcTBody"))
 
-
+    # Parse offense
     offense_players = parse_table("ctl00_phContent_dcTBody", "offense")
     # Parse defense
     defense_players = parse_table("ctl00_phContent_dcTBody2", "defense")
@@ -160,19 +158,6 @@ for idx, (_, acronym) in enumerate(teams):
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, all_players)
     conn.commit()
-
-    # List all tables
-    cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-    tables = cursor.fetchall()
-    print("Tables:", tables)
-
-    # Show contents of each table
-    for table_name, in tables:
-        print(f"\nTable: {table_name}")
-        cursor.execute(f"SELECT * FROM {table_name}")
-        rows = cursor.fetchall()
-        for row in rows:
-            print(row)
 
 conn.close()
 
