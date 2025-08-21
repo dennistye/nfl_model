@@ -17,10 +17,14 @@ __pycache__/
 # Ignore VS Code settings
 .vscode/
 
+epa_model.ipynb
+
 test.py
 
 odds.py
 
 player_info_scrape.py
+
 player_picture.py
+
 player_scrape.py
