@@ -1,0 +1,26 @@
+# Ignore model files
+models/
+
+# Igonre epa_pbp_2000-2024 data
+epa_pbp_2000-2024
+
+# Ignore myenv
+myenv/
+
+# Ignore csv_folder
+csv_folder/
+
+# Ignore Python cache
+__pycache__/
+*.pyc
+
+# Ignore VS Code settings
+.vscode/
+
+test.py
+
+odds.py
+
+player_info_scrape.py
+player_picture.py
+player_scrape.py

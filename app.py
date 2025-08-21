@@ -81,8 +81,8 @@ def predict():
             WHERE team_id = ? AND role = '1 string'
         """, (team_id,))
         players = cursor.fetchall()
-        print(players)
-        print(team_id)
+        # print(players)
+        # print(team_id)
         conn.close()
 
         # Convert to dict for JSON
