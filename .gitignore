@@ -2,7 +2,7 @@
 models/
 
 # Igonre epa_pbp_2000-2024 data
-epa_pbp_2000-2024
+epa_pbp_2000-2024/
 
 # Ignore myenv
 myenv/
