@@ -8,7 +8,7 @@ epa_pbp_2000-2024/
 myenv/
 
 # Ignore csv_folder
-csv_folder/
+# csv_folder/
 
 # Ignore Python cache
 __pycache__/
