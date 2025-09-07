@@ -3,7 +3,10 @@ import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import cross_val_score
 import matplotlib.pyplot as plt
+import sqlite3
+from datetime import date
 
+global_week = 0
 
 def clean_data(box_scores_2023_df, box_scores_2024_df, pbp_2023_df, pbp_2024_df):
     #change the box scores from NaN to REG for the OTFLag column
@@ -353,51 +356,94 @@ def team_features(all_data):
 
     return team_features_complete
 
-def clean_schedule_merge_with_features(schedule_2025_df, team_features_complete):
+def clean_schedule_merge_with_features(team_features_complete):
 
-    week1_df = schedule_2025_df[schedule_2025_df['Week'] == 1]
-    week1_df = week1_df[['Home', 'Visitor']]
-    week1_df['Home'] = week1_df['Home'].str.lstrip('@').str.strip()
+    # schedule_2025_df = pd.read_csv("csv_folder/2025_schedule.csv")
 
-    city_abbr = {
-        "Arizona": "ARI",
-        "Atlanta": "ATL",
-        "Baltimore": "BAL",
-        "Buffalo": "BUF",
-        "Carolina": "CAR",
-        "Chicago": "CHI",
-        "Cincinnati": "CIN",
-        "Cleveland": "CLE",
-        "Dallas": "DAL",
-        "Denver": "DEN",
-        "Detroit": "DET",
-        "Green Bay": "GB",
-        "Houston": "HOU",
-        "Indianapolis": "IND",
-        "Jacksonville": "JAX",
-        "Kansas City": "KC",
-        "Las Vegas": "LV",
-        "Los Angeles1": "LAC",  
-        "Los Angeles2": "LA",  
-        "Miami": "MIA",
-        "Minnesota": "MIN",
-        "New England": "NE",
-        "New Orleans": "NO",
-        "New York1": "NYG",  
-        "New York2": "NYJ",  
-        "Philadelphia": "PHI",
-        "Pittsburgh": "PIT",
-        "San Francisco": "SF",
-        "Seattle": "SEA",
-        "Tampa Bay": "TB",
-        "Tennessee": "TEN",
-        "Washington": "WAS"
-    }
+    # week1_df = schedule_2025_df[schedule_2025_df['Week'] == 1]
+    # week1_df = week1_df[['Home', 'Visitor']]
+    # week1_df['Home'] = week1_df['Home'].str.lstrip('@').str.strip()
 
-    week1_df['Home'] = week1_df['Home'].map(city_abbr)
-    week1_df['Visitor'] = week1_df['Visitor'].map(city_abbr)
+    # city_abbr = {
+    #     "Arizona": "ARI",
+    #     "Atlanta": "ATL",
+    #     "Baltimore": "BAL",
+    #     "Buffalo": "BUF",
+    #     "Carolina": "CAR",
+    #     "Chicago": "CHI",
+    #     "Cincinnati": "CIN",
+    #     "Cleveland": "CLE",
+    #     "Dallas": "DAL",
+    #     "Denver": "DEN",
+    #     "Detroit": "DET",
+    #     "Green Bay": "GB",
+    #     "Houston": "HOU",
+    #     "Indianapolis": "IND",
+    #     "Jacksonville": "JAX",
+    #     "Kansas City": "KC",
+    #     "Las Vegas": "LV",
+    #     "Los Angeles1": "LAC",  
+    #     "Los Angeles2": "LA",  
+    #     "Miami": "MIA",
+    #     "Minnesota": "MIN",
+    #     "New England": "NE",
+    #     "New Orleans": "NO",
+    #     "New York1": "NYG",  
+    #     "New York2": "NYJ",  
+    #     "Philadelphia": "PHI",
+    #     "Pittsburgh": "PIT",
+    #     "San Francisco": "SF",
+    #     "Seattle": "SEA",
+    #     "Tampa Bay": "TB",
+    #     "Tennessee": "TEN",
+    #     "Washington": "WAS"
+    # }
 
-    upcoming_encoded_home = week1_df.merge(team_features_complete, left_on='Home', right_on='Team', how='left')
+    # week1_df['Home'] = week1_df['Home'].map(city_abbr)
+    # week1_df['Visitor'] = week1_df['Visitor'].map(city_abbr)
+
+    conn = sqlite3.connect("nfl.db")
+    query = """
+        SELECT *
+        FROM "nfl2025schedule"
+    """
+
+    # Load directly into DataFrame
+    df = pd.read_sql_query(query, conn)
+    df_first = df.sort_values(["Week", "Date", "Time"]) \
+             .groupby("Week", as_index=False) \
+             .first()
+    
+    # Compute absolute difference in days
+    df_first["Date"] = pd.to_datetime(df_first["Date"], errors="coerce")
+
+    # Get today's date
+    today = pd.to_datetime(date.today())
+    df_first["Diff"] = (df_first["Date"] - today).abs()
+
+    # Find the row with the smallest difference
+    closest_week = df_first.loc[df_first["Diff"].idxmin(), "Week"]
+    
+    print(closest_week)
+    global_week = closest_week
+
+    conn = sqlite3.connect("nfl.db")
+    query = f"""
+        SELECT *
+        FROM "nfl2025schedule"
+        WHERE Week = {closest_week}
+    """
+
+    # Load directly into DataFrame
+    week_number_df = pd.read_sql_query(query, conn)
+    week_number_df = week_number_df[['Home', 'Visitor', "Time", "Location"]]
+    # print(week1_df)
+
+    # Close connection
+    conn.close()
+
+
+    upcoming_encoded_home = week_number_df.merge(team_features_complete, left_on='Home', right_on='Team', how='left')
     upcoming_encoded_both = upcoming_encoded_home.merge(team_features_complete, left_on='Visitor', right_on='Team', suffixes=('_Home', '_Visitor'), how='left')
 
 
@@ -473,13 +519,15 @@ def main():
 
     box_scores_2024_df = pd.read_csv("csv_folder/2024_box_scores.csv")
 
-    schedule_2025_df = pd.read_csv("csv_folder/2025_schedule.csv")
+    # schedule_2025_df = pd.read_csv("csv_folder/2025_schedule.csv")
 
     pbp_2023_df = pd.read_csv("csv_folder/pbp-2023.csv")
 
     pbp_2024_df = pd.read_csv("csv_folder/pbp-2024.csv")
 
-    pinnacle_probs_df = pd.read_csv("csv_folder/Pinnacle_odds.csv")
+    vegas_odds = pd.read_csv("csv_folder/odds.csv")
+
+    #pinnacle_probs_df = pd.read_csv("csv_folder/Pinnacle_odds.csv")
 
     # Cleaned data
     all_data = clean_data(box_scores_2023_df, box_scores_2024_df, pbp_2023_df, pbp_2024_df)
@@ -488,41 +536,59 @@ def main():
     team_features_complete = team_features(all_data)
 
     # Cleaning the schedule and merging with features
-    upcoming_encoded_final = clean_schedule_merge_with_features(schedule_2025_df, team_features_complete)
+    upcoming_encoded_final = clean_schedule_merge_with_features(team_features_complete)
 
     # Prepares data and uses Logistic Regression to train 
     upcoming_predictions = prep_and_train(upcoming_encoded_final, team_features_complete, all_data)
 
     # Output prediciton to a csv file, eventually will be ouputing to a database
 
-    upcoming_predictions["VegasSpread"] = pinnacle_probs_df['VegasSpread'].values
-    upcoming_predictions["VegasTotal"] = pinnacle_probs_df['VegasTotal'].values
+    # upcoming_predictions["VegasSpread"] = pinnacle_probs_df['VegasSpread'].values
+    # upcoming_predictions["VegasTotal"] = pinnacle_probs_df['VegasTotal'].values
 
     upcoming_predictions['HomeSpread'] = upcoming_predictions['PredictedSpread'].apply(convert_spread_to_reg)
-    upcoming_predictions['HomeVegasSpread'] = upcoming_predictions['VegasSpread'].apply(convert_spread_to_reg)
-    upcoming_predictions['DiffSpread'] = upcoming_predictions['HomeSpread'] - upcoming_predictions['HomeVegasSpread']
+    # upcoming_predictions['HomeVegasSpread'] = upcoming_predictions['VegasSpread'].apply(convert_spread_to_reg)
+    # upcoming_predictions['DiffSpread'] = upcoming_predictions['HomeSpread'] - upcoming_predictions['HomeVegasSpread']
 
     upcoming_predictions['VisitorSpread'] = upcoming_predictions['HomeSpread'].apply(lambda x: x*-1)
-    upcoming_predictions['VisitorVegasSpread'] = upcoming_predictions['HomeVegasSpread'].apply(lambda x: x*-1)
-    upcoming_predictions['DiffVisitorSpread'] = upcoming_predictions['VisitorSpread'] - upcoming_predictions['VisitorVegasSpread']
+    # upcoming_predictions['VisitorVegasSpread'] = upcoming_predictions['HomeVegasSpread'].apply(lambda x: x*-1)
+    # upcoming_predictions['DiffVisitorSpread'] = upcoming_predictions['VisitorSpread'] - upcoming_predictions['VisitorVegasSpread']
 
-    upcoming_predictions['DiffTotal'] = upcoming_predictions['PredictedTotal'] - upcoming_predictions['VegasTotal']
+    # upcoming_predictions['DiffTotal'] = upcoming_predictions['PredictedTotal'] - upcoming_predictions['VegasTotal']
 
-    upcoming_predictions['DiffSpread'] = upcoming_predictions['DiffSpread'].apply(lambda x: x*-1 if x < 0 else x)
-    upcoming_predictions['DiffTotal'] = upcoming_predictions['DiffTotal'].apply(lambda x: x*-1 if x < 0 else x)
+    # upcoming_predictions['DiffSpread'] = upcoming_predictions['DiffSpread'].apply(lambda x: x*-1 if x < 0 else x)
+    # upcoming_predictions['DiffTotal'] = upcoming_predictions['DiffTotal'].apply(lambda x: x*-1 if x < 0 else x)
 
-    upcoming_predictions = upcoming_predictions.drop(columns=['PredictedSpread', 'VegasSpread']) 
+    upcoming_predictions = upcoming_predictions.drop(columns=['PredictedSpread']) 
 
     upcoming_predictions['HomeSpread'] = upcoming_predictions['HomeSpread'].round(1)
     upcoming_predictions['VisitorSpread'] = upcoming_predictions['VisitorSpread'].round(1)
     upcoming_predictions['PredictedTotal'] = upcoming_predictions['PredictedTotal'].round(1)
-    upcoming_predictions['DiffSpread'] = upcoming_predictions['DiffSpread'].round(1)
-    upcoming_predictions['DiffVisitorSpread'] = upcoming_predictions['DiffVisitorSpread'].round(1)
-    upcoming_predictions['DiffTotal'] = upcoming_predictions['DiffTotal'].round(1)
+    upcoming_predictions['o_PredictedTotal'] = upcoming_predictions['PredictedTotal'].apply(lambda x: f"o{x}" if pd.notnull(x) else None)
+    upcoming_predictions['u_PredictedTotal'] = upcoming_predictions['PredictedTotal'].apply(lambda x: f"u{x}" if pd.notnull(x) else None)
+    # upcoming_predictions = upcoming_predictions.drop(columns=['PredictedTotal']) 
+
+    complete_df = upcoming_predictions.merge(vegas_odds, left_on=["Home", "Visitor"], right_on=["home_team", "visitor_team"], how="inner")
+    complete_df.to_csv("csv_folder/complete.csv", index=False)
+
+    
+    
+
+
+    # upcoming_predictions['DiffSpread'] = upcoming_predictions['DiffSpread'].round(1)
+    # upcoming_predictions['DiffVisitorSpread'] = upcoming_predictions['DiffVisitorSpread'].round(1)
+    # upcoming_predictions['DiffTotal'] = upcoming_predictions['DiffTotal'].round(1)
+
+
+
+
+
+
+
 
     upcoming_predictions.to_csv("csv_folder/week1_predictions_linear_reg.csv", index=False)
 
-    return upcoming_predictions
+    return upcoming_predictions, global_week
 
 if __name__ == "__main__":
     main()

@@ -5,7 +5,8 @@ import sqlite3
 
 app = Flask(__name__)
 
-prediction_df = pd.read_csv("csv_folder/week1_predictions_linear_reg.csv")
+prediction_df = pd.read_csv("csv_folder/complete.csv")
+DB_PATH = "nfl.db"
 
 
 @app.route('/')
@@ -14,18 +15,48 @@ def index():
     games = prediction_df[['Home', 'Visitor']].to_dict(orient='records')
     return render_template('index.html', games=games)
 
-@app.route('/best_value')
+@app.route('/matchups')
+def matchups():
+    # Show list of week 1 matchups
+    games = prediction_df[['Home', 'Visitor']].to_dict(orient='records')
+    return render_template('matchups.html', games=games)
+
+@app.route('/api/best_odds')
 def predictions():
-    # Read CSV file
-    df = pd.read_csv("csv_folder/week1_predictions_linear_reg.csv")
+   odds = prediction_df.to_dict(orient='records')
+   return jsonify(odds)
 
-    # Convert DataFrame to HTML table (Bootstrap-friendly)
-    table_html = df.to_html(classes="table table-striped", index=False)
-    return render_template('best_value.html', table_html=table_html)
+@app.route('/best_odds')
+def best_odds_page():
+    return render_template('best_odds.html')
 
-@app.route('/stats')
+@app.route('/player_stats')
 def stats():
-    return render_template('stats.html')
+    return render_template('player_stats.html')
+
+def get_player_stats(player_name):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("SELECT id FROM players WHERE name = ?", (player_name,))
+    row = cursor.fetchone()   # get the first (and likely only) result
+    if not row:
+        conn.close()
+    player_id = row[0]
+    query = "SELECT * FROM player_stats WHERE player_id = ?"
+    stats = pd.read_sql_query(query, conn, params=(player_id,))
+    conn.close()
+    return stats
+
+@app.route('/player_stats', methods=["GET", "POST"])
+def player_stats():
+    stats = None
+    if request.method == "POST":
+        player_name = request.form.get("player_name")  # Get input from search bar
+        if player_name:
+            stats = get_player_stats(player_name)
+            stats = stats.to_dict(orient="records")  # convert to list of dicts for template
+    return render_template("player_stats.html", stats=stats)
+
 
 @app.route('/about')
 def about():
@@ -37,6 +68,71 @@ def predict():
     home = request.form.get('home_team')
     away = request.form.get('away_team')
 
+    def get_odds(home, away, x):
+        conn = sqlite3.connect("nfl.db")
+        cursor = conn.cursor()
+        if(x == "HomeVegasSpread"):
+                cursor.execute("""
+                    SELECT home_spread
+                    FROM odds
+                    WHERE home_team = ? AND visitor_team = ?
+                """, (home, away))
+                odds = cursor.fetchall()
+                if odds:
+                    odds = odds[0][0]
+        elif(x == "VisitorVegasSpread"):
+                cursor.execute("""
+                    SELECT visitor_spread
+                    FROM odds
+                    WHERE home_team = ? AND visitor_team = ?
+                """, (home, away))
+                odds = cursor.fetchall()
+                if odds:
+                    odds = odds[0][0]
+        elif(x == "VegasTotal"):
+                cursor.execute("""
+                    SELECT o_total
+                    FROM odds
+                    WHERE home_team = ? AND visitor_team = ?
+                """, (home, away))
+                odds = cursor.fetchall()
+                if odds:
+                    odds = odds[0][0]
+                    odds = odds.lstrip("o")
+        return odds
+    
+    def get_date_time_locaiton(home, away, x, week):
+        conn = sqlite3.connect("nfl.db")
+        cursor = conn.cursor()
+        if(x == "date"):
+                cursor.execute("""
+                    SELECT Date
+                    FROM nfl2025schedule
+                    WHERE Week = ? AND Home = ? AND Visitor = ?
+                """, (week, home, away))
+                dtl = cursor.fetchall()
+                if dtl:
+                    dtl = dtl[0][0]
+        elif(x == "time"):
+                cursor.execute("""
+                    SELECT Time
+                    FROM nfl2025schedule
+                    WHERE Week = ? AND Home = ? AND Visitor = ?
+                """, (week, home, away))
+                dtl = cursor.fetchall()
+                if dtl:
+                    dtl = dtl[0][0]
+        elif(x == "location"):
+                cursor.execute("""
+                    SELECT Location
+                    FROM nfl2025schedule
+                    WHERE Week = ? AND Home = ? AND Visitor = ?
+                """, (week, home, away))
+                dtl = cursor.fetchall()
+                if dtl:
+                    dtl = dtl[0][0]
+        return dtl
+
     # Search for the exact matchup
     match = prediction_df[
         (prediction_df['Home'] == home) & (prediction_df['Visitor'] == away)
@@ -45,12 +141,18 @@ def predict():
     home_spread = float(match.iloc[0]['HomeSpread'])
     visitor_spread = float(match.iloc[0]['VisitorSpread'])
     total = float(match.iloc[0]['PredictedTotal'])
-    vegas_home_spread = float(match.iloc[0]['HomeVegasSpread'])
-    vegas_visitor_spread = float(match.iloc[0]['VisitorVegasSpread'])
-    vegas_total = float(match.iloc[0]['VegasTotal'])
-    diff_spread = float(match.iloc[0]['DiffSpread'])
-    diff_visitor_spread = float(match.iloc[0]['DiffVisitorSpread'])
-    diff_total = float(match.iloc[0]['DiffTotal'])
+    # print(total)
+    vegas_home_spread = get_odds(home, away, 'HomeVegasSpread')
+    vegas_visitor_spread = get_odds(home, away, 'VisitorVegasSpread')
+    vegas_total = get_odds(home, away, 'VegasTotal')
+
+    date = get_date_time_locaiton(home, away, "date", 1)
+    print(date)
+    time = get_date_time_locaiton(home, away, "time", 1)
+    location = get_date_time_locaiton(home, away, "location", 1)
+    # diff_spread = float(match.iloc[0]['DiffSpread'])
+    # diff_visitor_spread = float(match.iloc[0]['DiffVisitorSpread'])
+    # diff_total = float(match.iloc[0]['DiffTotal'])
 
     def get_starters(team_abbr):
         conn = sqlite3.connect("nfl.db")
@@ -77,7 +179,7 @@ def predict():
         # Query defensive starters
         cursor.execute("""
             SELECT name, position, number, side, role, headshot, acquisition, team_id
-            FROM players 
+            FROM players2 
             WHERE team_id = ? AND role = '1 string'
         """, (team_id,))
         players = cursor.fetchall()
@@ -98,12 +200,15 @@ def predict():
         'home_spread': round(home_spread, 3),
         'visitor_spread': round(visitor_spread, 3),
         'predicted_total': round(total, 3),
-        'vegas_home_spread': round(vegas_home_spread, 3),
-        'vegas_visitor_spread': round(vegas_visitor_spread, 3),
-        'vegas_total': round(vegas_total, 3),
-        'diff_spread': round(diff_spread, 3),
-        'diff_visitor_spread': round(diff_visitor_spread, 3),
-        'diff_total': round(diff_total, 3),
+        'vegas_home_spread': vegas_home_spread,
+        'vegas_visitor_spread': vegas_visitor_spread,
+        'vegas_total': vegas_total,
+        'date': date,
+        'time': time,
+        'location': location,
+        # 'diff_spread': round(diff_spread, 3),
+        # 'diff_visitor_spread': round(diff_visitor_spread, 3),
+        # 'diff_total': round(diff_total, 3),
         'home_starters': home_starters,
         'visitor_starters': visitor_starters
     })

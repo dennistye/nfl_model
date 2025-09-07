@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{% block title %}NFL Quant{% endblock %}</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <nav class="navbar">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/matchups">Matchups</a></li>
+        <li><a href="/best_odds">Best Odds</a></li>
+        <li><a href="/player_stats">Player Stats</a></li>
+        <li><a href="/about">About</a></li>
+      </ul>
+    </nav>
+
+    <div class="main-container">{% block content %}{% endblock %}</div>
+
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+  </body>
+</html>

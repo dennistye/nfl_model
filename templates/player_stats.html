@@ -1,0 +1,34 @@
+{% extends "navbar.html" %} {% block title %}Player Stats - NFL Quant{% endblock
+%} {% block content %}
+
+<body>
+  <h1 class="predictor-title">NFL Player Stats</h1>
+  <form method="POST">
+    <input
+      type="text"
+      name="player_name"
+      placeholder="Enter player name"
+      required
+    />
+    <button type="submit">Search</button>
+  </form>
+
+  {% if stats %}
+  <h2>Player Stats</h2>
+  <table border="1">
+    <tr>
+      {% for col in stats[0].keys() %}
+      <th>{{ col }}</th>
+      {% endfor %}
+    </tr>
+    {% for row in stats %}
+    <tr>
+      {% for value in row.values() %}
+      <td>{{ value }}</td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </table>
+  {% endif %}
+</body>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "navbar.html" %} {% block title %}Matchups - NFL Quant{% endblock %}
+{% block content %}
+<h1 class="predictor-title">NFL Week 1 Matchups</h1>
+<form id="prediction-form">
+  <select id="matchup" name="matchup">
+    {% for game in games %}
+    <option value="{{ game.Home }}_{{ game.Visitor }}">
+      {{ game.Visitor }} at {{ game.Home }}
+    </option>
+    {% endfor %}
+  </select>
+</form>
+
+<div class="team-container">
+  <div class="team-card">
+    <img id="visitor_logo" src="" alt="Visitor Team" class="team-logo" />
+    <div id="vegas_visitor_spread"></div>
+    <div id="visitor_spread"></div>
+  </div>
+  <div class="team-card">
+    <div id="date"></div>
+    <div id="time"></div>
+    <div id="location"></div>
+    <div id="vegas_total"></div>
+    <div id="total"></div>
+  </div>
+
+  <div class="team-card">
+    <img id="home_logo" src="" alt="Home Team" class="team-logo" />
+    <div id="vegas_home_spread"></div>
+    <div id="home_spread"></div>
+  </div>
+
+  <div class="starters-wrapper">
+    <div id="visitor_starters_container" class="starters-container">
+      <h3>Starting Offense</h3>
+      <div class="starters-grid" id="visitor_offense"></div>
+
+      <h3>Starting Defense</h3>
+      <div class="starters-grid" id="visitor_defense"></div>
+    </div>
+
+    <div class="injury-wrapper">
+      <h3>Home Injury Report</h3>
+      <div class="injury-notification-home"></div>
+      <h3>Visitor Injury Report</h3>
+      <div class="injury-notification-visitor"></div>
+    </div>
+
+    <div id="home_starters_container" class="starters-container">
+      <h3>Starting Offense</h3>
+      <div class="starters-grid" id="home_offense"></div>
+
+      <h3>Starting Defense</h3>
+      <div class="starters-grid" id="home_defense"></div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

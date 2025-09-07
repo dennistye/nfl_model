@@ -1,0 +1,51 @@
+{% extends "navbar.html" %} {% block title %}Best Odds - NFL Quant{% endblock %}
+{% block content %}
+<h1 class="predictor-title">NFL Week 1 Best Odds</h1>
+<div class="header-row">
+  <div class="header-cell">
+    <span>Team</span>
+    <span>Names</span>
+  </div>
+
+  <div class="header-cell">
+    <span>Vegas</span>
+    <span>Open</span>
+  </div>
+
+  <div class="header-cell">
+    <span>Vegas</span>
+    <span>ML</span>
+  </div>
+
+  <div class="header-cell">
+    <span>Vegas</span>
+    <span>Spread</span>
+  </div>
+
+  <div class="header-cell">
+    <span>Vegas</span>
+    <span>Total</span>
+  </div>
+
+  <div class="header-cell">
+    <span>Model</span>
+    <span>Spread</span>
+  </div>
+
+  <div class="header-cell">
+    <span>Model</span>
+    <span>Total</span>
+  </div>
+  <div class="header-cell">
+    <span>Quant</span>
+    <span>Spread</span>
+    <span>Pick</span>
+  </div>
+  <div class="header-cell">
+    <span>Quant</span>
+    <span>Total</span>
+    <span>Pick</span>
+  </div>
+</div>
+<div id="odds-column"></div>
+{% endblock %}
