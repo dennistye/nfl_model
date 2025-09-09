@@ -465,7 +465,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const matchupSelect = document.getElementById("matchup");
   // Set default matchup (e.g., first Week 1 game: PHI vs. DAL)
-  const defaultMatchup = "PHI_DAL";
+  const defaultMatchup = "GB_WAS";
   matchupSelect.value = defaultMatchup; // Set dropdown to default
   loadMatchupData(defaultMatchup); // Load data immediately
 });

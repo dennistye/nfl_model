@@ -1,134 +1,77 @@
 {% extends "navbar.html" %} {% block title %}NFL Quant{% endblock %} {% block
 content %}
+<h1 class="predictor-title">NFL Quant</h1>
+<link rel="stylesheet" href="static/home.css" />
+<body>
+  <!-- Main Section -->
+  <section class="main-section">
+    <h2>WEEK 1 PREDICTIONS ARE LIVE!</h2>
+    <button id="see-matchups">SEE THIS WEEK'S MATCHUPS</button>
+  </section>
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>NFL Quant - Home</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-  </head>
-  <body class="bg-gray-100 text-gray-900">
-    <!-- Hero Section -->
-    <section
-      class="bg-gradient-to-r from-blue-900 to-indigo-800 text-white py-20"
-    >
-      <div class="container mx-auto text-center">
-        <h1 class="text-5xl font-bold mb-4">NFL Quant</h1>
-        <p class="text-xl mb-8">
-          Advanced analytics, player stats & game predictions at your fingertips
-        </p>
-        <a
-          href="home"
-          class="bg-yellow-400 text-black px-6 py-3 rounded-full font-semibold shadow hover:bg-yellow-300 transition"
-        >
-          View This Week’s Matchups
-        </a>
+  <!-- Content Grid -->
+  <section class="grid">
+    <!-- Top Spread Edges -->
+    <div class="card">
+      <h3>TOP SPREAD EDGES</h3>
+      <div class="team-row">
+        <div class="team-square"></div>
+        <span class="team-name">TEAM vs. TEAM</span>
       </div>
-    </section>
-
-    <!-- Quick Player Search -->
-    <section class="py-12 bg-white shadow-inner">
-      <div class="container mx-auto text-center">
-        <h2 class="text-3xl font-semibold mb-6">Search Player Stats</h2>
-        <div class="flex justify-center">
-          <input
-            id="playerSearch"
-            type="text"
-            placeholder="Enter player name..."
-            class="border rounded-l-full px-4 py-2 w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <button
-            onclick="searchPlayer()"
-            class="bg-blue-600 text-white rounded-r-full px-4 py-2 font-semibold hover:bg-blue-500 transition"
-          >
-            Search
-          </button>
-        </div>
-        <div id="playerStats" class="mt-6 text-left max-w-md mx-auto"></div>
+      <div class="team-row">
+        <div class="team-square"></div>
+        <span class="team-name">TEAM vs. TEAM</span>
       </div>
-    </section>
-
-    <!-- Featured Matchups -->
-    <section id="matchups" class="py-16">
-      <div class="container mx-auto text-center">
-        <h2 class="text-4xl font-bold mb-10">This Week’s Featured Matchups</h2>
-        <div class="grid md:grid-cols-3 gap-8">
-          <!-- Example Matchup Card -->
-          <div
-            class="bg-white rounded-2xl shadow hover:shadow-lg transition p-6"
-          >
-            <div class="flex justify-between items-center mb-4">
-              <img src="/static/images/PHI.webp" alt="PHI" class="h-16 w-16" />
-              <span class="text-gray-500 font-semibold">vs</span>
-              <img src="/static/images/DAL.webp" alt="DAL" class="h-16 w-16" />
-            </div>
-            <h3 class="text-xl font-bold mb-2">Eagles vs Cowboys</h3>
-            <p class="text-sm text-gray-600 mb-1">Model Spread: PHI -3.5</p>
-            <p class="text-sm text-gray-600 mb-3">Vegas Spread: PHI -2.5</p>
-            <button
-              class="bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-500 transition"
-            >
-              View Details
-            </button>
-          </div>
-
-          <!-- More cards will be dynamically inserted here via JS -->
-        </div>
+      <div class="team-row">
+        <div class="team-square"></div>
+        <span class="team-name">TEAM vs. TEAM</span>
       </div>
-    </section>
+    </div>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-6 text-center">
-      <p>
-        &copy; <span id="year"></span> NFL Prediction Hub. All Rights Reserved.
-      </p>
-    </footer>
+    <!-- Top Totals Edges -->
+    <div class="card">
+      <h3>TOP TOTALS EDGES</h3>
+      <div class="team-row">
+        <div class="team-square"></div>
+        <span class="team-name">TEAM vs. TEAM</span>
+      </div>
+      <div class="team-row">
+        <div class="team-square"></div>
+        <span class="team-name">TEAM vs. TEAM</span>
+      </div>
+      <div class="team-row">
+        <div class="team-square"></div>
+        <span class="team-name">TEAM vs. TEAM</span>
+      </div>
+    </div>
 
-    <script>
-      document.getElementById("year").textContent = new Date().getFullYear();
+    <!-- This Week's Best Value -->
+    <div class="card content-center">
+      <h3>THIS WEEK'S BEST VALUE</h3>
+      <div class="content-box"></div>
+    </div>
 
-      function searchPlayer() {
-        const name = document.getElementById("playerSearch").value;
-        if (!name.trim()) return;
+    <!-- Matchup Tool -->
+    <div class="card content-center">
+      <h3>MATCHUP TOOL</h3>
+      <select>
+        <option>TEAM</option>
+      </select>
+      <select>
+        <option>TEAM</option>
+      </select>
+    </div>
+  </section>
 
-        fetch(`/api/player_stats?name=${encodeURIComponent(name)}`)
-          .then((res) => res.json())
-          .then((data) => {
-            const statsDiv = document.getElementById("playerStats");
-            if (!data || data.length === 0) {
-              statsDiv.innerHTML =
-                "<p class='text-red-600 font-semibold'>No stats found for this player.</p>";
-            } else {
-              let html =
-                "<table class='w-full border-collapse border border-gray-300 text-sm'>";
-              html +=
-                "<tr>" +
-                Object.keys(data[0])
-                  .map((k) => `<th class='border px-2 py-1'>${k}</th>`)
-                  .join("") +
-                "</tr>";
-              data.forEach((row) => {
-                html +=
-                  "<tr>" +
-                  Object.values(row)
-                    .map((v) => `<td class='border px-2 py-1'>${v}</td>`)
-                    .join("") +
-                  "</tr>";
-              });
-              html += "</table>";
-              statsDiv.innerHTML = html;
-            }
-          })
-          .catch((err) => {
-            document.getElementById("playerStats").innerHTML =
-              "<p class='text-red-600 font-semibold'>Error loading stats.</p>";
-            console.error(err);
-          });
-      }
-    </script>
-  </body>
-</html>
+  <!-- Footer -->
+  <!-- <footer>
+    <div class="footer-links">
+      <a href="#">Contact</a>
+      <a href="#">About</a>
+      <a href="#">Disclaimer</a>
+    </div>
+  </footer> -->
 
+  <script src="script.js"></script>
+</body>
 {% endblock %}
