@@ -8,21 +8,24 @@ from datetime import date
 
 global_week = 0
 
-def clean_data(box_scores_2023_df, box_scores_2024_df, pbp_2023_df, pbp_2024_df):
+def clean_data(box_scores_2023_df, box_scores_2024_df, box_scores_2025_df, pbp_2023_df, pbp_2024_df, pbp_2025_df):
     #change the box scores from NaN to REG for the OTFLag column
 
     box_scores_2023_df['OTFlag'] = box_scores_2023_df['OTFlag'].fillna('REG')
     box_scores_2024_df['OTFlag'] = box_scores_2024_df['OTFlag'].fillna('REG')
+    box_scores_2025_df['OTFlag'] = box_scores_2024_df['OTFlag'].fillna('REG')
 
     #get rid of the box score column because it is redundant
 
     box_scores_2023_df = box_scores_2023_df.drop(columns=['Box Score'], errors='ignore')
     box_scores_2024_df = box_scores_2024_df.drop(columns=['Box Score'], errors='ignore')
+    box_scores_2025_df = box_scores_2025_df.drop(columns=['Box Score'], errors='ignore')
 
     #drop any columns that are empty
 
     pbp_2023_df = pbp_2023_df.dropna(axis=1, how='all')
     pbp_2024_df = pbp_2024_df.dropna(axis=1, how='all')
+    pbp_2025_df = pbp_2025_df.dropna(axis=1, how='all')
 
     #fill any values that are empty to Unknown
 
@@ -49,11 +52,19 @@ def clean_data(box_scores_2023_df, box_scores_2024_df, pbp_2023_df, pbp_2024_df)
     pbp_2024_df['GameDate'] = pd.to_datetime(pbp_2024_df['GameDate'])
     pbp_2024_df['GameDate'] = pbp_2024_df['GameDate'].dt.strftime('%m/%d/%Y')
 
+    pbp_2025_df['GameDate'] = pd.to_datetime(pbp_2025_df['GameDate'])
+    pbp_2025_df['GameDate'] = pbp_2025_df['GameDate'].dt.strftime('%m/%d/%Y')
+    pbp_2025_df["GameDate"] = pbp_2025_df["GameDate"].iloc[0]
+
+
     box_scores_2023_df['Date'] = pd.to_datetime(box_scores_2023_df['Date'], errors='coerce')
     box_scores_2023_df['Date'] = box_scores_2023_df['Date'].dt.strftime('%m/%d/%Y')
 
     box_scores_2024_df['Date'] = pd.to_datetime(box_scores_2024_df['Date'], errors='coerce')
     box_scores_2024_df['Date'] = box_scores_2024_df['Date'].dt.strftime('%m/%d/%Y')
+
+    box_scores_2025_df['Date'] = pd.to_datetime(box_scores_2025_df['Date'], errors='coerce')
+    box_scores_2025_df['Date'] = box_scores_2025_df['Date'].dt.strftime('%m/%d/%Y')
 
     team_abbr = {
         "Arizona Cardinals": "ARI",
@@ -98,6 +109,10 @@ def clean_data(box_scores_2023_df, box_scores_2024_df, pbp_2023_df, pbp_2024_df)
     box_scores_2024_df['Visitor'] = box_scores_2024_df['Visitor'].map(team_abbr)
     box_scores_2024_df['Home'] = box_scores_2024_df['Home'].map(team_abbr)
 
+    box_scores_2025_df['Visitor'] = box_scores_2025_df['Visitor'].map(team_abbr)
+    box_scores_2025_df['Home'] = box_scores_2025_df['Home'].map(team_abbr)
+
+
 
     # Merge play-by-play data for 2023 with scores data for 2023 based on Date, OffenseTeam, and DefenseTeam
     merged_2023_df = pbp_2023_df.merge(box_scores_2023_df, left_on=['GameDate', 'OffenseTeam', 'DefenseTeam'], right_on=['Date', 'Visitor', 'Home'], how='left')
@@ -126,9 +141,24 @@ def clean_data(box_scores_2023_df, box_scores_2024_df, pbp_2023_df, pbp_2024_df)
     merged_2024_df = merged_2024_df.drop(columns='Date')
 
 
+
+    merged_2025_df = pbp_2025_df.merge(box_scores_2025_df, left_on=['GameDate', 'OffenseTeam', 'DefenseTeam'], right_on=['Date', 'Visitor', 'Home'], how='left')
+    merged_2025_df = merged_2025_df.merge(box_scores_2025_df, left_on=['GameDate', 'OffenseTeam', 'DefenseTeam'], right_on=['Date', 'Home', 'Visitor'], how='left', suffixes=('', '_reverse'))
+
+    for column in ['Visitor', 'Visitor_score', 'Home', 'Home_score', 'OTFlag']:
+        merged_2025_df[column] = merged_2025_df[column].combine_first(merged_2025_df[column + '_reverse'])
+
+
+    columns_to_drop = [col + '_reverse' for col in ['Date','Visitor', 'Visitor_score', 'Home', 'Home_score', 'OTFlag']]
+    merged_2025_df = merged_2025_df.drop(columns=columns_to_drop)
+    merged_2025_df = merged_2025_df.drop(columns='Date')
+
+
+
     # Adding "HomeWon" Column which is just a binary 1 or 0 when a home team won or lost
     merged_2023_df['HomeWon'] = merged_2023_df['Home_score'] > merged_2023_df['Visitor_score']
     merged_2024_df['HomeWon'] = merged_2024_df['Home_score'] > merged_2024_df['Visitor_score']
+    merged_2025_df['HomeWon'] = merged_2025_df['Home_score'] > merged_2025_df['Visitor_score']
 
     merged_2023_df['Spread'] = merged_2023_df['Home_score'] - merged_2023_df['Visitor_score']
     merged_2023_df['Total'] = merged_2023_df['Home_score'] + merged_2023_df['Visitor_score']
@@ -136,7 +166,11 @@ def clean_data(box_scores_2023_df, box_scores_2024_df, pbp_2023_df, pbp_2024_df)
     merged_2024_df['Spread'] = merged_2024_df['Home_score'] - merged_2024_df['Visitor_score']
     merged_2024_df['Total'] = merged_2024_df['Home_score'] + merged_2024_df['Visitor_score']
 
-    all_data = pd.concat([merged_2023_df, merged_2024_df])
+    merged_2025_df['Spread'] = merged_2025_df['Home_score'] - merged_2025_df['Visitor_score']
+    merged_2025_df['Total'] = merged_2025_df['Home_score'] + merged_2025_df['Visitor_score']
+
+    print(merged_2025_df)
+    all_data = pd.concat([merged_2023_df, merged_2024_df, ])
 
     #all_data['Weight'] = all_data['SeasonYear'].apply(lambda x: 1.5 if x == 2024 else 1)
 
@@ -436,7 +470,7 @@ def clean_schedule_merge_with_features(team_features_complete):
 
     # Load directly into DataFrame
     week_number_df = pd.read_sql_query(query, conn)
-    week_number_df = week_number_df[['Home', 'Visitor', "Time", "Location"]]
+    week_number_df = week_number_df[['Home', 'Visitor']]
     # print(week1_df)
 
     # Close connection
@@ -444,8 +478,9 @@ def clean_schedule_merge_with_features(team_features_complete):
 
 
     upcoming_encoded_home = week_number_df.merge(team_features_complete, left_on='Home', right_on='Team', how='left')
+    print(upcoming_encoded_home)
     upcoming_encoded_both = upcoming_encoded_home.merge(team_features_complete, left_on='Visitor', right_on='Team', suffixes=('_Home', '_Visitor'), how='left')
-
+    print(upcoming_encoded_both)
 
     # Calculate the difference in features as this might be a more predictive representation
     for col in ['AvgPointsScored', 'WinRate', 'AvgPointsDefended', 'AvgConcededPlays', 'AvgForcedTurnovers',
@@ -455,7 +490,7 @@ def clean_schedule_merge_with_features(team_features_complete):
 
     # Selecting only the difference columns and the teams for clarity
     upcoming_encoded_final = upcoming_encoded_both[['Home', 'Visitor'] + [col for col in upcoming_encoded_both.columns if 'Diff_' in col]]
-
+    print(upcoming_encoded_final)
     # After creating all_data in clean_data
     if upcoming_encoded_final.isna().any().any():
         print("DataFrame contains NaN values.")
@@ -476,6 +511,11 @@ def prep_and_train(upcoming_encoded_final, team_features_complete, all_data):
                 'AvgYardsPerPlay', 'AvgYardsPerGame', 'AvgPassCompletionRate', 'AvgTouchdownsPerGame', 'AvgRushSuccessRate',
                 'AvgYardsAllowedPerPlay', 'AvgYardsAllowedPerGame', 'AvgPassCompletionAllowedRate', 'AvgTouchdownsAllowedPerGame', 'AvgRushSuccessAllowedRate']:
         training_encoded_both[f'Diff_{col}'] = training_encoded_both[f'{col}_Home'] - training_encoded_both[f'{col}_Visitor']
+
+
+    training_encoded_both.to_csv("training.csv")
+
+
 
     # Filtering out the required columns
     # Feature matrix
@@ -514,10 +554,15 @@ def convert_spread_to_reg(spread):
 
 
 def main():
+
+
+
     # Load data
     box_scores_2023_df = pd.read_csv("csv_folder/2023_box_scores.csv")
 
     box_scores_2024_df = pd.read_csv("csv_folder/2024_box_scores.csv")
+
+    box_scores_2025_df = pd.read_csv("csv_folder/2025_box_scores.csv")
 
     # schedule_2025_df = pd.read_csv("csv_folder/2025_schedule.csv")
 
@@ -525,12 +570,18 @@ def main():
 
     pbp_2024_df = pd.read_csv("csv_folder/pbp-2024.csv")
 
+    pbp_2025_df = pd.read_csv("csv_folder/pbp-2025.csv")
+
     vegas_odds = pd.read_csv("csv_folder/odds.csv")
+
+    k_neighbors_classifier = pd.read_csv("supporting_files/k_neighbors_classifier.csv")
+
+    k_neighbors_classifier[['Visitor', 'Home']] = k_neighbors_classifier['Game'].str.split(' @ ', expand=True)
 
     #pinnacle_probs_df = pd.read_csv("csv_folder/Pinnacle_odds.csv")
 
     # Cleaned data
-    all_data = clean_data(box_scores_2023_df, box_scores_2024_df, pbp_2023_df, pbp_2024_df)
+    all_data = clean_data(box_scores_2023_df, box_scores_2024_df, box_scores_2025_df, pbp_2023_df, pbp_2024_df, pbp_2025_df)
 
     # Adding team features
     team_features_complete = team_features(all_data)
@@ -569,10 +620,16 @@ def main():
     # upcoming_predictions = upcoming_predictions.drop(columns=['PredictedTotal']) 
 
     complete_df = upcoming_predictions.merge(vegas_odds, left_on=["Home", "Visitor"], right_on=["home_team", "visitor_team"], how="inner")
-    complete_df.to_csv("csv_folder/complete.csv", index=False)
+    complete_df = complete_df.merge(k_neighbors_classifier, left_on=["Home", "Visitor"], right_on=["Home", "Visitor"], how="inner")
 
-    
-    
+    complete_df = complete_df.drop(columns=["Unnamed: 0_y", "Game", "Spread", "Total"])
+    # Sort by Unnamed: 0_x
+    complete_df.rename(columns={"Unnamed: 0_x": "Index"}, inplace=True)
+    complete_df.rename(columns={"KNC(7)": "knc"}, inplace=True)
+    complete_df = complete_df.sort_values("Index").reset_index(drop=True)
+
+
+    complete_df.to_csv("csv_folder/complete.csv", index=False)
 
 
     # upcoming_predictions['DiffSpread'] = upcoming_predictions['DiffSpread'].round(1)

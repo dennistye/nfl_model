@@ -5,8 +5,10 @@ content %}
 <body>
   <!-- Main Section -->
   <section class="main-section">
-    <h2>WEEK 1 PREDICTIONS ARE LIVE!</h2>
-    <button id="see-matchups">SEE THIS WEEK'S MATCHUPS</button>
+    <h2>WEEK 2 PREDICTIONS ARE LIVE!</h2>
+    <a href="/matchups">
+      <button>SEE THIS WEEK'S MATCHUPS</button>
+    </a>
   </section>
 
   <!-- Content Grid -->
@@ -14,7 +16,8 @@ content %}
     <!-- Top Spread Edges -->
     <div class="card">
       <h3>TOP SPREAD EDGES</h3>
-      <div class="team-row">
+      <div id="spreads_edges"></div>
+      <!-- <div class="team-row">
         <div class="team-square"></div>
         <span class="team-name">TEAM vs. TEAM</span>
       </div>
@@ -25,12 +28,30 @@ content %}
       <div class="team-row">
         <div class="team-square"></div>
         <span class="team-name">TEAM vs. TEAM</span>
-      </div>
+      </div> -->
     </div>
 
     <!-- Top Totals Edges -->
     <div class="card">
       <h3>TOP TOTALS EDGES</h3>
+      <div id="totals_edges"></div>
+      <!-- <div class="team-row">
+        <div class="team-square"></div>
+        <span class="team-name">TEAM vs. TEAM</span>
+      </div>
+      <div class="team-row">
+        <div class="team-square"></div>
+        <span class="team-name">TEAM vs. TEAM</span>
+      </div>
+      <div class="team-row">
+        <div class="team-square"></div>
+        <span class="team-name">TEAM vs. TEAM</span>
+      </div> -->
+    </div>
+
+    <!-- Matchup Tool -->
+    <div class="card content-center">
+      <h3>TOP PROP EDGES</h3>
       <div class="team-row">
         <div class="team-square"></div>
         <span class="team-name">TEAM vs. TEAM</span>
@@ -50,17 +71,6 @@ content %}
       <h3>THIS WEEK'S BEST VALUE</h3>
       <div class="content-box"></div>
     </div>
-
-    <!-- Matchup Tool -->
-    <div class="card content-center">
-      <h3>MATCHUP TOOL</h3>
-      <select>
-        <option>TEAM</option>
-      </select>
-      <select>
-        <option>TEAM</option>
-      </select>
-    </div>
   </section>
 
   <!-- Footer -->
@@ -71,7 +81,5 @@ content %}
       <a href="#">Disclaimer</a>
     </div>
   </footer> -->
-
-  <script src="script.js"></script>
 </body>
 {% endblock %}

@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify
 import pandas as pd
 import numpy as np
 import sqlite3
+from datetime import date
 
 app = Flask(__name__)
 
@@ -15,6 +16,11 @@ def index():
     games = prediction_df[['Home', 'Visitor']].to_dict(orient='records')
     return render_template('index.html', games=games)
 
+@app.route('/api/')
+def api_index():
+   odds = prediction_df.to_dict(orient='records')
+   return jsonify(odds)
+
 @app.route('/matchups')
 def matchups():
     # Show list of week 1 matchups
@@ -22,7 +28,7 @@ def matchups():
     return render_template('matchups.html', games=games)
 
 @app.route('/api/best_odds')
-def predictions():
+def best_odds():
    odds = prediction_df.to_dict(orient='records')
    return jsonify(odds)
 
@@ -101,15 +107,36 @@ def predict():
                     odds = odds.lstrip("o")
         return odds
     
-    def get_date_time_locaiton(home, away, x, week):
+    def get_date_time_locaiton(home, away, x):
+        from datetime import date
         conn = sqlite3.connect("nfl.db")
+        query = """
+            SELECT *
+            FROM "nfl2025schedule"
+        """
+
+        # Load directly into DataFrame
+        df = pd.read_sql_query(query, conn)
+        df_first = df.sort_values(["Week", "Date", "Time"]) \
+                .groupby("Week", as_index=False) \
+                .first()
+        
+        # Compute absolute difference in days
+        df_first["Date"] = pd.to_datetime(df_first["Date"], errors="coerce")
+
+        # Get today's date
+        today = pd.to_datetime(date.today())
+        df_first["Diff"] = (df_first["Date"] - today).abs()
+
+        # Find the row with the smallest difference
+        closest_week = df_first.loc[df_first["Diff"].idxmin(), "Week"]
         cursor = conn.cursor()
         if(x == "date"):
                 cursor.execute("""
                     SELECT Date
                     FROM nfl2025schedule
                     WHERE Week = ? AND Home = ? AND Visitor = ?
-                """, (week, home, away))
+                """, (int(closest_week), home, away))
                 dtl = cursor.fetchall()
                 if dtl:
                     dtl = dtl[0][0]
@@ -118,7 +145,7 @@ def predict():
                     SELECT Time
                     FROM nfl2025schedule
                     WHERE Week = ? AND Home = ? AND Visitor = ?
-                """, (week, home, away))
+                """, (int(closest_week), home, away))
                 dtl = cursor.fetchall()
                 if dtl:
                     dtl = dtl[0][0]
@@ -127,7 +154,7 @@ def predict():
                     SELECT Location
                     FROM nfl2025schedule
                     WHERE Week = ? AND Home = ? AND Visitor = ?
-                """, (week, home, away))
+                """, (int(closest_week), home, away))
                 dtl = cursor.fetchall()
                 if dtl:
                     dtl = dtl[0][0]
@@ -146,10 +173,10 @@ def predict():
     vegas_visitor_spread = get_odds(home, away, 'VisitorVegasSpread')
     vegas_total = get_odds(home, away, 'VegasTotal')
 
-    date = get_date_time_locaiton(home, away, "date", 1)
+    date = get_date_time_locaiton(home, away, "date")
     print(date)
-    time = get_date_time_locaiton(home, away, "time", 1)
-    location = get_date_time_locaiton(home, away, "location", 1)
+    time = get_date_time_locaiton(home, away, "time")
+    location = get_date_time_locaiton(home, away, "location")
     # diff_spread = float(match.iloc[0]['DiffSpread'])
     # diff_visitor_spread = float(match.iloc[0]['DiffVisitorSpread'])
     # diff_total = float(match.iloc[0]['DiffTotal'])

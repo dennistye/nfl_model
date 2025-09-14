@@ -245,6 +245,7 @@ function loadMatchupData(matchup) {
 }
 
 function loadOddsData(odds) {
+  console.log("Hello world!");
   const gamesColumn = document.getElementById("odds-column");
   gamesColumn.innerHTML = ""; // Clear previous data
 
@@ -416,12 +417,25 @@ function loadOddsData(odds) {
     const betting_total2 = document.createElement("div");
     betting_total2.className = "team-cell";
 
+    const [vegas_total_diff, vegas_spread_diff] = just_a_good_function(game);
+    console.log(vegas_total_diff);
     let vegas_numericTotal = game.o_total.slice(1);
-    if (game.PredictedTotal - vegas_numericTotal < -5) {
+
+    const u_cond1 = game.PredictedTotal - vegas_numericTotal < -5;
+    const u_cond2 = game.knc === "Under";
+    const u_cond3 = vegas_numericTotal - vegas_total_diff < -1.5; // replace with your third condition
+
+    const o_cond1 = vegas_numericTotal - game.PredictedTotal < -5;
+    const o_cond2 = game.knc === "Over";
+    const o_cond3 = vegas_numericTotal - vegas_total_diff > 1.5; // replace with your third condition
+
+    console.log(u_cond3);
+
+    if ([u_cond1, u_cond2, u_cond3].filter(Boolean).length >= 2) {
       betting_total2.style.backgroundColor = "lightgreen";
       betting_total1.textContent = ".";
       betting_total2.textContent = game.u_total;
-    } else if (vegas_numericTotal - game.PredictedTotal < -5) {
+    } else if ([o_cond1, o_cond2, o_cond3].filter(Boolean).length >= 2) {
       betting_total1.style.backgroundColor = "lightgreen";
       betting_total2.textContent = ".";
       betting_total1.textContent = game.o_total;
@@ -450,7 +464,186 @@ function loadOddsData(odds) {
   });
 }
 
-function loadPlayerstats() {}
+function totals_edges(odds) {
+  const gamesColumn = document.getElementById("totals_edges");
+  gamesColumn.innerHTML = ""; // Clear previous data
+  let count = 0;
+  odds.forEach((game) => {
+    // if (count >= 5) return; // stop after 3
+    // count++;
+    // Check if the game meets any condition to render
+    const totalCondition =
+      Math.abs(game.PredictedTotal - parseFloat(game.o_total.slice(1))) > 5;
+
+    if (!totalCondition) {
+      // Skip this game entirely if neither condition is true
+      return;
+    }
+
+    // If we reach here, at least one condition is true — create the card
+    const columnItem = document.createElement("div");
+    columnItem.className = "column-item";
+
+    // Away team
+    const awayDiv = document.createElement("div");
+    awayDiv.className = "team-section";
+    const awayLogo = document.createElement("img");
+    awayLogo.src =
+      game.Visitor === "NYJ"
+        ? "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/nyj.png&h=200&w=200"
+        : teamLogos[game.Visitor].logo;
+    awayLogo.alt = game.Visitor;
+    awayLogo.className = "team-logo1";
+    const awayName = document.createElement("div");
+    awayName.className = "team-name";
+    awayName.textContent = game.Visitor;
+    awayDiv.appendChild(awayLogo);
+    awayDiv.appendChild(awayName);
+
+    // Home team
+    const homeDiv = document.createElement("div");
+    homeDiv.className = "team-section";
+    const homeLogo = document.createElement("img");
+    homeLogo.src =
+      game.Home === "NYJ"
+        ? "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/nyj.png&h=200&w=200"
+        : teamLogos[game.Home].logo;
+    homeLogo.alt = game.Home;
+    homeLogo.className = "team-logo1";
+    const homeName = document.createElement("div");
+    homeName.className = "team-name";
+    homeName.textContent = game.Home;
+    homeDiv.appendChild(homeLogo);
+    homeDiv.appendChild(homeName);
+
+    // "vs" text
+    const vsDiv = document.createElement("div");
+    vsDiv.className = "vs-text";
+    vsDiv.textContent = "vs";
+
+    // Betting line
+    const betDiv = document.createElement("div");
+    betDiv.className = "bet-line";
+
+    if (totalCondition) {
+      betDiv.textContent = game.o_total;
+      betDiv.style.backgroundColor = "lightgreen";
+      betDiv.style.fontWeight = "bold";
+    } else if (totalCondition) {
+      betDiv.textContent = game.o_total;
+      betDiv.style.backgroundColor = "lightgreen";
+      betDiv.style.fontWeight = "bold";
+    }
+
+    // Append elements
+    columnItem.appendChild(awayDiv);
+    columnItem.appendChild(vsDiv);
+    columnItem.appendChild(homeDiv);
+    columnItem.appendChild(betDiv);
+
+    gamesColumn.appendChild(columnItem);
+  });
+}
+
+function spread_edges(odds) {
+  const gamesColumn = document.getElementById("spreads_edges");
+  gamesColumn.innerHTML = ""; // Clear previous data
+
+  odds.forEach((game) => {
+    // Check if the game meets any condition to render
+    const homeSpreadCondition =
+      Math.abs(game.HomeSpread - game.home_spread) > 5;
+    const totalCondition =
+      Math.abs(game.PredictedTotal - parseFloat(game.o_total.slice(1))) > 5;
+
+    if (!homeSpreadCondition && !totalCondition) {
+      // Skip this game entirely if neither condition is true
+      return;
+    }
+
+    // If we reach here, at least one condition is true — create the card
+    const columnItem = document.createElement("div");
+    columnItem.className = "column-item";
+
+    // Away team
+    const awayDiv = document.createElement("div");
+    awayDiv.className = "team-section";
+    const awayLogo = document.createElement("img");
+    awayLogo.src =
+      game.Visitor === "NYJ"
+        ? "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/nyj.png&h=200&w=200"
+        : teamLogos[game.Visitor].logo;
+    awayLogo.alt = game.Visitor;
+    awayLogo.className = "team-logo1";
+    const awayName = document.createElement("div");
+    awayName.className = "team-name";
+    awayName.textContent = game.Visitor;
+    awayDiv.appendChild(awayLogo);
+    awayDiv.appendChild(awayName);
+
+    // Home team
+    const homeDiv = document.createElement("div");
+    homeDiv.className = "team-section";
+    const homeLogo = document.createElement("img");
+    homeLogo.src =
+      game.Home === "NYJ"
+        ? "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/nyj.png&h=200&w=200"
+        : teamLogos[game.Home].logo;
+    homeLogo.alt = game.Home;
+    homeLogo.className = "team-logo1";
+    const homeName = document.createElement("div");
+    homeName.className = "team-name";
+    homeName.textContent = game.Home;
+    homeDiv.appendChild(homeLogo);
+    homeDiv.appendChild(homeName);
+
+    // "vs" text
+    const vsDiv = document.createElement("div");
+    vsDiv.className = "vs-text";
+    vsDiv.textContent = "vs";
+
+    // Betting line
+    const betDiv = document.createElement("div");
+    betDiv.className = "bet-line";
+
+    if (homeSpreadCondition) {
+      betDiv.textContent = game.Home + " " + game.home_spread;
+      betDiv.style.backgroundColor = "lightgreen";
+      betDiv.style.fontWeight = "bold";
+    } else if (totalCondition) {
+      betDiv.textContent = game.o_total;
+      betDiv.style.backgroundColor = "lightgreen";
+      betDiv.style.fontWeight = "bold";
+    }
+
+    // Append elements
+    columnItem.appendChild(awayDiv);
+    columnItem.appendChild(vsDiv);
+    columnItem.appendChild(homeDiv);
+    columnItem.appendChild(betDiv);
+
+    gamesColumn.appendChild(columnItem);
+  });
+}
+
+function just_a_good_function(game) {
+  let cleaned_total = game.open_total;
+  let cleaned_spread = game.open_spread;
+
+  // Remove 'o' or 'u' from total
+  if (cleaned_total.includes("o") || cleaned_total.includes("u")) {
+    cleaned_total = cleaned_total.replace(/[ou]/gi, "");
+    cleaned_spread = cleaned_spread.replace(/[+-]/g, "");
+  }
+
+  // Remove '+' or '-' from spread
+  if (cleaned_spread.includes("o") || cleaned_spread.includes("u")) {
+    cleaned_total = cleaned_spread.replace(/[ou]/gi, "");
+    cleaned_spread = cleaned_total.replace(/[+-]/g, "");
+  }
+
+  return [cleaned_total, cleaned_spread];
+}
 
 // Load default matchup on page load
 document.addEventListener("DOMContentLoaded", () => {
@@ -462,18 +655,36 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .catch((error) => console.error("Error fetching odds:", error));
   }
+});
 
-  const matchupSelect = document.getElementById("matchup");
-  // Set default matchup (e.g., first Week 1 game: PHI vs. DAL)
-  const defaultMatchup = "GB_WAS";
-  matchupSelect.value = defaultMatchup; // Set dropdown to default
-  loadMatchupData(defaultMatchup); // Load data immediately
+document.addEventListener("DOMContentLoaded", () => {
+  if (document.getElementById("totals_edges")) {
+    fetch("/api/")
+      .then((response) => response.json())
+      .then((data) => {
+        totals_edges(data);
+        spread_edges(data);
+      })
+      .catch((error) => console.error("Error fetching total edges:", error));
+  }
 });
 
 // Update data when matchup changes
-document.getElementById("matchup").addEventListener("change", (e) => {
-  const matchup = e.target.value;
-  if (matchup) {
-    loadMatchupData(matchup);
+document.addEventListener("DOMContentLoaded", () => {
+  const matchupSelect = document.getElementById("matchup");
+  // console.log(matchupSelect);
+  if (matchupSelect) {
+    // This code will ONLY run on the matchups page
+    const defaultMatchup = matchupSelect.options[0].value;
+    matchupSelect.value = defaultMatchup;
+    loadMatchupData(defaultMatchup);
+
+    matchupSelect.addEventListener("change", (e) => {
+      const matchup = e.target.value;
+      if (matchup) {
+        loadMatchupData(matchup);
+        console.log(matchup);
+      }
+    });
   }
 });

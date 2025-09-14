@@ -416,10 +416,12 @@ tr:hover {
   margin-bottom: 10px; /* Space below headers */
   justify-content: center;
   margin-left: 50px; /* adjust px as needed */
+  flex-wrap: wrap;
 }
 
 .header-cell {
   display: flex;
+  flex: 1 1 100px;
   flex-direction: column; /* Stack text inside header vertically */
   align-items: center; /* Center text horizontally */
   justify-content: center;
@@ -437,4 +439,10 @@ tr:hover {
   height: 24px;
   padding: 2px;
   margin-top: 7px;
+}
+
+.team-logo1 {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
 }

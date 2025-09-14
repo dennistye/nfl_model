@@ -23,6 +23,11 @@ test.py
 test2.py
 test3.py
 test4.py
+test5.py
+test6.py
+test7.py
+test8.py
+test9.py
 players_scrape/
 misc_folder/
 
@@ -35,3 +40,11 @@ player_picture.py
 player_scrape.py
 
 supporting_files/
+
+training.csv
+
+test.R
+
+team_stats.csv
+
+pbp-2025.csv
