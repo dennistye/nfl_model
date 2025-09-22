@@ -2,47 +2,47 @@ import numpy as np
 import pandas as pd
 import sqlite3
 
-city_abbr = {
-        "Arizona": "ARI",
-        "Atlanta": "ATL",
-        "Baltimore": "BAL",
-        "Buffalo": "BUF",
-        "Carolina": "CAR",
-        "Chicago": "CHI",
-        "Cincinnati": "CIN",
-        "Cleveland": "CLE",
-        "Dallas": "DAL",
-        "Denver": "DEN",
-        "Detroit": "DET",
-        "Green Bay": "GB",
-        "Houston": "HOU",
-        "Indianapolis": "IND",
-        "Jacksonville": "JAX",
-        "Kansas City": "KC",
-        "Las Vegas": "LV",
-        "Los Angeles1": "LAC",  
-        "Los Angeles2": "LA",  
-        "Miami": "MIA",
-        "Minnesota": "MIN",
-        "New England": "NE",
-        "New Orleans": "NO",
-        "New York1": "NYG",  
-        "New York2": "NYJ",  
-        "Philadelphia": "PHI",
-        "Pittsburgh": "PIT",
-        "San Francisco": "SF",
-        "Seattle": "SEA",
-        "Tampa Bay": "TB",
-        "Tennessee": "TEN",
-        "Washington": "WAS"
-    }
+team_dict = {
+    "Cardinals": "ARI",
+    "Falcons": "ATL",
+    "Ravens": "BAL",
+    "Bills": "BUF",
+    "Panthers": "CAR",
+    "Bears": "CHI",
+    "Bengals": "CIN",
+    "Browns": "CLE",
+    "Cowboys": "DAL",
+    "Broncos": "DEN",
+    "Lions": "DET",
+    "Packers": "GB",
+    "Texans": "HOU",
+    "Colts": "IND",
+    "Jaguars": "JAX",
+    "Chiefs": "KC",
+    "Raiders": "LV",
+    "Chargers": "LAC",
+    "Rams": "LAR",
+    "Dolphins": "MIA",
+    "Vikings": "MIN",
+    "Patriots": "NE",
+    "Saints": "NO",
+    "Giants": "NYG",
+    "Jets": "NYJ",
+    "Eagles": "PHI",
+    "Steelers": "PIT",
+    "49ers": "SF",
+    "Seahawks": "SEA",
+    "Buccaneers": "TB",
+    "Titans": "TEN",
+    "Commanders": "WAS"
+}
 
-df = pd.read_csv("2025_schedule.csv")
+df = pd.read_csv("merged_df.csv")
 
 df['Home'] = df['Home'].str.lstrip('@').str.strip()
 
-df["Visitor"] = df["Visitor"].map(city_abbr)
-df["Home"] = df["Home"].map(city_abbr)
+df["Visitor"] = df["Visitor"].map(team_dict)
+df["Home"] = df["Home"].map(team_dict)
 
 print(df)
 
