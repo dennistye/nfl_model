@@ -607,11 +607,19 @@ def prep_and_train(upcoming_encoded_final, team_features_complete, all_data):
     # y_spread = y_spread.fillna(0)
     # y_total = y_total.fillna(0)
 
+    # ---- Apply Weights ----
+    alpha = 0.7
+    current_year = 2025
+    weight_map = {year: alpha**(current_year - year) for year in [2023, 2024, 2025]}
+
+    # Map weights to each row based on SeasonYear
+    sample_weights = all_data['SeasonYear'].map(weight_map).fillna(1.0)
+
     spread_model = LinearRegression()
     total_model = LinearRegression()
 
-    spread_model.fit(X_train, y_spread)
-    total_model.fit(X_train, y_total)
+    spread_model.fit(X_train, y_spread, sample_weight=sample_weights)
+    total_model.fit(X_train, y_total, sample_weight=sample_weights)
 
     X_upcoming = upcoming_encoded_final[[col for col in upcoming_encoded_final.columns if 'Diff_' in col]]
     # X_upcoming.to_csv("x_upcoming.csv")
@@ -764,7 +772,7 @@ def main():
     print(complete_df)
 
 
-    complete_df.to_csv("csv_folder/complete.csv", index=False)
+    complete_df.to_csv("csv_folder/complete_weights.csv", index=False)
 
 
     # upcoming_predictions['DiffSpread'] = upcoming_predictions['DiffSpread'].round(1)

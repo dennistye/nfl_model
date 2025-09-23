@@ -37,7 +37,7 @@ team_dict = {
     "Commanders": "WAS"
 }
 
-df = pd.read_csv("merged_df.csv")
+df = pd.read_csv("2025_pbp_scrape/merged_df.csv")
 
 df['Home'] = df['Home'].str.lstrip('@').str.strip()
 
@@ -53,7 +53,7 @@ df.to_sql("nfl2025schedule", conn, if_exists="replace", index=False)
 
 # Verify by reading back
 check = pd.read_sql("SELECT * FROM nfl2025schedule", conn)
-print(check.head())
+print(check.head(65))
 
 conn.commit()
 conn.close()
