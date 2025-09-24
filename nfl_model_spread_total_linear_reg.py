@@ -592,7 +592,7 @@ def prep_and_train(upcoming_encoded_final, team_features_complete, all_data):
     # Feature matrix
     X_train = training_encoded_both[[col for col in training_encoded_both.columns if 'Diff_' in col]]
 
-    # X_train.to_csv("xtrain.csv")
+    X_train.to_csv("xtrain.csv")
     # print(X_train.isna().sum())
 
 
@@ -643,8 +643,13 @@ def best_bets(complete_df):
     complete_df["home_spread"] = pd.to_numeric(complete_df["home_spread"], errors="coerce")
     complete_df["best_total"] = None
     complete_df["best_spread"] = None
+    complete_df["diff_spread"] = None
+    complete_df["diff_total"] = None
+    complete_df["top_three_spread"] = None
+    complete_df["top_three_total"] = None
 
     for index, row in complete_df.iterrows():
+        complete_df.at[index, "diff_total"] = abs(row["PredictedTotal"] - row["o_total"])
         if row["PredictedTotal"] - row["o_total"] >= 5:
             complete_df.at[index, "best_total"] = "Over"
         elif row["PredictedTotal"] - row["o_total"] <= -5:
@@ -654,6 +659,7 @@ def best_bets(complete_df):
 
 
     for index, row in complete_df.iterrows():
+        complete_df.at[index, "diff_spread"] = abs(row["HomeSpread"] - row["home_spread"])
         if row["HomeSpread"] - row["home_spread"] >= 5 and row["HomeSpread"] > 0 and row["home_spread"] > 0:
             complete_df.at[index, "best_spread"] = "Away"
         elif row["HomeSpread"] - row["home_spread"] <= -5 and row["HomeSpread"] < 0 and row["home_spread"] < 0:
@@ -664,7 +670,26 @@ def best_bets(complete_df):
             complete_df.at[index, "best_spread"] = "Home" 
         else:
             complete_df.at[index, "best_spread"] = "Mininmal Edge"
+    
 
+        complete_df["top_three_spread"] = (
+        complete_df["diff_spread"]
+        .where(complete_df["diff_spread"] > 5)
+        .rank(method="first", ascending=False)
+        .where(lambda x: x <= 3)
+    )
+        
+    complete_df["top_three_total"] = (
+        complete_df["diff_total"]
+        .where(complete_df["diff_total"] > 5)
+        .rank(method="first", ascending=False)
+        .where(lambda x: x <= 3)
+    )
+
+    # complete_df.drop(columns=["diff_spread", "diff_total"], inplace=True)
+
+    complete_df['top_three_spread'] = complete_df['top_three_spread'].fillna(0).astype(int)
+    complete_df['top_three_total'] = complete_df['top_three_total'].fillna(0).astype(int)
 
     complete_df["o_total"] = "o" + complete_df["o_total"].astype(str)
 
@@ -697,7 +722,7 @@ def main():
 
     pbp_2024_df = pd.read_csv("csv_folder/pbp-2024.csv")
 
-    pbp_2025_df = pd.read_csv("2025_pbp_scrape/official_2025_pbp_data1.csv")
+    pbp_2025_df = pd.read_csv("2025_pbp_scrape/official_2025_pbp_data_merged.csv")
 
     # pbp_2025_df = pbp_2025_df[~pbp_2025_df['Type'].isin(['Timeout', 'Period'])]
     pbp_2025_df['DefenseTeam'] = pbp_2025_df['DefenseTeam'].replace('LAR', 'LA')

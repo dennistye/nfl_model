@@ -6,7 +6,7 @@ from datetime import date
 
 app = Flask(__name__)
 
-prediction_df = pd.read_csv("csv_folder/complete.csv")
+prediction_df = pd.read_csv("csv_folder/complete_weights.csv")
 DB_PATH = "nfl.db"
 
 
