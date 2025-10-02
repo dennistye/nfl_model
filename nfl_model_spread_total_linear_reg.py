@@ -2,38 +2,51 @@ import numpy as np
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 import matplotlib.pyplot as plt
 import sqlite3
 from datetime import date
 
 global_week = 0
 
-def clean_data(box_scores_2023_df, box_scores_2024_df, box_scores_2025_df, pbp_2023_df, pbp_2024_df, pbp_2025_df):
+def clean_data(box_scores_2022_df, box_scores_2023_df, box_scores_2024_df, box_scores_2025_df, pbp_2022_df, pbp_2023_df, pbp_2024_df, pbp_2025_df):
     #change the box scores from NaN to REG for the OTFLag column
+
+
+    pbp_2022_df['DefenseTeam'] = pbp_2022_df['DefenseTeam'].replace('LAR', 'LA')
+    pbp_2022_df['OffenseTeam'] = pbp_2022_df['OffenseTeam'].replace('LAR', 'LA')
+
     pbp_2023_df['DefenseTeam'] = pbp_2023_df['DefenseTeam'].replace('LAR', 'LA')
     pbp_2023_df['OffenseTeam'] = pbp_2023_df['OffenseTeam'].replace('LAR', 'LA')
 
     pbp_2024_df['DefenseTeam'] = pbp_2024_df['DefenseTeam'].replace('LAR', 'LA')
     pbp_2024_df['OffenseTeam'] = pbp_2024_df['OffenseTeam'].replace('LAR', 'LA')
 
-
+    box_scores_2022_df['OTFlag'] = box_scores_2022_df['OTFlag'].fillna('REG')
     box_scores_2023_df['OTFlag'] = box_scores_2023_df['OTFlag'].fillna('REG')
     box_scores_2024_df['OTFlag'] = box_scores_2024_df['OTFlag'].fillna('REG')
     box_scores_2025_df['OTFlag'] = box_scores_2025_df['OTFlag'].fillna('REG')
 
     #get rid of the box score column because it is redundant
-
+    box_scores_2022_df = box_scores_2022_df.drop(columns=['Box Score'], errors='ignore')
     box_scores_2023_df = box_scores_2023_df.drop(columns=['Box Score'], errors='ignore')
     box_scores_2024_df = box_scores_2024_df.drop(columns=['Box Score'], errors='ignore')
     box_scores_2025_df = box_scores_2025_df.drop(columns=['Box Score'], errors='ignore')
 
     #drop any columns that are empty
-
+    pbp_2022_df = pbp_2022_df.dropna(axis=1, how='all')
     pbp_2023_df = pbp_2023_df.dropna(axis=1, how='all')
     pbp_2024_df = pbp_2024_df.dropna(axis=1, how='all')
     pbp_2025_df = pbp_2025_df.dropna(axis=1, how='all')
 
     #fill any values that are empty to Unknown
+    pbp_2022_df['Formation'] = pbp_2022_df['Formation'].fillna('UNKNOWN')
+    pbp_2022_df['PlayType'] = pbp_2022_df['PlayType'].fillna('UNKNOWN')
+    pbp_2022_df['PassType'] = pbp_2022_df['PassType'].fillna('UNKNOWN')
+    pbp_2022_df['RushDirection'] = pbp_2022_df['RushDirection'].fillna('UNKNOWN')
+    pbp_2022_df['PenaltyTeam'] = pbp_2022_df['PenaltyTeam'].fillna('UNKNOWN')
+    pbp_2022_df['PenaltyType'] = pbp_2022_df['PenaltyType'].fillna('UNKNOWN')
 
     pbp_2023_df['Formation'] = pbp_2023_df['Formation'].fillna('UNKNOWN')
     pbp_2023_df['PlayType'] = pbp_2023_df['PlayType'].fillna('UNKNOWN')
@@ -96,6 +109,9 @@ def clean_data(box_scores_2023_df, box_scores_2024_df, box_scores_2025_df, pbp_2
 
     #change data from 2023-11-19 → 11/19/2023 format in play by play df and make sure the date columns are in date format
 
+    pbp_2022_df['GameDate'] = pd.to_datetime(pbp_2022_df['GameDate'])
+    pbp_2022_df['GameDate'] = pbp_2022_df['GameDate'].dt.strftime('%m/%d/%Y')
+
     pbp_2023_df['GameDate'] = pd.to_datetime(pbp_2023_df['GameDate'])
     pbp_2023_df['GameDate'] = pbp_2023_df['GameDate'].dt.strftime('%m/%d/%Y')
 
@@ -107,7 +123,8 @@ def clean_data(box_scores_2023_df, box_scores_2024_df, box_scores_2025_df, pbp_2
 
     
 
-
+    box_scores_2022_df['Date'] = pd.to_datetime(box_scores_2022_df['Date'], errors='coerce')
+    box_scores_2022_df['Date'] = box_scores_2022_df['Date'].dt.strftime('%m/%d/%Y')
 
     box_scores_2023_df['Date'] = pd.to_datetime(box_scores_2023_df['Date'], errors='coerce')
     box_scores_2023_df['Date'] = box_scores_2023_df['Date'].dt.strftime('%m/%d/%Y')
@@ -155,6 +172,9 @@ def clean_data(box_scores_2023_df, box_scores_2024_df, box_scores_2025_df, pbp_2
 
     #change the Full team name to just the abbriviation for visitor and home 
 
+    box_scores_2022_df['Visitor'] = box_scores_2022_df['Visitor'].map(team_abbr)
+    box_scores_2022_df['Home'] = box_scores_2022_df['Home'].map(team_abbr)
+
     box_scores_2023_df['Visitor'] = box_scores_2023_df['Visitor'].map(team_abbr)
     box_scores_2023_df['Home'] = box_scores_2023_df['Home'].map(team_abbr)
 
@@ -164,6 +184,19 @@ def clean_data(box_scores_2023_df, box_scores_2024_df, box_scores_2025_df, pbp_2
     box_scores_2025_df['Visitor'] = box_scores_2025_df['Visitor'].map(team_abbr)
     box_scores_2025_df['Home'] = box_scores_2025_df['Home'].map(team_abbr)
 
+
+
+     # Merge play-by-play data for 2022 with scores data for 2022 based on Date, OffenseTeam, and DefenseTeam
+    merged_2022_df = pbp_2022_df.merge(box_scores_2022_df, left_on=['GameDate', 'OffenseTeam', 'DefenseTeam'], right_on=['Date', 'Visitor', 'Home'], how='left')
+    merged_2022_df = merged_2022_df.merge(box_scores_2022_df, left_on=['GameDate', 'OffenseTeam', 'DefenseTeam'], right_on=['Date', 'Home', 'Visitor'], how='left', suffixes=('', '_reverse'))
+
+    for column in ['Visitor', 'Visitor_score', 'Home', 'Home_score', 'OTFlag']:
+        merged_2022_df[column] = merged_2022_df[column].combine_first(merged_2022_df[column + '_reverse'])
+
+
+    columns_to_drop = [col + '_reverse' for col in ['Date','Visitor', 'Visitor_score', 'Home', 'Home_score', 'OTFlag']]
+    merged_2022_df = merged_2022_df.drop(columns=columns_to_drop)
+    merged_2022_df = merged_2022_df.drop(columns='Date')
 
 
     # Merge play-by-play data for 2023 with scores data for 2023 based on Date, OffenseTeam, and DefenseTeam
@@ -208,9 +241,13 @@ def clean_data(box_scores_2023_df, box_scores_2024_df, box_scores_2025_df, pbp_2
 
 
     # Adding "HomeWon" Column which is just a binary 1 or 0 when a home team won or lost
+    merged_2022_df['HomeWon'] = merged_2022_df['Home_score'] > merged_2022_df['Visitor_score']
     merged_2023_df['HomeWon'] = merged_2023_df['Home_score'] > merged_2023_df['Visitor_score']
     merged_2024_df['HomeWon'] = merged_2024_df['Home_score'] > merged_2024_df['Visitor_score']
     merged_2025_df['HomeWon'] = merged_2025_df['Home_score'] > merged_2025_df['Visitor_score']
+
+    merged_2022_df['Spread'] = merged_2022_df['Home_score'] - merged_2022_df['Visitor_score']
+    merged_2022_df['Total'] = merged_2022_df['Home_score'] + merged_2022_df['Visitor_score']
 
     merged_2023_df['Spread'] = merged_2023_df['Home_score'] - merged_2023_df['Visitor_score']
     merged_2023_df['Total'] = merged_2023_df['Home_score'] + merged_2023_df['Visitor_score']
@@ -221,19 +258,34 @@ def clean_data(box_scores_2023_df, box_scores_2024_df, box_scores_2025_df, pbp_2
     merged_2025_df['Spread'] = merged_2025_df['Home_score'] - merged_2025_df['Visitor_score']
     merged_2025_df['Total'] = merged_2025_df['Home_score'] + merged_2025_df['Visitor_score']
 
-    merged_2025_df["Yardline"] = merged_2025_df["Yardline"].fillna(0).astype(int)
-    print(merged_2025_df.isna().sum())
+    merged_2025_df.rename(columns={"Yardline": "YardLine"}, inplace=True)
+    merged_2025_df.rename(columns={"IsMeaurement": "IsMeasurement"}, inplace=True)
+
+    merged_2025_df["YardLine"] = merged_2025_df["YardLine"].fillna(0).astype(int)
+    # print(merged_2022_df.isna().sum())
     # merged_2025_df.to_csv("merged_2025_df.csv")
 
-    print(merged_2025_df)
-    print(merged_2023_df)
+    # print(merged_2025_df)
+    # print(merged_2023_df)
+    
 
     all_data = pd.concat([merged_2023_df, merged_2024_df, merged_2025_df])
+    all_data = all_data.drop('Unnamed: 0.1', axis=1)  # drop single column
+
+    # all_data["Yardline"] = all_data["Yardline"].fillna(0).astype(int)
+    # all_data["IsMeaurement"] = all_data["IsMeaurement"].fillna(0).astype(int)
+    all_data["Challenger"] = all_data["Challenger"].fillna(0).astype(int)
+    # all_data["Yardline"] = all_data["Yardline"].fillna(0).astype(int)
+    print(all_data.isna().sum())
+
+    
+
+    merged_2025_df.to_csv("all_data.csv")
 
     #all_data['Weight'] = all_data['SeasonYear'].apply(lambda x: 1.5 if x == 2024 else 1)
 
     if all_data.isna().any().any():
-        print("DataFrame contains NaN values.")
+        print("all_data DataFrame contains NaN values.")
     else:
         print("No NaN values in DataFrame.")
 
@@ -241,7 +293,218 @@ def clean_data(box_scores_2023_df, box_scores_2024_df, box_scores_2025_df, pbp_2
 
     return all_data
 
+
+def calculate_home_field_advantage(all_data):
+    """
+    Calculates both league-wide and team-specific Home Field Advantage (HFA) per season.
+
+    Returns:
+        pd.DataFrame with columns:
+        [Season, Team, Simple_Avg, Home_Win_Pct, Away_Win_Pct, Regression]
+        where Team = "LEAGUE_AVG" for league-wide values.
+    """
+    records = []
+
+    for season in sorted(all_data["SeasonYear"].unique()):
+        season_data = all_data[all_data["SeasonYear"] == season]
+
+        # --- League-wide HFA ---
+        league_hfa_avg = (season_data["Home_score"] - season_data["Visitor_score"]).mean()
+        league_home_win_pct = (season_data["Home_score"] > season_data["Visitor_score"]).mean()
+
+        # Regression for league HFA
+        home_rows = season_data[["GameId", "Home", "Home_score"]].rename(
+            columns={"Home": "Team", "Home_score": "Points"}
+        )
+        home_rows["is_home"] = 1
+
+        away_rows = season_data[["GameId", "Visitor", "Visitor_score"]].rename(
+            columns={"Visitor": "Team", "Visitor_score": "Points"}
+        )
+        away_rows["is_home"] = 0
+
+        team_level = pd.concat([home_rows, away_rows], ignore_index=True)
+        X = team_level[["is_home"]]
+        y = team_level["Points"]
+
+        league_model = LinearRegression().fit(X, y)
+        league_regression_hfa = league_model.coef_[0]
+
+        records.append({
+            "Season": int(season),
+            "Team": "LEAGUE_AVG",
+            "Simple_Avg": round(league_hfa_avg, 2),
+            "Home_Win_Pct": round(league_home_win_pct * 100, 2),
+            "Away_Win_Pct": round((1 - league_home_win_pct) * 100, 2),
+            "Regression": round(league_regression_hfa, 2)
+        })
+
+        # --- Team-specific HFA ---
+        for team in season_data["Home"].unique():
+            team_data = season_data[season_data["Home"] == team]
+
+            if len(team_data) < 10:
+                continue  # skip teams with too few games
+
+            team_hfa_avg = (team_data["Home_score"] - team_data["Visitor_score"]).mean()
+            team_home_win_pct = (team_data["Home_score"] > team_data["Visitor_score"]).mean()
+
+            home_rows = team_data[["GameId", "Home", "Home_score"]].rename(
+                columns={"Home": "Team", "Home_score": "Points"}
+            )
+            home_rows["is_home"] = 1
+
+            away_rows = team_data[["GameId", "Visitor", "Visitor_score"]].rename(
+                columns={"Visitor": "Team", "Visitor_score": "Points"}
+            )
+            away_rows["is_home"] = 0
+
+            team_level = pd.concat([home_rows, away_rows], ignore_index=True)
+            X = team_level[["is_home"]]
+            y = team_level["Points"]
+
+            team_model = LinearRegression().fit(X, y)
+            team_regression_hfa = team_model.coef_[0]
+
+            records.append({
+                "Season": int(season),
+                "Team": team,
+                "Simple_Avg": round(team_hfa_avg, 2),
+                "Home_Win_Pct": round(team_home_win_pct * 100, 2),
+                "Away_Win_Pct": round((1 - team_home_win_pct) * 100, 2),
+                "Regression": round(team_regression_hfa, 2)
+            })
+
+    return pd.DataFrame(records)
+
+
+def calculate_total_home_field_advantage(all_data, box_scores_2023_df, box_scores_2024_df, box_scores_2025_df):
+    tau = 10.0  # tunable; larger tau -> more shrinkage for small n
+
+    def shrink(team_val, n, league_mean, tau=50.0):
+        weight = n / (n + tau)
+        return weight * team_val + (1 - weight) * league_mean
+
+    # Clean data
+    for df in [box_scores_2023_df, box_scores_2024_df, box_scores_2025_df]:
+        df['OTFlag'] = df['OTFlag'].fillna('REG')
+        df.drop(columns=['Box Score'], errors='ignore', inplace=True)
+
+
+
+    team_abbr = {
+        "Arizona Cardinals": "ARI",
+        "Atlanta Falcons": "ATL",
+        "Baltimore Ravens": "BAL",
+        "Buffalo Bills": "BUF",
+        "Carolina Panthers": "CAR",
+        "Chicago Bears": "CHI",
+        "Cincinnati Bengals": "CIN",
+        "Cleveland Browns": "CLE",
+        "Dallas Cowboys": "DAL",
+        "Denver Broncos": "DEN",
+        "Detroit Lions": "DET",
+        "Green Bay Packers": "GB",
+        "Houston Texans": "HOU",
+        "Indianapolis Colts": "IND",
+        "Jacksonville Jaguars": "JAX",
+        "Kansas City Chiefs": "KC",
+        "Las Vegas Raiders": "LV",
+        "Los Angeles Chargers": "LAC",
+        "Los Angeles Rams": "LA",
+        "Miami Dolphins": "MIA",
+        "Minnesota Vikings": "MIN",
+        "New England Patriots": "NE",
+        "New Orleans Saints": "NO",
+        "New York Giants": "NYG",
+        "New York Jets": "NYJ",
+        "Philadelphia Eagles": "PHI",
+        "Pittsburgh Steelers": "PIT",
+        "San Francisco 49ers": "SF",
+        "Seattle Seahawks": "SEA",
+        "Tampa Bay Buccaneers": "TB",
+        "Tennessee Titans": "TEN",
+        "Washington Commanders": "WAS"
+    }
+
+    # Combine
+    df_combined = pd.concat([box_scores_2023_df, box_scores_2024_df, box_scores_2025_df], axis=0, ignore_index=True)
+
+    df_combined['Visitor'] = df_combined['Visitor'].map(team_abbr)
+    df_combined['Home'] = df_combined['Home'].map(team_abbr)
+
+    # League-wide HFA
+    league_hfa_avg = (df_combined["Home_score"] - df_combined["Visitor_score"]).mean()
+    league_home_win_pct = (df_combined["Home_score"] > df_combined["Visitor_score"]).mean()
+    print(f"League HFA avg: {league_hfa_avg}, Home Win %: {league_home_win_pct*100:.2f}%")
+
+    results = []
+    home_games_count_dict = {}
+
+    teams = pd.concat([df_combined["Home"], df_combined["Visitor"]]).unique()
+
+    for team in teams:
+        home_games = df_combined[df_combined["Home"] == team]
+        away_games = df_combined[df_combined["Visitor"] == team]
+
+        home_game_num = len(home_games)
+        away_game_num = len(away_games)
+        home_games_count_dict[team] = home_game_num
+
+        # Regression for home games
+        if home_game_num > 0:
+            X_home = home_games[["Visitor_score"]]
+            y_home = home_games["Home_score"]
+            model_home = LinearRegression().fit(X_home, y_home)
+            home_coef = model_home.intercept_
+        else:
+            home_coef = None
+
+        # Regression for away games
+        if away_game_num > 0:
+            X_away = away_games[["Home_score"]]
+            y_away = away_games["Visitor_score"]
+            model_away = LinearRegression().fit(X_away, y_away)
+            away_coef = model_away.intercept_
+        else:
+            away_coef = None
+
+        results.append({
+            "team": team,
+            "regression_home": home_coef,
+            "regression_away": away_coef,
+            "reg_diff": None if (home_coef is None or away_coef is None) else home_coef - away_coef,
+            "home_games": home_game_num,
+            "away_games": away_game_num
+        })
+
+    team_hfa_df = pd.DataFrame(results)
+
+    # Shrink reg_diff
+    team_hfa_df['reg_diff_shrunk'] = team_hfa_df.apply(
+        lambda r: shrink(r['reg_diff'], home_games_count_dict.get(r['team'], 0), league_hfa_avg, tau)
+        if r['reg_diff'] is not None else None,
+        axis=1
+    )
+
+    return team_hfa_df
+
 def team_features(all_data):
+    # Add QB passing yards and QB rushing yards
+
+    # QB Touchdowns per game
+
+    # Sacks per game
+
+    # Rushing yards allowed per game
+
+    # Passing yards allowed per game
+
+    # Points allowed <----- already have this 
+
+    # Home or away, home team has a 3% higher chance of winning
+
+
     # 1. Average Pointes Scored
     # Calculate the average points scored by each team when home and away
     avg_points_scored_home = all_data.groupby('Home')['Home_score'].mean()
@@ -517,6 +780,7 @@ def clean_schedule_merge_with_features(team_features_complete):
     closest_week = df_first.loc[df_first["Diff"].idxmin(), "Week"]
     
     print(closest_week)
+    global global_week
     global_week = closest_week
 
     conn = sqlite3.connect("nfl.db")
@@ -530,7 +794,7 @@ def clean_schedule_merge_with_features(team_features_complete):
 
     # Load directly into DataFrame
     week_number_df = pd.read_sql_query(query, conn)
-    print(week_number_df)
+    # print(week_number_df)
     week_number_df = week_number_df[['Home', 'Visitor']]
     # print(week1_df)
 
@@ -564,9 +828,114 @@ def clean_schedule_merge_with_features(team_features_complete):
     return upcoming_encoded_final
 
 # Prepare training data
-def prep_and_train(upcoming_encoded_final, team_features_complete, all_data):
+def prep_and_train(upcoming_encoded_final, team_features_complete, all_data, total_hfa):
     
     # Merge play-by-play data with team features for home teams
+    training_encoded_home = all_data.merge(team_features_complete, left_on='Home', right_on='Team', how='left')
+    # Merge the result with team features for visitor teams
+    training_encoded_both = training_encoded_home.merge(team_features_complete, left_on='Visitor', right_on='Team', suffixes=('_Home', '_Visitor'), how='left')
+
+
+    training_encoded_both = training_encoded_both.merge(
+    total_hfa[['team', 'reg_diff_shrunk']], left_on='Home', right_on='team', how='left'
+    ).rename(columns={'reg_diff_shrunk': 'HFA_HOME'}).drop(columns=['team'])
+
+    training_encoded_both = training_encoded_both.merge(
+        total_hfa[['team', 'reg_diff_shrunk']], left_on='Visitor', right_on='team', how='left'
+    ).rename(columns={'reg_diff_shrunk': 'HFA_VISITOR'}).drop(columns=['team'])
+
+    # Create combined HFA difference
+    training_encoded_both['Diff_HFA'] = training_encoded_both['HFA_HOME'] - training_encoded_both['HFA_VISITOR']
+    # training_encoded_both.drop(columns=['Diff_HFA_Visitor'], inplace=True)
+
+    # upcoming_encoded_final.to_csv("upcoming_encoded_final.csv")
+    # team_features_complete.to_csv("team_features_complete.csv")
+    # all_data.to_csv("all_data.csv")
+
+    
+
+    # Calculate the difference in features
+    for col in ['AvgPointsScored', 'WinRate', 'AvgPointsDefended', 'AvgConcededPlays', 'AvgForcedTurnovers',
+                'AvgYardsPerPlay', 'AvgYardsPerGame', 'AvgPassCompletionRate', 'AvgTouchdownsPerGame', 'AvgRushSuccessRate',
+                'AvgYardsAllowedPerPlay', 'AvgYardsAllowedPerGame', 'AvgPassCompletionAllowedRate', 'AvgTouchdownsAllowedPerGame', 'AvgRushSuccessAllowedRate']:
+        training_encoded_both[f'Diff_{col}'] = training_encoded_both[f'{col}_Home'] - training_encoded_both[f'{col}_Visitor']
+
+
+    # training_encoded_both.to_csv("training.csv")
+
+    
+
+    # Filtering out the required columns
+    # Feature matrix
+    X_train = training_encoded_both[[col for col in training_encoded_both.columns if 'Diff_' in col]]
+    X_train['Diff_HFA'] = training_encoded_both['Diff_HFA']  # Add HFA difference as a feature
+
+    X_train.to_csv("x_train.csv")
+    # X_train.to_csv("xtrain.csv")
+    # print(X_train.isna().sum())
+
+
+    # X_train = X_train.fillna(0)
+
+    # Target vectors
+    y_spread = all_data['Spread']
+    # print(y_spread)
+    y_total = all_data['Total']
+    # print(y_total)
+
+    # y_spread = y_spread.fillna(0)
+    # y_total = y_total.fillna(0)
+
+    # ---- Apply Weights ----
+    alpha = 0.7
+    current_year = 2025
+    weight_map = {year: alpha**(current_year - year) for year in [2022, 2023, 2024, 2025]}
+
+    # Map weights to each row based on SeasonYear
+    sample_weights = all_data['SeasonYear'].map(weight_map).fillna(1.0)
+
+    spread_model = LinearRegression()
+    total_model = LinearRegression()
+
+    spread_model.fit(X_train, y_spread, sample_weight=sample_weights)
+    total_model.fit(X_train, y_total, sample_weight=sample_weights)
+
+    X_upcoming = upcoming_encoded_final[[col for col in upcoming_encoded_final.columns if 'Diff_' in col]]
+    # X_upcoming.to_csv("x_upcoming.csv")
+    # print(X_upcoming.isna().sum())
+
+
+    upcoming_encoded_final = upcoming_encoded_final.merge(
+        total_hfa[['team', 'reg_diff_shrunk']], left_on='Home', right_on='team', how='left'
+    ).rename(columns={'reg_diff_shrunk': 'HFA_HOME'}).drop(columns=['team'])
+
+    upcoming_encoded_final = upcoming_encoded_final.merge(
+        total_hfa[['team', 'reg_diff_shrunk']], left_on='Visitor', right_on='team', how='left'
+    ).rename(columns={'reg_diff_shrunk': 'HFA_VISITOR'}).drop(columns=['team'])
+
+    upcoming_encoded_final['Diff_HFA'] = upcoming_encoded_final['HFA_HOME'] - upcoming_encoded_final['HFA_VISITOR']
+
+    # Add to upcoming X
+    X_upcoming['Diff_HFA'] = upcoming_encoded_final['Diff_HFA']
+
+    cols = ['Diff_HFA'] + [col for col in X_upcoming.columns if col != 'Diff_HFA']
+    X_upcoming = X_upcoming[cols]
+
+    X_upcoming.to_csv("x_upcoming.csv")
+
+    predicted_spreads = spread_model.predict(X_upcoming)
+    predicted_totals = total_model.predict(X_upcoming)
+
+    upcoming_encoded_final['PredictedSpread'] = predicted_spreads
+    upcoming_encoded_final['PredictedTotal'] = predicted_totals
+
+    final_predictions = upcoming_encoded_final[['Home', 'Visitor', 'PredictedSpread', 'PredictedTotal']]
+
+    return final_predictions
+
+
+def test_model(upcoming_encoded_final, team_features_complete, all_data):
+     # Merge play-by-play data with team features for home teams
     training_encoded_home = all_data.merge(team_features_complete, left_on='Home', right_on='Team', how='left')
     # Merge the result with team features for visitor teams
     training_encoded_both = training_encoded_home.merge(team_features_complete, left_on='Visitor', right_on='Team', suffixes=('_Home', '_Visitor'), how='left')
@@ -591,8 +960,9 @@ def prep_and_train(upcoming_encoded_final, team_features_complete, all_data):
     # Filtering out the required columns
     # Feature matrix
     X_train = training_encoded_both[[col for col in training_encoded_both.columns if 'Diff_' in col]]
+    # X_train['Diff_HFA'] = training_encoded_both['Diff_HFA']
 
-    X_train.to_csv("xtrain.csv")
+    # X_train.to_csv("xtrain.csv")
     # print(X_train.isna().sum())
 
 
@@ -600,9 +970,9 @@ def prep_and_train(upcoming_encoded_final, team_features_complete, all_data):
 
     # Target vectors
     y_spread = all_data['Spread']
-    print(y_spread)
+    # print(y_spread)
     y_total = all_data['Total']
-    print(y_total)
+    # print(y_total)
 
     # y_spread = y_spread.fillna(0)
     # y_total = y_total.fillna(0)
@@ -636,6 +1006,7 @@ def prep_and_train(upcoming_encoded_final, team_features_complete, all_data):
     return final_predictions
 
 
+
 def best_bets(complete_df):
 
     complete_df["o_total"] = complete_df["o_total"].str.replace("o", "", regex=False)
@@ -659,7 +1030,7 @@ def best_bets(complete_df):
 
 
     for index, row in complete_df.iterrows():
-        complete_df.at[index, "diff_spread"] = abs(row["HomeSpread"] - row["home_spread"])
+        complete_df.at[index, "diff_spread"] = abs(abs(row["HomeSpread"]) - abs(row["home_spread"]))
         if row["HomeSpread"] - row["home_spread"] >= 5 and row["HomeSpread"] > 0 and row["home_spread"] > 0:
             complete_df.at[index, "best_spread"] = "Away"
         elif row["HomeSpread"] - row["home_spread"] <= -5 and row["HomeSpread"] < 0 and row["home_spread"] < 0:
@@ -710,6 +1081,8 @@ def main():
 
 
     # Load data
+    box_scores_2022_df = pd.read_csv("csv_folder/2022_box_scores.csv")
+
     box_scores_2023_df = pd.read_csv("csv_folder/2023_box_scores.csv")
 
     box_scores_2024_df = pd.read_csv("csv_folder/2024_box_scores.csv")
@@ -717,6 +1090,7 @@ def main():
     box_scores_2025_df = pd.read_csv("csv_folder/2025_box_scores.csv")
 
     # schedule_2025_df = pd.read_csv("csv_folder/2025_schedule.csv")
+    pbp_2022_df = pd.read_csv("csv_folder/pbp-2022.csv")
 
     pbp_2023_df = pd.read_csv("csv_folder/pbp-2023.csv")
 
@@ -724,12 +1098,83 @@ def main():
 
     pbp_2025_df = pd.read_csv("2025_pbp_scrape/official_2025_pbp_data_merged.csv")
 
+    pbp_2025_df = pbp_2025_df.drop("Unnamed: 0", axis=1)
+
     # pbp_2025_df = pbp_2025_df[~pbp_2025_df['Type'].isin(['Timeout', 'Period'])]
     pbp_2025_df['DefenseTeam'] = pbp_2025_df['DefenseTeam'].replace('LAR', 'LA')
     pbp_2025_df['OffenseTeam'] = pbp_2025_df['OffenseTeam'].replace('LAR', 'LA')
     # pbp_2025_df = pbp_2025_df.drop(columns=['Season', 'Week'])
 
     vegas_odds = pd.read_csv("csv_folder/odds.csv")
+    vegas_odds2 = pd.read_csv("vegas_lines.csv")
+
+
+
+
+
+
+    
+    vegas_odds2 = vegas_odds2[vegas_odds2["G#"] == 1]
+    vegas_odds2['Opp'] = vegas_odds2['Opp'].str.lstrip('@')
+    vegas_odds2.rename(columns={"Opp": "visitor_team"}, inplace=True)
+    vegas_odds2.rename(columns={"Team": "home_team"}, inplace=True)
+    vegas_odds2.rename(columns={"Spread": "home_spread"}, inplace=True)
+    vegas_odds2.rename(columns={"Over/Under": "o_total"}, inplace=True)
+
+    vegas_odds2['o_total'] = vegas_odds2['o_total'].astype(float)  # to float
+    vegas_odds2['home_spread'] = vegas_odds2['home_spread'].astype(float)  # to float
+
+    team_abbr = {
+    "CRD": "ARI",
+    "SDG": "LAC",
+    "ARI": "ARI",
+    "GNB": "GB",
+    "HTX": "HOU",
+    "IND": "IND",
+    "JAX": "JAX",
+    "KAN": "KC",
+    "LVR": "LV",
+    "LAR": "LA",
+    "NWE": "NE",
+    "NOR": "NO",
+    "SFO": "SF",
+    "TAM": "TB",
+    "ATL": "ATL",
+    "RAV": "BAL",
+    "BAL": "BAL",
+    "BUF": "BUF",
+    "CAR": "CAR",
+    "CHI": "CHI",
+    "CIN": "CIN",
+    "CLE": "CLE",
+    "DAL": "DAL",
+    "DEN": "DEN",
+    "DET": "DET",
+    "GNB": "GB",
+    "LAC": "LAC",
+    "MIA": "MIA",
+    "MIN": "MIN",
+    "NO": "NO",
+    "NYG": "NYG",
+    "NYJ": "NYJ",
+    "PHI": "PHI",
+    "PIT": "PIT",
+    "SEA": "SEA",
+    "OTI": "TEN",
+    "WAS": "WAS",
+    "CLT": "MIA",
+    "TEN": "TEN",
+    "RAM": "LA",
+    "RAI": "LV",
+    "HOU": "HOU"
+}
+
+    vegas_odds2['home_team'] = vegas_odds2['home_team'].map(team_abbr)
+    vegas_odds2['visitor_team'] = vegas_odds2['visitor_team'].map(team_abbr)
+
+    # print(vegas_odds2)
+
+    pbp_2022_df = pbp_2022_df[~(pbp_2022_df['OffenseTeam'].isna() & pbp_2022_df['DefenseTeam'].isna())]
 
     # k_neighbors_classifier = pd.read_csv("supporting_files/k_neighbors_classifier.csv")
 
@@ -738,7 +1183,14 @@ def main():
     #pinnacle_probs_df = pd.read_csv("csv_folder/Pinnacle_odds.csv")
 
     # Cleaned data
-    all_data = clean_data(box_scores_2023_df, box_scores_2024_df, box_scores_2025_df, pbp_2023_df, pbp_2024_df, pbp_2025_df)
+    all_data = clean_data(box_scores_2022_df, box_scores_2023_df, box_scores_2024_df, box_scores_2025_df, pbp_2022_df, pbp_2023_df, pbp_2024_df, pbp_2025_df)
+
+    # home_field_advantage = calculate_home_field_advantage(all_data)
+
+    # print(home_field_advantage)
+
+    total_hfa = calculate_total_home_field_advantage(all_data, box_scores_2023_df, box_scores_2024_df, box_scores_2024_df)
+    print(total_hfa)
 
     # Adding team features
     team_features_complete = team_features(all_data)
@@ -747,7 +1199,9 @@ def main():
     upcoming_encoded_final = clean_schedule_merge_with_features(team_features_complete)
 
     # Prepares data and uses Logistic Regression to train 
-    upcoming_predictions = prep_and_train(upcoming_encoded_final, team_features_complete, all_data)
+    upcoming_predictions = prep_and_train(upcoming_encoded_final, team_features_complete, all_data, total_hfa)
+
+    # test_model(upcoming_encoded_final, team_features_complete, all_data)
 
     # Output prediciton to a csv file, eventually will be ouputing to a database
 
@@ -776,15 +1230,26 @@ def main():
     upcoming_predictions['u_PredictedTotal'] = upcoming_predictions['PredictedTotal'].apply(lambda x: f"u{x}" if pd.notnull(x) else None)
     # upcoming_predictions = upcoming_predictions.drop(columns=['PredictedTotal']) 
 
-    print(vegas_odds)
-    print(upcoming_predictions)
+    # print(vegas_odds)
+    # print(upcoming_predictions)
     # print(k_neighbors_classifier)
+
+    print(upcoming_predictions)
+    print(vegas_odds)
 
     complete_df = upcoming_predictions.merge(vegas_odds, left_on=["Home", "Visitor"], right_on=["home_team", "visitor_team"], how="inner")
 
+    print(complete_df)
+
+    # complete_df2 = upcoming_predictions.merge(vegas_odds2, left_on=["Home", "Visitor"], right_on=["home_team", "visitor_team"], how="inner")
+
+    # complete_df2 = best_bets(complete_df2)
+
     complete_df = best_bets(complete_df)
 
-
+    complete_df = complete_df.drop(columns=["Unnamed: 0"])
+    complete_df = complete_df.drop(columns=["visitor_team"])
+    complete_df = complete_df.drop(columns=["home_team"])
 
     # complete_df = complete_df.merge(k_neighbors_classifier, left_on=["Home", "Visitor"], right_on=["Home", "Visitor"], how="inner")
 
@@ -794,7 +1259,9 @@ def main():
     # complete_df.rename(columns={"KNC(7)": "knc"}, inplace=True)
     # complete_df = complete_df.sort_values("Index").reset_index(drop=True)
 
-    print(complete_df)
+    # print(complete_df)
+
+
 
 
     complete_df.to_csv("csv_folder/complete_weights.csv", index=False)
@@ -804,11 +1271,44 @@ def main():
     # upcoming_predictions['DiffVisitorSpread'] = upcoming_predictions['DiffVisitorSpread'].round(1)
     # upcoming_predictions['DiffTotal'] = upcoming_predictions['DiffTotal'].round(1)
 
+    global global_week
+
+    complete_df["week"] = global_week
+
+    conn = sqlite3.connect("nfl.db")
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS predictions (
+    week INTEGER,
+    Home TEXT,
+    Visitor TEXT,
+    PredictedTotal REAL,
+    HomeSpread REAL,
+    VisitorSpread REAL,
+    o_PredictedTotal TEXT,
+    u_PredictedTotal TEXT,
+    game_id TEXT,
+    open_total REAL,
+    visitor_spread REAL,
+    o_total TEXT,
+    visitor_ml REAL,
+    open_spread REAL,
+    home_spread REAL,
+    u_total TEXT,
+    home_ml REAL,
+    best_total TEXT,
+    best_spread TEXT,
+    diff_spread REAL,
+    diff_total REAL,
+    top_three_spread INTEGER,
+    top_three_total INTEGER
+    )
+    """)
+    conn.commit()
 
 
-
-
-
+    complete_df.to_sql("predictions", conn, if_exists="append", index=False)
 
 
     upcoming_predictions.to_csv("csv_folder/week1_predictions_linear_reg.csv", index=False)

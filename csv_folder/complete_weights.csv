@@ -1,17 +1,15 @@
-Home,Visitor,PredictedTotal,HomeSpread,VisitorSpread,o_PredictedTotal,u_PredictedTotal,Unnamed: 0,game_id,open_total,visitor_spread,o_total,visitor_ml,open_spread,home_spread,u_total,home_ml,visitor_team,home_team,best_total,best_spread,diff_spread,diff_total,top_three_spread,top_three_total
-ARI,SEA,46.4,0.6,-0.6,o46.4,u46.4,1,401772938,o44.5,-1.5,o43.5,-110,-1.5,1.5,u43.5,-110,SEA,ARI,Mininmal Edge,Mininmal Edge,0.9,2.8999999999999986,0,0
-PIT,MIN,44.0,-0.7,0.7,o44.0,u44.0,2,401772632,-1.5,-2.5,o40.5,-150,u41.5,2.5,u40.5,130,MIN,PIT,Mininmal Edge,Mininmal Edge,3.2,3.5,0,0
-ATL,WAS,44.8,-1.2,1.2,o44.8,u44.8,5,401772739,-3.5,-2.5,o44.5,-145,u46.5,2.5,u44.5,125,WAS,ATL,Mininmal Edge,Mininmal Edge,3.7,0.29999999999999716,0,0
-BUF,NO,48.9,-11.5,11.5,o48.9,u48.9,6,401772740,o48.5,15.5,o47.5,900,-14.5,-15.5,u47.5,-1800,NO,BUF,Mininmal Edge,Mininmal Edge,4.0,1.3999999999999986,0,0
-DET,CLE,51.8,-14.5,14.5,o51.8,u51.8,8,401772846,o45.5,8.5,o46.5,360,-8.5,-8.5,u46.5,-500,CLE,DET,Over,Home,6.0,5.299999999999997,2,2
-NE,CAR,46.7,-4.0,4.0,o46.7,u46.7,9,401772847,o44.5,5.5,o43.5,200,-4.5,-5.5,u43.5,-240,CAR,NE,Mininmal Edge,Mininmal Edge,1.5,3.200000000000003,0,0
-NYG,LAC,43.4,6.9,-6.9,o43.4,u43.4,3,401772737,-5.5,-6.5,o44.5,-290,u45.5,6.5,u44.5,240,LAC,NYG,Mininmal Edge,Mininmal Edge,0.40000000000000036,1.1000000000000014,0,0
-TB,PHI,46.1,0.8,-0.8,o46.1,u46.1,7,401772845,-2.5,-3.5,o43.5,-170,u45.5,3.5,u43.5,145,PHI,TB,Mininmal Edge,Mininmal Edge,2.7,2.6000000000000014,0,0
-HOU,TEN,47.6,-9.7,9.7,o47.6,u47.6,4,401772738,o39.5,6.5,o39.5,280,-6.5,-6.5,u39.5,-360,TEN,HOU,Over,Mininmal Edge,3.1999999999999993,8.100000000000001,0,1
-LA,IND,45.5,-4.6,4.6,o45.5,u45.5,11,401772849,o48.5,3.5,o49.5,160,-3.5,-3.5,u49.5,-190,IND,LA,Mininmal Edge,Mininmal Edge,1.0999999999999996,4.0,0,0
-SF,JAX,46.5,-8.7,8.7,o46.5,u46.5,10,401772848,o45.5,3.5,o46.5,150,-4.5,-3.5,u46.5,-175,JAX,SF,Mininmal Edge,Home,5.199999999999999,0.0,0,0
-KC,BAL,43.9,2.5,-2.5,o43.9,u43.9,12,401772741,-2.5,-2.5,o48.5,-150,u48.5,2.5,u48.5,130,BAL,KC,Mininmal Edge,Mininmal Edge,0.0,4.600000000000001,0,0
-LV,CHI,45.1,-1.4,1.4,o45.1,u45.1,13,401772742,-1.5,1.5,o47.5,-105,u47.5,-1.5,u47.5,-115,CHI,LV,Mininmal Edge,Mininmal Edge,0.10000000000000009,2.3999999999999986,0,0
-DAL,GB,47.8,1.0,-1.0,o47.8,u47.8,14,401772921,-6.5,-6.5,o47.5,-290,u48.5,6.5,u47.5,240,GB,DAL,Mininmal Edge,Home,5.5,0.29999999999999716,3,0
-MIA,NYJ,50.7,-9.2,9.2,o50.7,u50.7,15,401772813,o44.5,2.5,o45.5,120,-2.5,-2.5,u45.5,-140,NYJ,MIA,Over,Home,6.699999999999999,5.200000000000003,1,3
-DEN,CIN,45.2,-3.5,3.5,o45.2,u45.2,16,401772716,o44.5,7.5,o44.5,290,-7.5,-7.5,u44.5,-380,CIN,DEN,Mininmal Edge,Mininmal Edge,4.0,0.7000000000000028,0,0
+Home,Visitor,PredictedTotal,HomeSpread,VisitorSpread,o_PredictedTotal,u_PredictedTotal,game_id,open_total,visitor_spread,o_total,visitor_ml,open_spread,home_spread,u_total,home_ml,best_total,best_spread,diff_spread,diff_total,top_three_spread,top_three_total
+LA,SF,44.6,-0.6,0.6,o44.6,u44.6,401772939,o46.5,7.5,o45.5,300,-3.5,-7.5,u45.5,-400,Mininmal Edge,Away,6.9,0.8999999999999986,0,0
+CLE,MIN,38.1,3.9,-3.9,o38.1,u38.1,401772633,-3.5,-3.5,o36.5,-200,u37.5,3.5,u36.5,+170,Mininmal Edge,Mininmal Edge,0.3999999999999999,1.6000000000000014,0,0
+IND,LV,47.1,-4.9,4.9,o47.1,u47.1,401772851,o48.5,6.5,o47.5,240,-6.5,-6.5,u47.5,-290,Mininmal Edge,Mininmal Edge,1.5999999999999996,0.3999999999999986,0,0
+NO,NYG,45.9,-9.2,9.2,o45.9,u45.9,401772744,-2.5,1.5,o41.5,105,u42.5,-1.5,u41.5,-125,Mininmal Edge,Home,7.699999999999999,4.399999999999999,3,0
+NYJ,DAL,40.7,3.5,-3.5,o40.7,u40.7,401772850,-1.5,-2.5,o47.5,-140,u44.5,2.5,u47.5,+120,Under,Mininmal Edge,1.0,6.799999999999997,0,2
+PHI,DEN,47.5,-7.1,7.1,o47.5,u47.5,401772745,o44.5,3.5,o43.5,160,-5.5,-3.5,u43.5,-190,Mininmal Edge,Mininmal Edge,3.5999999999999996,4.0,0,0
+CAR,MIA,43.0,9.2,-9.2,o43.0,u43.0,401772852,-1.5,-1.5,o44.5,-120,u44.5,1.5,u44.5,EVEN,Mininmal Edge,Away,7.699999999999999,1.5,0,0
+BAL,HOU,48.4,-11.2,11.2,o48.4,u48.4,401772743,o43.5,-1.5,o40.5,-125,-3.5,1.5,u40.5,+105,Over,Mininmal Edge,9.7,7.899999999999999,2,1
+ARI,TEN,47.5,-7.6,7.6,o47.5,u47.5,401772747,o42.5,7.5,o41.5,320,-7.5,-7.5,u41.5,-425,Over,Mininmal Edge,0.09999999999999964,6.0,0,3
+SEA,TB,44.1,0.1,-0.1,o44.1,u44.1,401772746,o44.5,3.5,o44.5,160,-2.5,-3.5,u44.5,-190,Mininmal Edge,Mininmal Edge,3.4,0.3999999999999986,0,0
+CIN,DET,45.2,6.1,-6.1,o45.2,u45.2,401772854,-8.5,-10.5,o49.5,-650,u48.5,10.5,u49.5,+425,Mininmal Edge,Mininmal Edge,4.4,4.299999999999997,0,0
+LAC,WAS,44.5,-5.9,5.9,o44.5,u44.5,401772853,o49.5,2.5,o48.5,125,-2.5,-2.5,u48.5,-145,Mininmal Edge,Mininmal Edge,3.4000000000000004,4.0,0,0
+BUF,NE,46.0,-17.8,17.8,o46.0,u46.0,401772922,o49.5,7.5,o48.5,340,-8.5,-7.5,u48.5,-450,Mininmal Edge,Home,10.3,2.5,1,0
+JAX,KC,43.9,5.7,-5.7,o43.9,u43.9,401772814,-2.5,-3.5,o46.5,-190,u45.5,3.5,u46.5,+160,Mininmal Edge,Mininmal Edge,2.2,2.6000000000000014,0,0

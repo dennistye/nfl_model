@@ -120,19 +120,31 @@ select {
   flex-direction: column;
   align-items: center;
 }
-
-/* Footer */
-/* footer {
-  width: 100%;
-  text-align: center;
-  margin-top: 2.5rem;
-  color: #4b5563;
-  font-size: 0.875rem;
-  border-top: 1px solid #d1d5db;
-  padding-top: 1rem;
-  margin-right: 1.5rem;
+.team-logo-odds {
+  display: flex;
+  align-items: center; /* Center text horizontally */
+  text-align: center; /* Optional, centers text inside each span */
+  width: 24px;
+  height: 24px;
+  padding: 2px;
+  margin-top: 7px;
 }
 
-.footer-links {
-  margin-bottom: 0.5rem;
-} */
+.team-logo1 {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
+.game-item {
+  margin-bottom: 15px; /* Adjust spacing as needed */
+  gap: 10px; /* Optional: adds space between visitor and home */
+}
+
+.column-item {
+  margin-bottom: 15px; /* Adjust spacing as needed */
+  display: flex; /* Optional: keeps visitor/home side by side */
+  gap: 20px; /* Optional: adds space between visitor and home */
+  justify-content: center;
+  align-items: center;
+}
