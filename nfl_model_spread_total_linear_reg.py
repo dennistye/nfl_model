@@ -270,17 +270,13 @@ def clean_data(box_scores_2022_df, box_scores_2023_df, box_scores_2024_df, box_s
     
 
     all_data = pd.concat([merged_2023_df, merged_2024_df, merged_2025_df])
-    all_data = all_data.drop('Unnamed: 0.1', axis=1)  # drop single column
+    # all_data = all_data.drop('Unnamed: 0.1', axis=1)  # drop single column
 
     # all_data["Yardline"] = all_data["Yardline"].fillna(0).astype(int)
     # all_data["IsMeaurement"] = all_data["IsMeaurement"].fillna(0).astype(int)
     all_data["Challenger"] = all_data["Challenger"].fillna(0).astype(int)
     # all_data["Yardline"] = all_data["Yardline"].fillna(0).astype(int)
     print(all_data.isna().sum())
-
-    
-
-    merged_2025_df.to_csv("all_data.csv")
 
     #all_data['Weight'] = all_data['SeasonYear'].apply(lambda x: 1.5 if x == 2024 else 1)
 
@@ -870,10 +866,6 @@ def prep_and_train(upcoming_encoded_final, team_features_complete, all_data, tot
     X_train = training_encoded_both[[col for col in training_encoded_both.columns if 'Diff_' in col]]
     X_train['Diff_HFA'] = training_encoded_both['Diff_HFA']  # Add HFA difference as a feature
 
-    X_train.to_csv("x_train.csv")
-    # X_train.to_csv("xtrain.csv")
-    # print(X_train.isna().sum())
-
 
     # X_train = X_train.fillna(0)
 
@@ -887,9 +879,51 @@ def prep_and_train(upcoming_encoded_final, team_features_complete, all_data, tot
     # y_total = y_total.fillna(0)
 
     # ---- Apply Weights ----
+
+
+    qb_history = {
+        "ARI":[2024, 2025],
+        "ATL":[2025],
+        "BAL":[2023, 2024, 2025],
+        "BUF":[2023, 2024, 2025],
+        "CAR":[2023, 2024, 2025],
+        "CHI":[2024, 2025],
+        "CIN":[2023, 2025],
+        "CLE":[2025],
+        "DAL":[2023, 2024, 2025],
+        "DEN":[2025],
+        "DET":[2023, 2024, 2025],
+        "GB":[2023, 2024, 2025],
+        "HOU":[2023, 2024, 2025],
+        "IND":[2025],
+        "JAX":[2023, 2024, 2025],
+        "KC":[2023, 2024, 2025],
+        "LV":[2025],
+        "LAC":[2023, 2024, 2025], 
+        "LA":[2023, 2024, 2025],
+        "MIA":[2023, 2024, 2025],
+        "MIN":[2025],
+        "NE":[2025],
+        "NO":[2025],
+        "NYG":[2025],  
+        "NYJ":[2025],  
+        "PHI":[2023, 2024, 2025],
+        "PIT":[2025], 
+        "SF":[2023, 2024, 2025],
+        "SEA":[2025],
+        "TB":[2023, 2024, 2025],
+        "TEN":[2025],
+        "WAS":[2024, 2025],
+    }
+
+
+
+
+
+
     alpha = 0.7
     current_year = 2025
-    weight_map = {year: alpha**(current_year - year) for year in [2022, 2023, 2024, 2025]}
+    weight_map = {year: alpha**(current_year - year) for year in [2023, 2024, 2025]}
 
     # Map weights to each row based on SeasonYear
     sample_weights = all_data['SeasonYear'].map(weight_map).fillna(1.0)
@@ -920,8 +954,6 @@ def prep_and_train(upcoming_encoded_final, team_features_complete, all_data, tot
 
     cols = ['Diff_HFA'] + [col for col in X_upcoming.columns if col != 'Diff_HFA']
     X_upcoming = X_upcoming[cols]
-
-    X_upcoming.to_csv("x_upcoming.csv")
 
     predicted_spreads = spread_model.predict(X_upcoming)
     predicted_totals = total_model.predict(X_upcoming)
@@ -1035,9 +1067,13 @@ def best_bets(complete_df):
             complete_df.at[index, "best_spread"] = "Away"
         elif row["HomeSpread"] - row["home_spread"] <= -5 and row["HomeSpread"] < 0 and row["home_spread"] < 0:
             complete_df.at[index, "best_spread"] = "Home" 
-        elif row["HomeSpread"] - row["home_spread"] >=5 and row["HomeSpread"] < 0 and row["home_spread"] < 0:
+        elif row["HomeSpread"] - row["home_spread"] >= 5 and row["HomeSpread"] < 0 and row["home_spread"] < 0:
             complete_df.at[index, "best_spread"] = "Away" 
         elif row["HomeSpread"] - row["home_spread"] <= -5 and row["HomeSpread"] > 0 and row["home_spread"] > 0:
+            complete_df.at[index, "best_spread"] = "Home" 
+        elif row["HomeSpread"] - row["home_spread"] >= 5 and row["HomeSpread"] > 0 and row["home_spread"] < 0:
+            complete_df.at[index, "best_spread"] = "Away" 
+        elif row["HomeSpread"] - row["home_spread"] <= -5 and row["HomeSpread"] < 0 and row["home_spread"] > 0:
             complete_df.at[index, "best_spread"] = "Home" 
         else:
             complete_df.at[index, "best_spread"] = "Mininmal Edge"
@@ -1106,7 +1142,7 @@ def main():
     # pbp_2025_df = pbp_2025_df.drop(columns=['Season', 'Week'])
 
     vegas_odds = pd.read_csv("csv_folder/odds.csv")
-    vegas_odds2 = pd.read_csv("vegas_lines.csv")
+#     vegas_odds2 = pd.read_csv("vegas_lines.csv")
 
 
 
@@ -1114,63 +1150,63 @@ def main():
 
 
     
-    vegas_odds2 = vegas_odds2[vegas_odds2["G#"] == 1]
-    vegas_odds2['Opp'] = vegas_odds2['Opp'].str.lstrip('@')
-    vegas_odds2.rename(columns={"Opp": "visitor_team"}, inplace=True)
-    vegas_odds2.rename(columns={"Team": "home_team"}, inplace=True)
-    vegas_odds2.rename(columns={"Spread": "home_spread"}, inplace=True)
-    vegas_odds2.rename(columns={"Over/Under": "o_total"}, inplace=True)
+#     vegas_odds2 = vegas_odds2[vegas_odds2["G#"] == 1]
+#     vegas_odds2['Opp'] = vegas_odds2['Opp'].str.lstrip('@')
+#     vegas_odds2.rename(columns={"Opp": "visitor_team"}, inplace=True)
+#     vegas_odds2.rename(columns={"Team": "home_team"}, inplace=True)
+#     vegas_odds2.rename(columns={"Spread": "home_spread"}, inplace=True)
+#     vegas_odds2.rename(columns={"Over/Under": "o_total"}, inplace=True)
 
-    vegas_odds2['o_total'] = vegas_odds2['o_total'].astype(float)  # to float
-    vegas_odds2['home_spread'] = vegas_odds2['home_spread'].astype(float)  # to float
+#     vegas_odds2['o_total'] = vegas_odds2['o_total'].astype(float)  # to float
+#     vegas_odds2['home_spread'] = vegas_odds2['home_spread'].astype(float)  # to float
 
-    team_abbr = {
-    "CRD": "ARI",
-    "SDG": "LAC",
-    "ARI": "ARI",
-    "GNB": "GB",
-    "HTX": "HOU",
-    "IND": "IND",
-    "JAX": "JAX",
-    "KAN": "KC",
-    "LVR": "LV",
-    "LAR": "LA",
-    "NWE": "NE",
-    "NOR": "NO",
-    "SFO": "SF",
-    "TAM": "TB",
-    "ATL": "ATL",
-    "RAV": "BAL",
-    "BAL": "BAL",
-    "BUF": "BUF",
-    "CAR": "CAR",
-    "CHI": "CHI",
-    "CIN": "CIN",
-    "CLE": "CLE",
-    "DAL": "DAL",
-    "DEN": "DEN",
-    "DET": "DET",
-    "GNB": "GB",
-    "LAC": "LAC",
-    "MIA": "MIA",
-    "MIN": "MIN",
-    "NO": "NO",
-    "NYG": "NYG",
-    "NYJ": "NYJ",
-    "PHI": "PHI",
-    "PIT": "PIT",
-    "SEA": "SEA",
-    "OTI": "TEN",
-    "WAS": "WAS",
-    "CLT": "MIA",
-    "TEN": "TEN",
-    "RAM": "LA",
-    "RAI": "LV",
-    "HOU": "HOU"
-}
+#     team_abbr = {
+#     "CRD": "ARI",
+#     "SDG": "LAC",
+#     "ARI": "ARI",
+#     "GNB": "GB",
+#     "HTX": "HOU",
+#     "IND": "IND",
+#     "JAX": "JAX",
+#     "KAN": "KC",
+#     "LVR": "LV",
+#     "LAR": "LA",
+#     "NWE": "NE",
+#     "NOR": "NO",
+#     "SFO": "SF",
+#     "TAM": "TB",
+#     "ATL": "ATL",
+#     "RAV": "BAL",
+#     "BAL": "BAL",
+#     "BUF": "BUF",
+#     "CAR": "CAR",
+#     "CHI": "CHI",
+#     "CIN": "CIN",
+#     "CLE": "CLE",
+#     "DAL": "DAL",
+#     "DEN": "DEN",
+#     "DET": "DET",
+#     "GNB": "GB",
+#     "LAC": "LAC",
+#     "MIA": "MIA",
+#     "MIN": "MIN",
+#     "NO": "NO",
+#     "NYG": "NYG",
+#     "NYJ": "NYJ",
+#     "PHI": "PHI",
+#     "PIT": "PIT",
+#     "SEA": "SEA",
+#     "OTI": "TEN",
+#     "WAS": "WAS",
+#     "CLT": "MIA",
+#     "TEN": "TEN",
+#     "RAM": "LA",
+#     "RAI": "LV",
+#     "HOU": "HOU"
+# }
 
-    vegas_odds2['home_team'] = vegas_odds2['home_team'].map(team_abbr)
-    vegas_odds2['visitor_team'] = vegas_odds2['visitor_team'].map(team_abbr)
+#     vegas_odds2['home_team'] = vegas_odds2['home_team'].map(team_abbr)
+#     vegas_odds2['visitor_team'] = vegas_odds2['visitor_team'].map(team_abbr)
 
     # print(vegas_odds2)
 

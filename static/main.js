@@ -162,9 +162,19 @@ function loadMatchupData(matchup) {
           players.forEach((p) => {
             const card = document.createElement("div");
             card.className = "starter-card";
-
-            if (p.acquisition === "Injured/Inactive" && p.role === "1 string") {
+            // console.log(p.injury);
+            // console.log(p.name);
+            // console.log(p.role);
+            if (
+              (p.injury == "Injured reserve" || p.injury == "Out") &&
+              p.role == "1 string"
+            ) {
               card.classList.add("injured");
+            } else if (
+              (p.injury == "Questionable" || p.injury == "Doubtful") &&
+              p.role == "1 string"
+            ) {
+              card.classList.add("questionable");
             }
 
             const img = document.createElement("img");
@@ -203,7 +213,13 @@ function loadMatchupData(matchup) {
         let hasInjuries = false;
 
         starters.forEach((p) => {
-          if (p.acquisition === "Injured/Inactive" && p.role === "1 string") {
+          console.log(p.role);
+          if (
+            p.injury == "Injured reserve" ||
+            (p.injury == "Out" && p.role == "1 string")
+          ) {
+            // console.log(p.injury);
+            // console.log(p.role);
             // console.log(p.acquisition);
 
             hasInjuries = true;
@@ -211,11 +227,11 @@ function loadMatchupData(matchup) {
             injuryEntry.className = "injury-entry";
 
             const nameDiv = document.createElement("div");
-            nameDiv.textContent = `${p.number} - ${p.name} (${p.position}) (${p.side})`;
+            nameDiv.textContent = `${p.number} - ${p.name} (${p.position})`;
             nameDiv.className = "injury-player-name";
 
             const injuryDiv = document.createElement("div");
-            injuryDiv.textContent = p.injury;
+            injuryDiv.textContent = `${p.injury} - ${p.injury_date}`;
             injuryDiv.className = "injury-status";
 
             // const teamDiv = document.createElement("div");
@@ -245,7 +261,6 @@ function loadMatchupData(matchup) {
 }
 
 function loadOddsData(odds) {
-  console.log("Hello world!");
   const gamesColumn = document.getElementById("odds-column");
   gamesColumn.innerHTML = ""; // Clear previous data
 
@@ -550,32 +565,32 @@ function totals_edges(odds) {
       betDiv.textContent = game.o_total;
       // betDiv.style.backgroundColor = "lightgreen";
       betDiv.style.fontWeight = "bold";
-      betDiv.style.color = "Green";
+      betDiv.style.color = "darkgreen";
     } else if (game.best_total == "Over" && game.top_three_total === 2) {
       betDiv.textContent = game.o_total;
       // betDiv.style.backgroundColor = "lightgreen";
       betDiv.style.fontWeight = "bold";
-      betDiv.style.color = "Green";
+      betDiv.style.color = "darkgreen";
     } else if (game.best_total == "Over" && game.top_three_total === 3) {
       betDiv.textContent = game.o_total;
       // betDiv.style.backgroundColor = "lightgreen";
       betDiv.style.fontWeight = "bold";
-      betDiv.style.color = "Green";
+      betDiv.style.color = "darkgreen";
     } else if (game.best_total == "Under" && game.top_three_total === 1) {
       betDiv.textContent = game.u_total;
       // betDiv.style.backgroundColor = "lightgreen";
       betDiv.style.fontWeight = "bold";
-      betDiv.style.color = "Green";
+      betDiv.style.color = "darkgreen";
     } else if (game.best_total == "Under" && game.top_three_total === 2) {
       betDiv.textContent = game.u_total;
       // betDiv.style.backgroundColor = "lightgreen";
       betDiv.style.fontWeight = "bold";
-      betDiv.style.color = "Green";
+      betDiv.style.color = "darkgreen";
     } else if (game.best_total == "Under" && game.top_three_total === 3) {
       betDiv.textContent = game.u_total;
       // betDiv.style.backgroundColor = "lightgreen";
       betDiv.style.fontWeight = "bold";
-      betDiv.style.color = "Green";
+      betDiv.style.color = "darkgreen";
     } else {
       return;
     }
@@ -593,18 +608,8 @@ function totals_edges(odds) {
 function spread_edges(odds) {
   const gamesColumn = document.getElementById("spreads_edges");
   gamesColumn.innerHTML = ""; // Clear previous data
-
+  let num = 1;
   odds.forEach((game) => {
-    // Check if the game meets any condition to render
-    // const homeSpreadCondition =
-    //   Math.abs(game.HomeSpread - game.home_spread) > 5;
-
-    // if (!homeSpreadCondition) {
-    //   // Skip this game entirely if neither condition is true
-    //   return;
-    // }
-
-    // If we reach here, at least one condition is true — create the card
     const columnItem = document.createElement("div");
     columnItem.className = "column-item";
 
@@ -649,40 +654,39 @@ function spread_edges(odds) {
     const betDiv = document.createElement("div");
     betDiv.className = "bet-line";
 
-    if (game.best_spread == "Home" && game.top_three_spread === 1) {
+    if (game.best_spread == "Home" && game.top_three_spread == 1) {
       betDiv.textContent = game.Home + " " + game.home_spread;
       // betDiv.style.backgroundColor = "lightgreen";
       betDiv.style.fontWeight = "bold";
-      betDiv.style.color = "Green";
-    } else if (game.best_spread == "Home" && game.top_three_spread === 2) {
+      betDiv.style.color = "darkgreen";
+    } else if (game.best_spread == "Away" && game.top_three_spread == 1) {
+      betDiv.textContent = game.Visitor + " " + game.visitor_spread;
+      // betDiv.style.backgroundColor = "lightgreen";
+      betDiv.style.fontWeight = "bold";
+      betDiv.style.color = "darkgreen";
+    } else if (game.best_spread == "Home" && game.top_three_spread == 2) {
       betDiv.textContent = game.Home + " " + game.home_spread;
       // betDiv.style.backgroundColor = "lightgreen";
       betDiv.style.fontWeight = "bold";
-      betDiv.style.color = "Green";
-    } else if (game.best_spread == "Home" && game.top_three_spread === 3) {
+      betDiv.style.color = "darkgreen";
+    } else if (game.best_spread == "Away" && game.top_three_spread == 2) {
+      betDiv.textContent = game.Visitor + " " + game.visitor_spread;
+      // betDiv.style.backgroundColor = "lightgreen";
+      betDiv.style.fontWeight = "bold";
+      betDiv.style.color = "darkgreen";
+    } else if (game.best_spread == "Home" && game.top_three_spread == 3) {
       betDiv.textContent = game.Home + " " + game.home_spread;
       // betDiv.style.backgroundColor = "lightgreen";
       betDiv.style.fontWeight = "bold";
-      betDiv.style.color = "Green";
-    } else if (game.best_spread == "Away" && game.top_three_spread === 1) {
+      betDiv.style.color = "darkgreen";
+    } else if (game.best_spread == "Away" && game.top_three_spread == 3) {
       betDiv.textContent = game.Visitor + " " + game.visitor_spread;
       // betDiv.style.backgroundColor = "lightgreen";
       betDiv.style.fontWeight = "bold";
-      betDiv.style.color = "Green";
-    } else if (game.best_spread == "Away" && game.top_three_spread === 2) {
-      betDiv.textContent = game.Visitor + " " + game.visitor_spread;
-      // betDiv.style.backgroundColor = "lightgreen";
-      betDiv.style.fontWeight = "bold";
-      betDiv.style.color = "Green";
-    } else if (game.best_spread == "Away" && game.top_three_spread === 3) {
-      betDiv.textContent = game.Visitor + " " + game.visitor_spread;
-      // betDiv.style.backgroundColor = "lightgreen";
-      betDiv.style.fontWeight = "bold";
-      betDiv.style.color = "Green";
+      betDiv.style.color = "darkgreen";
     } else {
       return;
     }
-
     // Append elements
     columnItem.appendChild(awayDiv);
     columnItem.appendChild(vsDiv);
@@ -741,22 +745,22 @@ function weeks_best_value(odds) {
 
     if (game.best_spread == "Home" && game.top_three_spread === 1) {
       betDiv.textContent = `${game.Home} ${game.home_spread}`;
-      descriptionDiv.textContent = `Model discrepancy by ${
+      descriptionDiv.textContent = `MODEL DISCREPANCY BY ${
         Math.round(game.diff_spread * 10) / 10
-      } points`;
+      } POINTS`;
       betDiv.style.fontWeight = "bold";
-      betDiv.style.color = "Green";
+      betDiv.style.color = "darkgreen";
       descriptionDiv.style.fontWeight = "bold";
-      descriptionDiv.style.color = "Green";
+      descriptionDiv.style.color = "darkgreen";
     } else if (game.best_spread == "Away" && game.top_three_spread === 1) {
       betDiv.textContent = `${game.Visitor} ${game.visitor_spread}`;
-      descriptionDiv.textContent = `Model discrepancy by ${
+      descriptionDiv.textContent = `MODEL DISCREPANCY BY ${
         Math.round(game.diff_spread * 10) / 10
-      } points`;
+      } POINTS`;
       betDiv.style.fontWeight = "bold";
-      betDiv.style.color = "Green";
+      betDiv.style.color = "darkgreen";
       descriptionDiv.style.fontWeight = "bold";
-      descriptionDiv.style.color = "Green";
+      descriptionDiv.style.color = "darkgreen";
     } else {
       return; // Skip if conditions aren’t met
     }

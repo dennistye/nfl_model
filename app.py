@@ -205,17 +205,45 @@ def predict():
 
         # Query defensive starters
         cursor.execute("""
-            SELECT name, position, number, side, role, headshot, acquisition, team_id
+            SELECT id, name, position, number, side, role, headshot, acquisition, team_id
             FROM players2 
             WHERE team_id = ? AND role = '1 string'
         """, (team_id,))
         players = cursor.fetchall()
         # print(players)
         # print(team_id)
+        players_with_extra = []
+
+        for p in players:
+            id = p[0]
+
+            cursor.execute("SELECT Status, Date FROM injuries WHERE ID = ?", (id,))
+            injury_row = cursor.fetchone()
+
+            if injury_row:
+                injury_status, injury_date = injury_row
+            else:
+                injury_status, injury_date = None, None
+
+            players_with_extra.append({
+                "player_id": p[0],
+                "name": p[1],
+                "position": p[2],
+                "number": p[3],
+                "side": p[4],
+                "role": p[5],
+                "headshot": p[6],
+                "acquisition": p[7],
+                "team_id": p[8],
+                "injury": injury_status,
+                "injury_date": injury_date
+            })
+
         conn.close()
 
-        # Convert to dict for JSON
-        return [{"name": p[0], "position": p[1], "number": p[2], "side": p[3], "role": p[4], "headshot": p[5], "acquisition": p[6], "team_id": p[7]} for p in players]
+        return players_with_extra
+
+       
 
     home_starters = get_starters(home)
     visitor_starters = get_starters(away)

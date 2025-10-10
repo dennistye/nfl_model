@@ -148,3 +148,12 @@ select {
   justify-content: center;
   align-items: center;
 }
+
+.bet-wrapper {
+  margin-bottom: 15px; /* Adjust spacing as needed */
+  display: flex; /* Optional: keeps visitor/home side by side */
+  gap: 20px; /* Optional: adds space between visitor and home */
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}

@@ -243,6 +243,12 @@ tr:hover {
   justify-content: space-between;
   gap: 35px;
 }
+
+@media only screen and (max-width: 768px) {
+  .starters-wrapper {
+    display: none;
+  }
+}
 /*
 .starters-container {
   display: flex;
@@ -306,6 +312,7 @@ tr:hover {
   );
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s;
+  gap: 15px;
 }
 
 .injury-notification-visitor {
@@ -323,6 +330,7 @@ tr:hover {
   );
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s;
+  gap: 15px;
 }
 
 .injury-wrapper {
@@ -331,6 +339,11 @@ tr:hover {
 }
 
 .injured {
-  background-color: #ffcccc; /* light red background */
-  border: 1px solid #ff0000; /* optional red border */
+  background-color: #ffb3b3; /* balanced light red */
+  border: 1px solid #ff4d4d; /* stronger red border */
+}
+
+.questionable {
+  background-color: #ffe0b3; /* balanced light orange/yellow */
+  border: 1px solid #ffb84d; /* stronger orange border */
 }
