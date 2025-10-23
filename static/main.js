@@ -38,15 +38,12 @@ function loadMatchupData(matchup) {
   // const matchup = document.getElementById('matchup').value;
   const [home_team, away_team] = matchup.split("_");
 
-  // Set team logos
-  // Apply home team style
   if (teamLogos[away_team]) {
     document.getElementById("visitor_logo").src = teamLogos[away_team].logo;
     document.querySelector(".team-card:nth-child(1)").style.backgroundColor =
       teamLogos[away_team].color;
   }
 
-  // Apply visitor team style
   if (teamLogos[home_team]) {
     document.getElementById("home_logo").src = teamLogos[home_team].logo;
     document.querySelector(".team-card:nth-child(3)").style.backgroundColor =
@@ -94,32 +91,6 @@ function loadMatchupData(matchup) {
       document.getElementById(
         "vegas_total"
       ).textContent = `Vegas Total: ${data.vegas_total}`;
-      //   document.getElementById(
-      //     "diff_total"
-      //   ).textContent = `Total Difference: ${data.diff_total}`;
-
-      // const spreads = [
-      //   // { id: "diff_spread", value: data.diff_spread },
-      //   // { id: "diff_total", value: data.diff_total },
-      //   { id: "total", value: data.predicted_total },
-      //   { id: "vegas_total", value: data.vegas_total },
-      // ];
-
-      // spreads.forEach((spread) => {
-      //   const element = document.getElementById(spread.id);
-      //   if (
-      //     spread.value &&
-      //     !isNaN(spread.value) &&
-      //     Math.abs(spread.value) > 3 &&
-      //     spread.id == ("diff_spread" || spread.id == "diff_total")
-      //   ) {
-      //     element.style.color = "#00f700ff"; // Green for spreads > 3
-      //   } else if (spread.id == "total" || spread.id == "vegas_total") {
-      //     element.style.color = "black"; // Default color
-      //   } else {
-      //     element.style.color = "black"; // Default color
-      //   }
-      // });
 
       // changing middle table's font to black
       const date = document.getElementById("date");
@@ -165,16 +136,34 @@ function loadMatchupData(matchup) {
             // console.log(p.injury);
             // console.log(p.name);
             // console.log(p.role);
-            if (
-              (p.injury == "Injured reserve" || p.injury == "Out") &&
-              p.role == "1 string"
-            ) {
-              card.classList.add("injured");
-            } else if (
-              (p.injury == "Questionable" || p.injury == "Doubtful") &&
-              p.role == "1 string"
-            ) {
+            if (p.status == "IR" && p.role == "1_string") {
+              card.classList.add("injured_reserve");
+
+              const indicator = document.createElement("span");
+              indicator.className = "injury-indicator";
+              indicator.textContent = "IR";
+              card.appendChild(indicator);
+            } else if (p.status == "O" && p.role == "1_string") {
+              card.classList.add("out");
+
+              const indicator = document.createElement("span");
+              indicator.className = "injury-indicator";
+              indicator.textContent = "O";
+              card.appendChild(indicator);
+            } else if (p.status == "Q" && p.role == "1_string") {
               card.classList.add("questionable");
+
+              const indicator = document.createElement("span");
+              indicator.className = "injury-indicator";
+              indicator.textContent = "Q";
+              card.appendChild(indicator);
+            } else if (p.status == "D" && p.role == "1_string") {
+              card.classList.add("doubtful");
+
+              const indicator = document.createElement("span");
+              indicator.className = "injury-indicator";
+              indicator.textContent = "D";
+              card.appendChild(indicator);
             }
 
             const img = document.createElement("img");
@@ -227,7 +216,7 @@ function loadMatchupData(matchup) {
             injuryEntry.className = "injury-entry";
 
             const nameDiv = document.createElement("div");
-            nameDiv.textContent = `${p.number} - ${p.name} (${p.position})`;
+            nameDiv.textContent = `${p.name} (${p.position})`;
             nameDiv.className = "injury-player-name";
 
             const injuryDiv = document.createElement("div");
@@ -653,7 +642,8 @@ function spread_edges(odds) {
     // Betting line
     const betDiv = document.createElement("div");
     betDiv.className = "bet-line";
-
+    console.log(game.top_three_spread);
+    console.log(game.best_spread);
     if (game.best_spread == "Home" && game.top_three_spread == 1) {
       betDiv.textContent = game.Home + " " + game.home_spread;
       // betDiv.style.backgroundColor = "lightgreen";
@@ -781,25 +771,6 @@ function weeks_best_value(odds) {
     gamesColumn2.appendChild(betWrapper);
   });
 }
-
-// function just_a_good_function(game) {
-//   let cleaned_total = game.open_total;
-//   let cleaned_spread = game.open_spread;
-
-//   // Remove 'o' or 'u' from total
-//   if (cleaned_total.includes("o") || cleaned_total.includes("u")) {
-//     cleaned_total = cleaned_total.replace(/[ou]/gi, "");
-//     cleaned_spread = cleaned_spread.replace(/[+-]/g, "");
-//   }
-
-//   // Remove '+' or '-' from spread
-//   if (cleaned_spread.includes("o") || cleaned_spread.includes("u")) {
-//     cleaned_total = cleaned_spread.replace(/[ou]/gi, "");
-//     cleaned_spread = cleaned_total.replace(/[+-]/g, "");
-//   }
-
-//   return [cleaned_total, cleaned_spread];
-// }
 
 // Load default matchup on page load
 document.addEventListener("DOMContentLoaded", () => {

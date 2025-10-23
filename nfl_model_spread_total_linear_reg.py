@@ -84,7 +84,7 @@ def clean_data(box_scores_2022_df, box_scores_2023_df, box_scores_2024_df, box_s
     pbp_2025_df["IsChallenge"] = pbp_2025_df["IsChallenge"].astype(int)
     pbp_2025_df["IsChallengeReversed"] = pbp_2025_df["IsChallengeReversed"].astype(int)
     pbp_2025_df["Challenger"] = pbp_2025_df["Challenger"].astype(int)
-    pbp_2025_df["IsMeaurement"] = pbp_2025_df["IsMeaurement"].astype(int)
+    pbp_2025_df["IsMeasurement"] = pbp_2025_df["IsMeasurement"].astype(int)
     pbp_2025_df["IsInterception"] = pbp_2025_df["IsInterception"].astype(int)
     pbp_2025_df["IsFumble"] = pbp_2025_df["IsFumble"].astype(int)
     pbp_2025_df["IsPenalty"] = pbp_2025_df["IsPenalty"].astype(int)
@@ -916,17 +916,33 @@ def prep_and_train(upcoming_encoded_final, team_features_complete, all_data, tot
         "WAS":[2024, 2025],
     }
 
-
-
-
-
-
     alpha = 0.7
     current_year = 2025
     weight_map = {year: alpha**(current_year - year) for year in [2023, 2024, 2025]}
 
     # Map weights to each row based on SeasonYear
     sample_weights = all_data['SeasonYear'].map(weight_map).fillna(1.0)
+
+    # def get_weight(row):
+    #     offense_team = row["OffenseTeam"]
+    #     year = row["SeasonYear"]
+
+    #     # If team not in QB history, neutral weight
+    #     if offense_team not in qb_history:
+    #         return 1.0
+
+    #     qb_years = qb_history[offense_team]
+
+    #     # ✅ Full weight only for years QB actually played
+    #     if year in qb_years:
+    #         return 1.0
+    #     else:
+    #         # Year QB didn’t play — small weight
+    #         return 0.05
+
+
+    # # Apply to your play-by-play or team-level data
+    # sample_weights = all_data.apply(get_weight, axis=1)
 
     spread_model = LinearRegression()
     total_model = LinearRegression()
@@ -957,6 +973,10 @@ def prep_and_train(upcoming_encoded_final, team_features_complete, all_data, tot
 
     predicted_spreads = spread_model.predict(X_upcoming)
     predicted_totals = total_model.predict(X_upcoming)
+
+    print("Spread model R²:", spread_model.score(X_train, y_spread, sample_weight=sample_weights))
+    print("Total model R²:", total_model.score(X_train, y_total, sample_weight=sample_weights))
+
 
     upcoming_encoded_final['PredictedSpread'] = predicted_spreads
     upcoming_encoded_final['PredictedTotal'] = predicted_totals
@@ -1081,14 +1101,14 @@ def best_bets(complete_df):
 
         complete_df["top_three_spread"] = (
         complete_df["diff_spread"]
-        .where(complete_df["diff_spread"] > 5)
+        .where(complete_df["diff_spread"] >= 5)
         .rank(method="first", ascending=False)
         .where(lambda x: x <= 3)
     )
         
     complete_df["top_three_total"] = (
         complete_df["diff_total"]
-        .where(complete_df["diff_total"] > 5)
+        .where(complete_df["diff_total"] >= 5)
         .rank(method="first", ascending=False)
         .where(lambda x: x <= 3)
     )
@@ -1132,7 +1152,7 @@ def main():
 
     pbp_2024_df = pd.read_csv("csv_folder/pbp-2024.csv")
 
-    pbp_2025_df = pd.read_csv("2025_pbp_scrape/official_2025_pbp_data_merged.csv")
+    pbp_2025_df = pd.read_csv("csv_folder/pbp-2025.csv")
 
     pbp_2025_df = pbp_2025_df.drop("Unnamed: 0", axis=1)
 
@@ -1344,7 +1364,7 @@ def main():
     conn.commit()
 
 
-    complete_df.to_sql("predictions", conn, if_exists="append", index=False)
+    # complete_df.to_sql("predictions", conn, if_exists="append", index=False)
 
 
     upcoming_predictions.to_csv("csv_folder/week1_predictions_linear_reg.csv", index=False)

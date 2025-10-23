@@ -268,6 +268,7 @@ tr:hover {
 }
 
 .starter-card {
+  position: relative;
   border: 1px solid #ccc;
   border-radius: 10px;
   padding: 8px;
@@ -333,17 +334,46 @@ tr:hover {
   gap: 15px;
 }
 
+.injury-indicator {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  font-weight: bold;
+  font-size: 20px;
+  color: white; /* default color, can change if needed */
+}
+
+.starter-card.injured_reserve .injury-indicator,
+.starter-card.out .injury-indicator {
+  color: #ff4d4d;
+}
+
+.starter-card.questionable .injury-indicator,
+.starter-card.doubtful .injury-indicator {
+  color: #ffb84d;
+}
+
 .injury-wrapper {
   display: flex;
   flex-direction: column;
 }
 
-.injured {
-  background-color: #ffb3b3; /* balanced light red */
+.injured_reserve {
+  /* background-color: #ffb3b3; */
+  border: 1px solid #ff4d4d; /* stronger red border */
+}
+
+.out {
+  /* background-color: #ffb3b3; */
   border: 1px solid #ff4d4d; /* stronger red border */
 }
 
 .questionable {
-  background-color: #ffe0b3; /* balanced light orange/yellow */
+  /* background-color: #ffe0b3; */
+  border: 1px solid #ffb84d; /* stronger orange border */
+}
+
+.doubtful {
+  /* background-color: #ffe0b3; */
   border: 1px solid #ffb84d; /* stronger orange border */
 }

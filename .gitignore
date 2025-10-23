@@ -45,3 +45,11 @@ test.R
 team_stats.csv
 
 pbp-2025.csv
+
+action_prop_scrape.py
+
+espn_player_scrape.py
+
+espn_roster_scrape.py
+
+scrape_pbp_espn.py

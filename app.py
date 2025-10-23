@@ -205,9 +205,9 @@ def predict():
 
         # Query defensive starters
         cursor.execute("""
-            SELECT id, name, position, number, side, role, headshot, acquisition, team_id
-            FROM players2 
-            WHERE team_id = ? AND role = '1 string'
+            SELECT id, player_name, position, side, role, player_picture, player_status, team_id, Number
+            FROM players3 
+            WHERE team_id = ? AND role = '1_string'
         """, (team_id,))
         players = cursor.fetchall()
         # print(players)
@@ -222,6 +222,7 @@ def predict():
 
             if injury_row:
                 injury_status, injury_date = injury_row
+                print(injury_status)
             else:
                 injury_status, injury_date = None, None
 
@@ -229,12 +230,12 @@ def predict():
                 "player_id": p[0],
                 "name": p[1],
                 "position": p[2],
-                "number": p[3],
-                "side": p[4],
-                "role": p[5],
-                "headshot": p[6],
-                "acquisition": p[7],
-                "team_id": p[8],
+                "side": p[3],
+                "role": p[4],
+                "headshot": p[5],
+                "status": p[6],
+                "team_id": p[7],
+                "number": p[8],
                 "injury": injury_status,
                 "injury_date": injury_date
             })
