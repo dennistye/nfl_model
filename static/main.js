@@ -174,7 +174,7 @@ function loadMatchupData(matchup) {
             img.className = "starter-img";
 
             const text = document.createElement("div");
-            text.textContent = `${p.number} - ${p.name} (${p.position})`;
+            text.textContent = `${p.number} - ${p.name} \n(${p.position})`;
 
             card.appendChild(img);
             card.appendChild(text);

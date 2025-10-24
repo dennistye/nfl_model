@@ -222,7 +222,6 @@ def predict():
 
             if injury_row:
                 injury_status, injury_date = injury_row
-                print(injury_status)
             else:
                 injury_status, injury_date = None, None
 
