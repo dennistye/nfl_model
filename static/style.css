@@ -147,32 +147,6 @@ body {
   margin-top: 10px;
   display: none;
 }
-@media (max-width: 768px) {
-  .main-container {
-    width: 90%;
-  }
-  .team-card {
-    width: 100%;
-    max-width: 400px;
-  }
-  #prediction-form {
-    min-height: 120px;
-    padding: 20px;
-  }
-  #matchup {
-    max-width: 100%;
-    font-size: 16px;
-    height: 50px;
-  }
-  .predictor-title {
-    font-size: 32px;
-    padding: 15px;
-  }
-  .navbar ul {
-    flex-direction: column;
-    gap: 10px;
-  }
-}
 
 .table-container {
   display: flex;
@@ -242,12 +216,6 @@ tr:hover {
   display: flex;
   justify-content: space-between;
   gap: 35px;
-}
-
-@media only screen and (max-width: 768px) {
-  .starters-wrapper {
-    display: none;
-  }
 }
 /*
 .starters-container {

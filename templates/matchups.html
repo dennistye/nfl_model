@@ -1,8 +1,8 @@
 {% extends "navbar.html" %} {% block title %}Matchups - NFL Quant{% endblock %}
 {% block content %}
 <h1 class="predictor-title">NFL Week 8 Matchups</h1>
+<link rel="stylesheet" href="static/style.css" />
 <form id="prediction-form">
-  <link rel="stylesheet" href="static/style.css" />
   <select id="matchup" name="matchup">
     {% for game in games %}
     <option value="{{ game.Home }}_{{ game.Visitor }}">
