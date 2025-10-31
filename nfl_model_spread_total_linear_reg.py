@@ -7,6 +7,8 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 import matplotlib.pyplot as plt
 import sqlite3
 from datetime import date
+import math
+from scipy.stats import norm
 
 global_week = 0
 
@@ -986,6 +988,63 @@ def prep_and_train(upcoming_encoded_final, team_features_complete, all_data, tot
     return final_predictions
 
 
+
+
+def spread_edge(diff, std_dev=13.5, odds=-110):
+    """
+    Estimate % edge given a spread difference (model - Vegas).
+
+    Parameters:
+        diff (float): Difference between your predicted spread and Vegas spread.
+                      Positive means your model favors covering more than Vegas.
+        std_dev (float): Standard deviation of NFL point margins. Default 13.5.
+        odds (float): Sportsbook odds. Default -110.
+
+    Returns:
+        float: Approximate % edge
+    """
+    # Convert spread difference to probability
+    model_prob = 1 - norm.cdf(-diff / std_dev)
+
+    # Break-even probability for given odds
+    break_even = abs(odds) / (abs(odds) + 100)
+
+    # Edge in %
+    edge_percent = (model_prob - break_even) * 100
+    print(edge_percent)
+    return edge_percent
+
+
+def spread_percent_edge(complete_df):
+
+    complete_df["spread_percent_edge"] = None
+
+    for index, row in complete_df.iterrows():
+        if row["best_spread"] == "Home":
+            complete_df.at[index, "spread_percent_edge"] = spread_edge(row["diff_spread"])
+        elif row["best_spread"] == "Away":
+            complete_df.at[index, "spread_percent_edge"] = spread_edge(row["diff_spread"])
+    
+    complete_df['spread_percent_edge'] = complete_df['spread_percent_edge'].fillna(0).astype(int)
+
+
+    return complete_df
+
+def total_percent_edge(complete_df):
+
+    complete_df["total_percent_edge"] = None
+
+    for index, row in complete_df.iterrows():
+        if row["best_total"] == "Over":
+            complete_df.at[index, "total_percent_edge"] = spread_edge(row["diff_total"])
+        elif row["best_total"] == "Under":
+            complete_df.at[index, "total_percent_edge"] = spread_edge(row["diff_total"])
+
+    complete_df['total_percent_edge'] = complete_df['total_percent_edge'].fillna(0).astype(int)
+
+
+    return complete_df
+
 def test_model(upcoming_encoded_final, team_features_complete, all_data):
      # Merge play-by-play data with team features for home teams
     training_encoded_home = all_data.merge(team_features_complete, left_on='Home', right_on='Team', how='left')
@@ -1056,7 +1115,7 @@ def test_model(upcoming_encoded_final, team_features_complete, all_data):
     final_predictions = upcoming_encoded_final[['Home', 'Visitor', 'PredictedSpread', 'PredictedTotal']]
 
     return final_predictions
-
+    
 
 
 def best_bets(complete_df):
@@ -1068,8 +1127,8 @@ def best_bets(complete_df):
     complete_df["best_spread"] = None
     complete_df["diff_spread"] = None
     complete_df["diff_total"] = None
-    complete_df["top_three_spread"] = None
-    complete_df["top_three_total"] = None
+    # complete_df["top_three_spread"] = None
+    # complete_df["top_three_total"] = None
 
     for index, row in complete_df.iterrows():
         complete_df.at[index, "diff_total"] = abs(row["PredictedTotal"] - row["o_total"])
@@ -1099,24 +1158,24 @@ def best_bets(complete_df):
             complete_df.at[index, "best_spread"] = "Mininmal Edge"
     
 
-        complete_df["top_three_spread"] = (
-        complete_df["diff_spread"]
-        .where(complete_df["diff_spread"] >= 5)
-        .rank(method="first", ascending=False)
-        .where(lambda x: x <= 3)
-    )
+    #     complete_df["top_three_spread"] = (
+    #     complete_df["diff_spread"]
+    #     .where(complete_df["diff_spread"] >= 5)
+    #     .rank(method="first", ascending=False)
+    #     .where(lambda x: x <= 3)
+    # )
         
-    complete_df["top_three_total"] = (
-        complete_df["diff_total"]
-        .where(complete_df["diff_total"] >= 5)
-        .rank(method="first", ascending=False)
-        .where(lambda x: x <= 3)
-    )
+    # complete_df["top_three_total"] = (
+    #     complete_df["diff_total"]
+    #     .where(complete_df["diff_total"] >= 5)
+    #     .rank(method="first", ascending=False)
+    #     .where(lambda x: x <= 3)
+    # )
 
     # complete_df.drop(columns=["diff_spread", "diff_total"], inplace=True)
 
-    complete_df['top_three_spread'] = complete_df['top_three_spread'].fillna(0).astype(int)
-    complete_df['top_three_total'] = complete_df['top_three_total'].fillna(0).astype(int)
+    # complete_df['top_three_spread'] = complete_df['top_three_spread'].fillna(0).astype(int)
+    # complete_df['top_three_total'] = complete_df['top_three_total'].fillna(0).astype(int)
 
     complete_df["o_total"] = "o" + complete_df["o_total"].astype(str)
 
@@ -1290,12 +1349,12 @@ def main():
     # print(upcoming_predictions)
     # print(k_neighbors_classifier)
 
-    print(upcoming_predictions)
-    print(vegas_odds)
+    # print(upcoming_predictions)
+    # print(vegas_odds)
 
     complete_df = upcoming_predictions.merge(vegas_odds, left_on=["Home", "Visitor"], right_on=["home_team", "visitor_team"], how="inner")
 
-    print(complete_df)
+    # print(complete_df)
 
     # complete_df2 = upcoming_predictions.merge(vegas_odds2, left_on=["Home", "Visitor"], right_on=["home_team", "visitor_team"], how="inner")
 
@@ -1306,6 +1365,12 @@ def main():
     complete_df = complete_df.drop(columns=["Unnamed: 0"])
     complete_df = complete_df.drop(columns=["visitor_team"])
     complete_df = complete_df.drop(columns=["home_team"])
+
+    complete_df = spread_percent_edge(complete_df)
+    complete_df = total_percent_edge(complete_df)
+
+    print(complete_df)
+
 
     # complete_df = complete_df.merge(k_neighbors_classifier, left_on=["Home", "Visitor"], right_on=["Home", "Visitor"], how="inner")
 

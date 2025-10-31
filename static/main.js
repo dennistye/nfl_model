@@ -253,6 +253,8 @@ function loadOddsData(odds) {
   const gamesColumn = document.getElementById("odds-column");
   gamesColumn.innerHTML = ""; // Clear previous data
 
+  odds.sort((a, b) => b.diff_spread - a.diff_spread);
+
   odds.forEach((game) => {
     // Wrapper for both sections
     const columnItem = document.createElement("div");
@@ -398,16 +400,6 @@ function loadOddsData(odds) {
     const betting_spread2 = document.createElement("div");
     betting_spread2.className = "team-cell";
 
-    // if (Math.abs(game.HomeSpread - game.home_spread) > 5) {
-    //   betting_spread2.style.backgroundColor = "lightgreen";
-    //   betting_spread1.textContent = ".";
-    //   betting_spread2.textContent = game.home_spread;
-    // } else {
-    //   betting_spread1.textContent = ".";
-    //   betting_spread2.textContent = ".";
-    // }
-
-    console.log(game.best_spread == "Home");
     if (game.best_spread == "Home") {
       betting_spread2.style.backgroundColor = "lightgreen";
       betting_spread1.textContent = ".";
@@ -434,33 +426,6 @@ function loadOddsData(odds) {
 
     const betting_total2 = document.createElement("div");
     betting_total2.className = "team-cell";
-
-    // const [vegas_total_diff, vegas_spread_diff] = just_a_good_function(game);
-    // console.log(vegas_total_diff);
-    // let vegas_numericTotal = game.o_total.slice(1);
-
-    // const u_cond1 = game.PredictedTotal - vegas_numericTotal < -5;
-    // const u_cond2 = game.knc === "Under";
-    // const u_cond3 = vegas_numericTotal - vegas_total_diff < -1.5; // replace with your third condition
-
-    // const o_cond1 = vegas_numericTotal - game.PredictedTotal < -5;
-    // const o_cond2 = game.knc === "Over";
-    // const o_cond3 = vegas_numericTotal - vegas_total_diff > 1.5; // replace with your third condition
-
-    // console.log(u_cond3);
-
-    // if ([u_cond1, u_cond2, u_cond3].filter(Boolean).length >= 2) {
-    //   betting_total2.style.backgroundColor = "lightgreen";
-    //   betting_total1.textContent = ".";
-    //   betting_total2.textContent = game.u_total;
-    // } else if ([o_cond1, o_cond2, o_cond3].filter(Boolean).length >= 2) {
-    //   betting_total1.style.backgroundColor = "lightgreen";
-    //   betting_total2.textContent = ".";
-    //   betting_total1.textContent = game.o_total;
-    // } else {
-    //   betting_total1.textContent = ".";
-    //   betting_total2.textContent = ".";
-    // }
 
     if (game.best_total == "Over") {
       betting_total1.style.backgroundColor = "lightgreen";
@@ -499,10 +464,13 @@ function totals_edges(odds) {
   const gamesColumn = document.getElementById("totals_edges");
   gamesColumn.innerHTML = ""; // Clear previous data
 
+  odds.sort((a, b) => b.diff_total - a.diff_total);
+
+  console.log(odds);
+
+  let num = 0;
+
   odds.forEach((game) => {
-    // if (vals > 3) {
-    //   return;
-    // }
     // If we reach here, at least one condition is true — create the card
     const columnItem = document.createElement("div");
     columnItem.className = "column-item";
@@ -546,40 +514,71 @@ function totals_edges(odds) {
 
     // Betting line
     const betDiv = document.createElement("div");
+    const edgeDiv = document.createElement("div");
+
     betDiv.className = "bet-line";
-    // console.log(game.top_three_total === vals);
-    // console.log(game.top_three_total);
-    // console.log(vals);
-    if (game.best_total == "Over" && game.top_three_total === 1) {
+    edgeDiv.className = "edge";
+
+    if (game.best_total == "Over" && num == 0) {
       betDiv.textContent = game.o_total;
       // betDiv.style.backgroundColor = "lightgreen";
       betDiv.style.fontWeight = "bold";
       betDiv.style.color = "darkgreen";
-    } else if (game.best_total == "Over" && game.top_three_total === 2) {
+
+      edgeDiv.textContent = `EDGE: ${game.total_percent_edge}%`;
+      // betDiv.style.backgroundColor = "lightgreen";
+      edgeDiv.style.fontWeight = "bold";
+      edgeDiv.style.color = "darkgreen";
+    } else if (game.best_total == "Under" && num == 0) {
+      betDiv.textContent = game.u_total;
+      // betDiv.style.backgroundColor = "lightgreen";
+      betDiv.style.fontWeight = "bold";
+      betDiv.style.color = "darkgreen";
+
+      edgeDiv.textContent = `EDGE: ${game.total_percent_edge}%`;
+      // betDiv.style.backgroundColor = "lightgreen";
+      edgeDiv.style.fontWeight = "bold";
+      edgeDiv.style.color = "darkgreen";
+    } else if (game.best_total == "Over" && num == 1) {
       betDiv.textContent = game.o_total;
       // betDiv.style.backgroundColor = "lightgreen";
       betDiv.style.fontWeight = "bold";
       betDiv.style.color = "darkgreen";
-    } else if (game.best_total == "Over" && game.top_three_total === 3) {
+
+      edgeDiv.textContent = `EDGE: ${game.total_percent_edge}%`;
+      // betDiv.style.backgroundColor = "lightgreen";
+      edgeDiv.style.fontWeight = "bold";
+      edgeDiv.style.color = "darkgreen";
+    } else if (game.best_total == "Under" && num == 1) {
+      betDiv.textContent = game.u_total;
+      // betDiv.style.backgroundColor = "lightgreen";
+      betDiv.style.fontWeight = "bold";
+      betDiv.style.color = "darkgreen";
+
+      edgeDiv.textContent = `EDGE: ${game.total_percent_edge}%`;
+      // betDiv.style.backgroundColor = "lightgreen";
+      edgeDiv.style.fontWeight = "bold";
+      edgeDiv.style.color = "darkgreen";
+    } else if (game.best_total == "Over" && num == 2) {
       betDiv.textContent = game.o_total;
       // betDiv.style.backgroundColor = "lightgreen";
       betDiv.style.fontWeight = "bold";
       betDiv.style.color = "darkgreen";
-    } else if (game.best_total == "Under" && game.top_three_total === 1) {
+
+      edgeDiv.textContent = `EDGE: ${game.total_percent_edge}%`;
+      // betDiv.style.backgroundColor = "lightgreen";
+      edgeDiv.style.fontWeight = "bold";
+      edgeDiv.style.color = "darkgreen";
+    } else if (game.best_total == "Under" && num == 2) {
       betDiv.textContent = game.u_total;
       // betDiv.style.backgroundColor = "lightgreen";
       betDiv.style.fontWeight = "bold";
       betDiv.style.color = "darkgreen";
-    } else if (game.best_total == "Under" && game.top_three_total === 2) {
-      betDiv.textContent = game.u_total;
+
+      edgeDiv.textContent = `EDGE: ${game.total_percent_edge}%`;
       // betDiv.style.backgroundColor = "lightgreen";
-      betDiv.style.fontWeight = "bold";
-      betDiv.style.color = "darkgreen";
-    } else if (game.best_total == "Under" && game.top_three_total === 3) {
-      betDiv.textContent = game.u_total;
-      // betDiv.style.backgroundColor = "lightgreen";
-      betDiv.style.fontWeight = "bold";
-      betDiv.style.color = "darkgreen";
+      edgeDiv.style.fontWeight = "bold";
+      edgeDiv.style.color = "darkgreen";
     } else {
       return;
     }
@@ -589,15 +588,21 @@ function totals_edges(odds) {
     columnItem.appendChild(vsDiv);
     columnItem.appendChild(homeDiv);
     columnItem.appendChild(betDiv);
+    columnItem.appendChild(edgeDiv);
 
     gamesColumn.appendChild(columnItem);
+    num++;
   });
 }
 
 function spread_edges(odds) {
   const gamesColumn = document.getElementById("spreads_edges");
   gamesColumn.innerHTML = ""; // Clear previous data
-  let num = 1;
+
+  odds.sort((a, b) => b.diff_spread - a.diff_spread);
+
+  let num = 0;
+
   odds.forEach((game) => {
     const columnItem = document.createElement("div");
     columnItem.className = "column-item";
@@ -641,49 +646,83 @@ function spread_edges(odds) {
 
     // Betting line
     const betDiv = document.createElement("div");
+    const edgeDiv = document.createElement("div");
     betDiv.className = "bet-line";
-    console.log(game.top_three_spread);
-    console.log(game.best_spread);
-    if (game.best_spread == "Home" && game.top_three_spread == 1) {
+    edgeDiv.className = "edge";
+
+    if (num == 0 && game.best_spread == "Home") {
       betDiv.textContent = game.Home + " " + game.home_spread;
       // betDiv.style.backgroundColor = "lightgreen";
       betDiv.style.fontWeight = "bold";
       betDiv.style.color = "darkgreen";
-    } else if (game.best_spread == "Away" && game.top_three_spread == 1) {
+
+      edgeDiv.textContent = `EDGE: ${game.spread_percent_edge}%`;
+      // betDiv.style.backgroundColor = "lightgreen";
+      edgeDiv.style.fontWeight = "bold";
+      edgeDiv.style.color = "darkgreen";
+    } else if (num == 0 && game.best_spread == "Away") {
       betDiv.textContent = game.Visitor + " " + game.visitor_spread;
       // betDiv.style.backgroundColor = "lightgreen";
       betDiv.style.fontWeight = "bold";
       betDiv.style.color = "darkgreen";
-    } else if (game.best_spread == "Home" && game.top_three_spread == 2) {
+
+      edgeDiv.textContent = `EDGE: ${game.spread_percent_edge}%`;
+      // betDiv.style.backgroundColor = "lightgreen";
+      edgeDiv.style.fontWeight = "bold";
+      edgeDiv.style.color = "darkgreen";
+    } else if (num == 1 && game.best_spread == "Home") {
       betDiv.textContent = game.Home + " " + game.home_spread;
       // betDiv.style.backgroundColor = "lightgreen";
       betDiv.style.fontWeight = "bold";
       betDiv.style.color = "darkgreen";
-    } else if (game.best_spread == "Away" && game.top_three_spread == 2) {
+
+      edgeDiv.textContent = `EDGE: ${game.spread_percent_edge}%`;
+      // betDiv.style.backgroundColor = "lightgreen";
+      edgeDiv.style.fontWeight = "bold";
+      edgeDiv.style.color = "darkgreen";
+    } else if (num == 1 && game.best_spread == "Away") {
       betDiv.textContent = game.Visitor + " " + game.visitor_spread;
       // betDiv.style.backgroundColor = "lightgreen";
       betDiv.style.fontWeight = "bold";
       betDiv.style.color = "darkgreen";
-    } else if (game.best_spread == "Home" && game.top_three_spread == 3) {
+
+      edgeDiv.textContent = `EDGE: ${game.spread_percent_edge}%`;
+      // betDiv.style.backgroundColor = "lightgreen";
+      edgeDiv.style.fontWeight = "bold";
+      edgeDiv.style.color = "darkgreen";
+    } else if (num == 2 && game.best_spread == "Home") {
       betDiv.textContent = game.Home + " " + game.home_spread;
       // betDiv.style.backgroundColor = "lightgreen";
       betDiv.style.fontWeight = "bold";
       betDiv.style.color = "darkgreen";
-    } else if (game.best_spread == "Away" && game.top_three_spread == 3) {
+
+      edgeDiv.textContent = `EDGE: ${game.spread_percent_edge}%`;
+      // betDiv.style.backgroundColor = "lightgreen";
+      edgeDiv.style.fontWeight = "bold";
+      edgeDiv.style.color = "darkgreen";
+    } else if (num == 2 && game.best_spread == "Away") {
       betDiv.textContent = game.Visitor + " " + game.visitor_spread;
       // betDiv.style.backgroundColor = "lightgreen";
       betDiv.style.fontWeight = "bold";
       betDiv.style.color = "darkgreen";
+
+      edgeDiv.textContent = `EDGE: ${game.spread_percent_edge}%`;
+      // betDiv.style.backgroundColor = "lightgreen";
+      edgeDiv.style.fontWeight = "bold";
+      edgeDiv.style.color = "darkgreen";
     } else {
       return;
     }
+
     // Append elements
     columnItem.appendChild(awayDiv);
     columnItem.appendChild(vsDiv);
     columnItem.appendChild(homeDiv);
     columnItem.appendChild(betDiv);
+    columnItem.appendChild(edgeDiv);
 
     gamesColumn.appendChild(columnItem);
+    num++;
   });
 }
 
@@ -693,83 +732,170 @@ function weeks_best_value(odds) {
   gamesColumn.innerHTML = ""; // Clear previous data
   gamesColumn2.innerHTML = ""; // Clear previous data
 
-  odds.forEach((game) => {
-    const columnItem = document.createElement("div");
-    columnItem.className = "column-item";
+  const maxSpread = Math.max(...odds.map((game) => game.diff_spread));
+  const maxTotal = Math.max(...odds.map((game) => game.diff_total));
 
-    // Away team
-    const awayDiv = document.createElement("div");
-    awayDiv.className = "team-section";
-    const awayLogo = document.createElement("img");
-    awayLogo.src =
-      game.Visitor === "NYJ"
-        ? "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/nyj.png&h=200&w=200"
-        : teamLogos[game.Visitor].logo;
-    awayLogo.alt = game.Visitor;
-    awayLogo.className = "team-logo1";
-    awayDiv.appendChild(awayLogo);
+  if (maxSpread > maxTotal) {
+    odds.sort((a, b) => b.diff_spread - a.diff_spread);
 
-    // Home team
-    const homeDiv = document.createElement("div");
-    homeDiv.className = "team-section";
-    const homeLogo = document.createElement("img");
-    homeLogo.src =
-      game.Home === "NYJ"
-        ? "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/nyj.png&h=200&w=200"
-        : teamLogos[game.Home].logo;
-    homeLogo.alt = game.Home;
-    homeLogo.className = "team-logo1";
-    homeDiv.appendChild(homeLogo);
+    let num = 0;
 
-    // "vs" text
-    const vsDiv = document.createElement("div");
-    vsDiv.className = "vs-text";
-    vsDiv.textContent = "vs";
+    odds.forEach((game) => {
+      const columnItem = document.createElement("div");
+      columnItem.className = "column-item";
 
-    // Betting line + description
-    const betDiv = document.createElement("div");
-    betDiv.className = "bet-line";
+      // Away team
+      const awayDiv = document.createElement("div");
+      awayDiv.className = "team-section";
+      const awayLogo = document.createElement("img");
+      awayLogo.src =
+        game.Visitor === "NYJ"
+          ? "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/nyj.png&h=200&w=200"
+          : teamLogos[game.Visitor].logo;
+      awayLogo.alt = game.Visitor;
+      awayLogo.className = "team-logo1";
+      awayDiv.appendChild(awayLogo);
 
-    const descriptionDiv = document.createElement("div");
-    descriptionDiv.className = "bet-description";
+      // Home team
+      const homeDiv = document.createElement("div");
+      homeDiv.className = "team-section";
+      const homeLogo = document.createElement("img");
+      homeLogo.src =
+        game.Home === "NYJ"
+          ? "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/nyj.png&h=200&w=200"
+          : teamLogos[game.Home].logo;
+      homeLogo.alt = game.Home;
+      homeLogo.className = "team-logo1";
+      homeDiv.appendChild(homeLogo);
 
-    if (game.best_spread == "Home" && game.top_three_spread === 1) {
-      betDiv.textContent = `${game.Home} ${game.home_spread}`;
-      descriptionDiv.textContent = `MODEL DISCREPANCY BY ${
-        Math.round(game.diff_spread * 10) / 10
-      } POINTS`;
-      betDiv.style.fontWeight = "bold";
-      betDiv.style.color = "darkgreen";
-      descriptionDiv.style.fontWeight = "bold";
-      descriptionDiv.style.color = "darkgreen";
-    } else if (game.best_spread == "Away" && game.top_three_spread === 1) {
-      betDiv.textContent = `${game.Visitor} ${game.visitor_spread}`;
-      descriptionDiv.textContent = `MODEL DISCREPANCY BY ${
-        Math.round(game.diff_spread * 10) / 10
-      } POINTS`;
-      betDiv.style.fontWeight = "bold";
-      betDiv.style.color = "darkgreen";
-      descriptionDiv.style.fontWeight = "bold";
-      descriptionDiv.style.color = "darkgreen";
-    } else {
-      return; // Skip if conditions aren’t met
-    }
+      // "vs" text
+      const vsDiv = document.createElement("div");
+      vsDiv.className = "vs-text";
+      vsDiv.textContent = "vs";
 
-    // Wrap bet + description together
-    const betWrapper = document.createElement("div");
-    betWrapper.className = "bet-wrapper";
-    betWrapper.appendChild(betDiv);
-    betWrapper.appendChild(descriptionDiv);
+      // Betting line + description
+      const betDiv = document.createElement("div");
+      betDiv.className = "bet-line";
 
-    // Append elements
-    columnItem.appendChild(awayDiv);
-    columnItem.appendChild(vsDiv);
-    columnItem.appendChild(homeDiv);
-    // columnItem.appendChild(betWrapper);
+      const descriptionDiv = document.createElement("div");
+      descriptionDiv.className = "bet-description";
 
-    gamesColumn.appendChild(columnItem);
-    gamesColumn2.appendChild(betWrapper);
-  });
+      if (game.best_spread == "Home" && num == 0) {
+        betDiv.textContent = `${game.Home} ${game.home_spread}`;
+        descriptionDiv.textContent = `EDGE: ${game.spread_percent_edge}%`;
+        betDiv.style.fontWeight = "bold";
+        betDiv.style.color = "darkgreen";
+        descriptionDiv.style.fontWeight = "bold";
+        descriptionDiv.style.color = "darkgreen";
+      } else if (game.best_spread == "Away" && num == 0) {
+        betDiv.textContent = `${game.Visitor} ${game.visitor_spread}`;
+        descriptionDiv.textContent = `EDGE: ${game.spread_percent_edge}%`;
+        betDiv.style.fontWeight = "bold";
+        betDiv.style.color = "darkgreen";
+        descriptionDiv.style.fontWeight = "bold";
+        descriptionDiv.style.color = "darkgreen";
+      } else {
+        return; // Skip if conditions aren’t met
+      }
+
+      // Wrap bet + description together
+      const betWrapper = document.createElement("div");
+      betWrapper.className = "bet-wrapper";
+      betWrapper.appendChild(betDiv);
+      betWrapper.appendChild(descriptionDiv);
+
+      // Append elements
+      columnItem.appendChild(awayDiv);
+      columnItem.appendChild(vsDiv);
+      columnItem.appendChild(homeDiv);
+      // columnItem.appendChild(betWrapper);
+
+      gamesColumn.appendChild(columnItem);
+      gamesColumn2.appendChild(betWrapper);
+
+      num++;
+    });
+  } else {
+    odds.sort((a, b) => b.diff_total - a.diff_total);
+
+    let num = 0;
+
+    odds.forEach((game) => {
+      const columnItem = document.createElement("div");
+      columnItem.className = "column-item";
+
+      // Away team
+      const awayDiv = document.createElement("div");
+      awayDiv.className = "team-section";
+      const awayLogo = document.createElement("img");
+      awayLogo.src =
+        game.Visitor === "NYJ"
+          ? "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/nyj.png&h=200&w=200"
+          : teamLogos[game.Visitor].logo;
+      awayLogo.alt = game.Visitor;
+      awayLogo.className = "team-logo1";
+      awayDiv.appendChild(awayLogo);
+
+      // Home team
+      const homeDiv = document.createElement("div");
+      homeDiv.className = "team-section";
+      const homeLogo = document.createElement("img");
+      homeLogo.src =
+        game.Home === "NYJ"
+          ? "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/nyj.png&h=200&w=200"
+          : teamLogos[game.Home].logo;
+      homeLogo.alt = game.Home;
+      homeLogo.className = "team-logo1";
+      homeDiv.appendChild(homeLogo);
+
+      // "vs" text
+      const vsDiv = document.createElement("div");
+      vsDiv.className = "vs-text";
+      vsDiv.textContent = "vs";
+
+      // Betting line + description
+      const betDiv = document.createElement("div");
+      betDiv.className = "bet-line";
+
+      const descriptionDiv = document.createElement("div");
+      descriptionDiv.className = "bet-description";
+
+      if (game.best_total == "Over" && num == 0) {
+        betDiv.textContent = `${game.o_total}`;
+        descriptionDiv.textContent = `EDGE: ${game.total_percent_edge}%`;
+        betDiv.style.fontWeight = "bold";
+        betDiv.style.color = "darkgreen";
+        descriptionDiv.style.fontWeight = "bold";
+        descriptionDiv.style.color = "darkgreen";
+      } else if (game.best_spread == "Under" && num == 0) {
+        betDiv.textContent = `${game.u_total}`;
+        descriptionDiv.textContent = `EDGE: ${game.total_percent_edge}%`;
+        betDiv.style.fontWeight = "bold";
+        betDiv.style.color = "darkgreen";
+        descriptionDiv.style.fontWeight = "bold";
+        descriptionDiv.style.color = "darkgreen";
+      } else {
+        return; // Skip if conditions aren’t met
+      }
+
+      // Wrap bet + description together
+      const betWrapper = document.createElement("div");
+      betWrapper.className = "bet-wrapper";
+      betWrapper.appendChild(betDiv);
+      betWrapper.appendChild(descriptionDiv);
+
+      // Append elements
+      columnItem.appendChild(awayDiv);
+      columnItem.appendChild(vsDiv);
+      columnItem.appendChild(homeDiv);
+      // columnItem.appendChild(betWrapper);
+
+      gamesColumn.appendChild(columnItem);
+      gamesColumn2.appendChild(betWrapper);
+
+      num++;
+    });
+  }
 }
 
 // Load default matchup on page load

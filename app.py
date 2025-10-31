@@ -206,7 +206,7 @@ def predict():
         # Query defensive starters
         cursor.execute("""
             SELECT id, player_name, position, side, role, player_picture, player_status, team_id, Number
-            FROM players3 
+            FROM players3
             WHERE team_id = ? AND role = '1_string'
         """, (team_id,))
         players = cursor.fetchall()
