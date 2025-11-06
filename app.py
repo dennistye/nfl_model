@@ -3,6 +3,8 @@ import pandas as pd
 import numpy as np
 import sqlite3
 from datetime import date
+import json
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -35,6 +37,19 @@ def best_odds():
 @app.route('/best_odds')
 def best_odds_page():
     return render_template('best_odds.html')
+
+@app.route('/api/best_props')
+def best_props():
+    conn = sqlite3.connect(DB_PATH)
+    query = "SELECT * FROM props;"
+    props = pd.read_sql_query(query, conn)
+    # print(props)
+    conn.close()
+    return jsonify(json.loads(props.to_json(orient="records")))
+
+@app.route('/best_props')
+def props():
+    return render_template('best_props.html')
 
 @app.route('/player_stats')
 def stats():
@@ -136,7 +151,7 @@ def predict():
                     SELECT Date
                     FROM nfl2025schedule
                     WHERE Week = ? AND Home = ? AND Visitor = ?
-                """, (int(closest_week), home, away))
+                """, (int(10), home, away))
                 dtl = cursor.fetchall()
                 if dtl:
                     dtl = dtl[0][0]
@@ -145,7 +160,7 @@ def predict():
                     SELECT Time
                     FROM nfl2025schedule
                     WHERE Week = ? AND Home = ? AND Visitor = ?
-                """, (int(closest_week), home, away))
+                """, (int(10), home, away))
                 dtl = cursor.fetchall()
                 if dtl:
                     dtl = dtl[0][0]
@@ -154,7 +169,7 @@ def predict():
                     SELECT Location
                     FROM nfl2025schedule
                     WHERE Week = ? AND Home = ? AND Visitor = ?
-                """, (int(closest_week), home, away))
+                """, (int(10), home, away))
                 dtl = cursor.fetchall()
                 if dtl:
                     dtl = dtl[0][0]
@@ -206,7 +221,7 @@ def predict():
         # Query defensive starters
         cursor.execute("""
             SELECT id, player_name, position, side, role, player_picture, player_status, team_id, Number
-            FROM players3
+            FROM players4
             WHERE team_id = ? AND role = '1_string'
         """, (team_id,))
         players = cursor.fetchall()
@@ -217,13 +232,13 @@ def predict():
         for p in players:
             id = p[0]
 
-            cursor.execute("SELECT Status, Date FROM injuries WHERE ID = ?", (id,))
+            cursor.execute("SELECT Status, Date, Description FROM injuries WHERE ID = ?", (id,))
             injury_row = cursor.fetchone()
 
             if injury_row:
-                injury_status, injury_date = injury_row
+                injury_status, injury_date, injury_description = injury_row
             else:
-                injury_status, injury_date = None, None
+                injury_status, injury_date, injury_description = None, None, None
 
             players_with_extra.append({
                 "player_id": p[0],
@@ -236,7 +251,8 @@ def predict():
                 "team_id": p[7],
                 "number": p[8],
                 "injury": injury_status,
-                "injury_date": injury_date
+                "injury_date": injury_date,
+                "injury_description": injury_description
             })
 
         conn.close()
@@ -247,6 +263,14 @@ def predict():
 
     home_starters = get_starters(home)
     visitor_starters = get_starters(away)
+
+
+    date_obj = datetime.strptime(date, "%m/%d/%Y")
+
+    # Get full day name
+    day_name = date_obj.strftime("%A")
+
+    
     
 
     return jsonify({
@@ -258,6 +282,7 @@ def predict():
         'vegas_home_spread': vegas_home_spread,
         'vegas_visitor_spread': vegas_visitor_spread,
         'vegas_total': vegas_total,
+        'day': day_name,
         'date': date,
         'time': time,
         'location': location,

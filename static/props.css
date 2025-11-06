@@ -1,0 +1,178 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+}
+
+.main-container {
+  max-width: 1200px;
+  width: 80%;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.predictor-title {
+  font-family: "Oswald", "Impact", Arial, sans-serif;
+  font-size: 48px;
+  color: #fff;
+  background: linear-gradient(to right, #1e3e5c, #206369);
+  padding: 20px;
+  border-radius: 8px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  margin-bottom: 30px;
+  animation: fadeIn 1s ease-in;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.odds-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.team-cell {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 10px;
+  background: #fff;
+  text-align: center;
+  align-items: center;
+  font-size: 0.85rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+
+  /* Force equal sizing */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  /* min-height: 100px; 
+  max-height: 100px;  */
+  min-width: 50px;
+  max-width: 50px;
+  margin-bottom: 2px;
+}
+
+.game-item {
+  margin-bottom: 15px; /* Adjust spacing as needed */
+  gap: 10px; /* Optional: adds space between visitor and home */
+}
+
+.prop-cell1 {
+  /* border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 10px; */
+  background: #fff;
+  text-align: center;
+  align-items: center;
+  font-size: 0.85rem;
+  /* box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); */
+
+  /* Force equal sizing */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  /* min-height: 100px; 
+  max-height: 100px;  */
+  min-width: 130px;
+  max-width: 50px;
+  margin-bottom: 2px;
+}
+
+.prop-cell2 {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 10px;
+  background: #fff;
+  text-align: center;
+  align-items: center;
+  font-size: 0.85rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+
+  /* Force equal sizing */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  /* min-height: 100px; 
+  max-height: 100px;  */
+  min-width: 130px;
+  max-width: 50px;
+  margin-bottom: 2px;
+}
+
+.column-item {
+  margin-bottom: 15px; /* Adjust spacing as needed */
+  display: flex; /* Optional: keeps visitor/home side by side */
+  gap: 20px; /* Optional: adds space between visitor and home */
+  justify-content: center;
+  align-items: center;
+}
+
+.header-row {
+  display: grid;
+  gap: 20px; /* Space between each header */
+  grid-template-columns: 72px 72px 72px 72px 72px 72px 72px 72px 72px;
+  margin-bottom: 10px; /* Space below headers */
+  justify-content: center;
+  margin-left: 50px; /* adjust px as needed */
+  flex-wrap: wrap;
+}
+
+.header-cell {
+  display: flex;
+  flex: 1 1 100px;
+  flex-direction: column; /* Stack text inside header vertically */
+  align-items: center; /* Center text horizontally */
+  justify-content: center;
+  text-align: center; /* Optional, centers text inside each span */
+  padding: 5px 10px;
+  font-weight: bold;
+  /* border-bottom: 2px solid #000;  */
+}
+
+.team-logo-odds {
+  display: flex;
+  align-items: center; /* Center text horizontally */
+  text-align: center; /* Optional, centers text inside each span */
+  width: 24px;
+  height: 24px;
+  padding: 2px;
+  margin-top: 7px;
+}
+
+.team-logo1 {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
+.odds-table {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}

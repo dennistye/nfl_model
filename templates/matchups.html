@@ -1,6 +1,6 @@
 {% extends "navbar.html" %} {% block title %}Matchups - NFL Quant{% endblock %}
 {% block content %}
-<h1 class="predictor-title">NFL Week 9 Matchups</h1>
+<h1 class="predictor-title">NFL Week 10 Matchups</h1>
 <link rel="stylesheet" href="static/style.css" />
 <form id="prediction-form">
   <select id="matchup" name="matchup">
@@ -14,11 +14,14 @@
 
 <div class="team-container">
   <div class="team-card">
+    <!-- <h3 class="visitor-side" style="color: white">Visitor</h3> -->
+    <h2 class="visitor-title"></h2>
     <img id="visitor_logo" src="" alt="Visitor Team" class="team-logo" />
     <div id="vegas_visitor_spread"></div>
     <div id="visitor_spread"></div>
   </div>
   <div class="team-card">
+    <div id="day"></div>
     <div id="date"></div>
     <div id="time"></div>
     <div id="location"></div>
@@ -27,6 +30,8 @@
   </div>
 
   <div class="team-card">
+    <!-- <h3 class="visitor-side" style="color: white">Home</h3> -->
+    <h2 class="home-title"></h2>
     <img id="home_logo" src="" alt="Home Team" class="team-logo" />
     <div id="vegas_home_spread"></div>
     <div id="home_spread"></div>

@@ -13,9 +13,8 @@ from scipy.stats import norm
 global_week = 0
 
 def clean_data(box_scores_2022_df, box_scores_2023_df, box_scores_2024_df, box_scores_2025_df, pbp_2022_df, pbp_2023_df, pbp_2024_df, pbp_2025_df):
+    
     #change the box scores from NaN to REG for the OTFLag column
-
-
     pbp_2022_df['DefenseTeam'] = pbp_2022_df['DefenseTeam'].replace('LAR', 'LA')
     pbp_2022_df['OffenseTeam'] = pbp_2022_df['OffenseTeam'].replace('LAR', 'LA')
 
@@ -102,15 +101,7 @@ def clean_data(box_scores_2022_df, box_scores_2023_df, box_scores_2024_df, box_s
     pbp_2025_df["Formation"] = pbp_2025_df["Formation"].replace(0, "UNKNOWN")
     pbp_2025_df["PassType"] = pbp_2025_df["PassType"].fillna("UNKNOWN")
 
-
-    
-
-
-
-
-
     #change data from 2023-11-19 → 11/19/2023 format in play by play df and make sure the date columns are in date format
-
     pbp_2022_df['GameDate'] = pd.to_datetime(pbp_2022_df['GameDate'])
     pbp_2022_df['GameDate'] = pbp_2022_df['GameDate'].dt.strftime('%m/%d/%Y')
 
@@ -173,7 +164,6 @@ def clean_data(box_scores_2022_df, box_scores_2023_df, box_scores_2024_df, box_s
     }
 
     #change the Full team name to just the abbriviation for visitor and home 
-
     box_scores_2022_df['Visitor'] = box_scores_2022_df['Visitor'].map(team_abbr)
     box_scores_2022_df['Home'] = box_scores_2022_df['Home'].map(team_abbr)
 
@@ -188,7 +178,7 @@ def clean_data(box_scores_2022_df, box_scores_2023_df, box_scores_2024_df, box_s
 
 
 
-     # Merge play-by-play data for 2022 with scores data for 2022 based on Date, OffenseTeam, and DefenseTeam
+    # Merge play-by-play data for 2022 with scores data for 2022 based on Date, OffenseTeam, and DefenseTeam
     merged_2022_df = pbp_2022_df.merge(box_scores_2022_df, left_on=['GameDate', 'OffenseTeam', 'DefenseTeam'], right_on=['Date', 'Visitor', 'Home'], how='left')
     merged_2022_df = merged_2022_df.merge(box_scores_2022_df, left_on=['GameDate', 'OffenseTeam', 'DefenseTeam'], right_on=['Date', 'Home', 'Visitor'], how='left', suffixes=('', '_reverse'))
 
@@ -291,7 +281,6 @@ def clean_data(box_scores_2022_df, box_scores_2023_df, box_scores_2024_df, box_s
 
     return all_data
 
-
 def calculate_home_field_advantage(all_data):
     """
     Calculates both league-wide and team-specific Home Field Advantage (HFA) per season.
@@ -374,7 +363,6 @@ def calculate_home_field_advantage(all_data):
             })
 
     return pd.DataFrame(records)
-
 
 def calculate_total_home_field_advantage(all_data, box_scores_2023_df, box_scores_2024_df, box_scores_2025_df):
     tau = 10.0  # tunable; larger tau -> more shrinkage for small n
@@ -785,7 +773,7 @@ def clean_schedule_merge_with_features(team_features_complete):
     query = f"""
         SELECT *
         FROM "nfl2025schedule"
-        WHERE Week = {closest_week}
+        WHERE Week = 10
     """
 
     
@@ -825,7 +813,6 @@ def clean_schedule_merge_with_features(team_features_complete):
         print("No NaN values in DataFrame.")
     return upcoming_encoded_final
 
-# Prepare training data
 def prep_and_train(upcoming_encoded_final, team_features_complete, all_data, total_hfa):
     
     # Merge play-by-play data with team features for home teams
@@ -987,9 +974,6 @@ def prep_and_train(upcoming_encoded_final, team_features_complete, all_data, tot
 
     return final_predictions
 
-
-
-
 def spread_edge(diff, std_dev=13.5, odds=-110):
     """
     Estimate % edge given a spread difference (model - Vegas).
@@ -1013,7 +997,6 @@ def spread_edge(diff, std_dev=13.5, odds=-110):
     edge_percent = (model_prob - break_even) * 100
     print(edge_percent)
     return edge_percent
-
 
 def spread_percent_edge(complete_df):
 
@@ -1116,8 +1099,6 @@ def test_model(upcoming_encoded_final, team_features_complete, all_data):
 
     return final_predictions
     
-
-
 def best_bets(complete_df):
 
     complete_df["o_total"] = complete_df["o_total"].str.replace("o", "", regex=False)
@@ -1181,7 +1162,6 @@ def best_bets(complete_df):
 
     return complete_df
 
-
 def convert_spread_to_reg(spread):
     if spread > 0:
         spread = spread * -1
@@ -1189,11 +1169,7 @@ def convert_spread_to_reg(spread):
         spread = spread * -1
     return spread
 
-
-
 def main():
-
-
 
     # Load data
     box_scores_2022_df = pd.read_csv("csv_folder/2022_box_scores.csv")
@@ -1222,13 +1198,6 @@ def main():
 
     vegas_odds = pd.read_csv("csv_folder/odds.csv")
 #     vegas_odds2 = pd.read_csv("vegas_lines.csv")
-
-
-
-
-
-
-    
 #     vegas_odds2 = vegas_odds2[vegas_odds2["G#"] == 1]
 #     vegas_odds2['Opp'] = vegas_odds2['Opp'].str.lstrip('@')
 #     vegas_odds2.rename(columns={"Opp": "visitor_team"}, inplace=True)
@@ -1396,6 +1365,8 @@ def main():
 
     complete_df["week"] = global_week
 
+    print(global_week)
+
     conn = sqlite3.connect("nfl.db")
     cursor = conn.cursor()
 
@@ -1427,6 +1398,9 @@ def main():
     )
     """)
     conn.commit()
+
+    # complete_df = complete_df.drop('spread_percent_edge', axis=1)
+    # complete_df = complete_df.drop('total_percent_edge', axis=1)
 
 
     # complete_df.to_sql("predictions", conn, if_exists="append", index=False)

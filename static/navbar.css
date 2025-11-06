@@ -28,6 +28,20 @@
   color: #00ff00;
 }
 
+.logo {
+  height: 40px;
+  width: auto;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+.navbar-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px; /* space between logo and first link */
+}
+
 @media (max-width: 770px) {
   .navbar {
     padding: 6px 0;
