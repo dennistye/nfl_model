@@ -5,6 +5,7 @@ import sqlite3
 from datetime import date
 import json
 from datetime import datetime
+from players_scrape.current_nfl_week import current_week
 
 app = Flask(__name__)
 
@@ -123,35 +124,16 @@ def predict():
         return odds
     
     def get_date_time_locaiton(home, away, x):
-        from datetime import date
+
+        closest_week = current_week()
         conn = sqlite3.connect("nfl.db")
-        query = """
-            SELECT *
-            FROM "nfl2025schedule"
-        """
-
-        # Load directly into DataFrame
-        df = pd.read_sql_query(query, conn)
-        df_first = df.sort_values(["Week", "Date", "Time"]) \
-                .groupby("Week", as_index=False) \
-                .first()
-        
-        # Compute absolute difference in days
-        df_first["Date"] = pd.to_datetime(df_first["Date"], errors="coerce")
-
-        # Get today's date
-        today = pd.to_datetime(date.today())
-        df_first["Diff"] = (df_first["Date"] - today).abs()
-
-        # Find the row with the smallest difference
-        closest_week = df_first.loc[df_first["Diff"].idxmin(), "Week"]
         cursor = conn.cursor()
         if(x == "date"):
                 cursor.execute("""
                     SELECT Date
                     FROM nfl2025schedule
                     WHERE Week = ? AND Home = ? AND Visitor = ?
-                """, (int(10), home, away))
+                """, (int(closest_week), home, away))
                 dtl = cursor.fetchall()
                 if dtl:
                     dtl = dtl[0][0]
@@ -160,7 +142,7 @@ def predict():
                     SELECT Time
                     FROM nfl2025schedule
                     WHERE Week = ? AND Home = ? AND Visitor = ?
-                """, (int(10), home, away))
+                """, (int(closest_week), home, away))
                 dtl = cursor.fetchall()
                 if dtl:
                     dtl = dtl[0][0]
@@ -169,7 +151,7 @@ def predict():
                     SELECT Location
                     FROM nfl2025schedule
                     WHERE Week = ? AND Home = ? AND Visitor = ?
-                """, (int(10), home, away))
+                """, (int(closest_week), home, away))
                 dtl = cursor.fetchall()
                 if dtl:
                     dtl = dtl[0][0]

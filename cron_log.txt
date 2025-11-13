@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/Users/dennistye/Desktop/nfl_model/players_scrape/action_player_prop_scrape.py", line 4, in <module>
+    from players_scrape.current_nfl_week import current_week
+ModuleNotFoundError: No module named 'players_scrape'

@@ -9,6 +9,7 @@ import sqlite3
 from datetime import date
 import math
 from scipy.stats import norm
+from players_scrape.current_nfl_week import current_week
 
 global_week = 0
 
@@ -63,12 +64,7 @@ def clean_data(box_scores_2022_df, box_scores_2023_df, box_scores_2024_df, box_s
     pbp_2024_df['PenaltyTeam'] = pbp_2024_df['PenaltyTeam'].fillna('UNKNOWN')
     pbp_2024_df['PenaltyType'] = pbp_2024_df['PenaltyType'].fillna('UNKNOWN')
 
-    # pbp_2025_df['ScoringPlay'] = pbp_2025_df['ScoringPlay'].fillna('UNKNOWN')
-    # pbp_2025_df['PlayType'] = pbp_2025_df['PlayType'].astype(str)
-    # pbp_2025_df['PlayType'] = pbp_2025_df['PlayType'].replace('None', 'UNKNOWN')
-    # pbp_2025_df['PlayType'] = pbp_2025_df['PlayType'].fillna('UNKNOWN')
     pbp_2025_df = pbp_2025_df.fillna(0)        # replace NaN with 0
-    # pbp_2025_df = pbp_2025_df.fillna('')       # replace NaN with empty string
     pbp_2025_df = pbp_2025_df.rename(columns={"Down_num": "Down"})
     pbp_2025_df["Quarter"] = pbp_2025_df["Quarter"].astype(int)
     pbp_2025_df["ToGo"] = pbp_2025_df["ToGo"].astype(int)
@@ -114,7 +110,6 @@ def clean_data(box_scores_2022_df, box_scores_2023_df, box_scores_2024_df, box_s
     pbp_2025_df['GameDate'] = pd.to_datetime(pbp_2025_df['GameDate'])
     pbp_2025_df['GameDate'] = pbp_2025_df['GameDate'].dt.strftime('%m/%d/%Y')
 
-    
 
     box_scores_2022_df['Date'] = pd.to_datetime(box_scores_2022_df['Date'], errors='coerce')
     box_scores_2022_df['Date'] = box_scores_2022_df['Date'].dt.strftime('%m/%d/%Y')
@@ -177,7 +172,6 @@ def clean_data(box_scores_2022_df, box_scores_2023_df, box_scores_2024_df, box_s
     box_scores_2025_df['Home'] = box_scores_2025_df['Home'].map(team_abbr)
 
 
-
     # Merge play-by-play data for 2022 with scores data for 2022 based on Date, OffenseTeam, and DefenseTeam
     merged_2022_df = pbp_2022_df.merge(box_scores_2022_df, left_on=['GameDate', 'OffenseTeam', 'DefenseTeam'], right_on=['Date', 'Visitor', 'Home'], how='left')
     merged_2022_df = merged_2022_df.merge(box_scores_2022_df, left_on=['GameDate', 'OffenseTeam', 'DefenseTeam'], right_on=['Date', 'Home', 'Visitor'], how='left', suffixes=('', '_reverse'))
@@ -231,7 +225,6 @@ def clean_data(box_scores_2022_df, box_scores_2023_df, box_scores_2024_df, box_s
     merged_2025_df = merged_2025_df.drop(columns='Date')
 
 
-
     # Adding "HomeWon" Column which is just a binary 1 or 0 when a home team won or lost
     merged_2022_df['HomeWon'] = merged_2022_df['Home_score'] > merged_2022_df['Visitor_score']
     merged_2023_df['HomeWon'] = merged_2023_df['Home_score'] > merged_2023_df['Visitor_score']
@@ -254,30 +247,17 @@ def clean_data(box_scores_2022_df, box_scores_2023_df, box_scores_2024_df, box_s
     merged_2025_df.rename(columns={"IsMeaurement": "IsMeasurement"}, inplace=True)
 
     merged_2025_df["YardLine"] = merged_2025_df["YardLine"].fillna(0).astype(int)
-    # print(merged_2022_df.isna().sum())
-    # merged_2025_df.to_csv("merged_2025_df.csv")
-
-    # print(merged_2025_df)
-    # print(merged_2023_df)
     
-
     all_data = pd.concat([merged_2023_df, merged_2024_df, merged_2025_df])
-    # all_data = all_data.drop('Unnamed: 0.1', axis=1)  # drop single column
 
-    # all_data["Yardline"] = all_data["Yardline"].fillna(0).astype(int)
-    # all_data["IsMeaurement"] = all_data["IsMeaurement"].fillna(0).astype(int)
     all_data["Challenger"] = all_data["Challenger"].fillna(0).astype(int)
-    # all_data["Yardline"] = all_data["Yardline"].fillna(0).astype(int)
+    
     print(all_data.isna().sum())
-
-    #all_data['Weight'] = all_data['SeasonYear'].apply(lambda x: 1.5 if x == 2024 else 1)
 
     if all_data.isna().any().any():
         print("all_data DataFrame contains NaN values.")
     else:
         print("No NaN values in DataFrame.")
-
-    #all_data = merged_2024_df
 
     return all_data
 
@@ -490,7 +470,6 @@ def team_features(all_data):
 
     # Home or away, home team has a 3% higher chance of winning
 
-
     # 1. Average Pointes Scored
     # Calculate the average points scored by each team when home and away
     avg_points_scored_home = all_data.groupby('Home')['Home_score'].mean()
@@ -539,7 +518,6 @@ def team_features(all_data):
     # 2. Average conceded plays:
     # A play is considered successful for the offense if it results in a touchdown or doesn't result in a turnover.
     # Create a new column 'SuccessfulPlay' in the all_data DataFrame to represent this.
-    #all_data['SuccessfulPlay'] = all_data['IsTouchdown'] | (~all_data['IsInterception'] & ~all_data['IsFumble'])
     all_data['SuccessfulPlay'] = (
     (all_data['IsTouchdown']) |
     (
@@ -645,7 +623,6 @@ def team_features(all_data):
     # Merging with the existing combined features
     team_features_expanded = team_features_combined.merge(new_offensive_features, on='Team')
 
-
     # Calculate additional defensive features
 
     # 1. Average yards allowed per play
@@ -699,90 +676,20 @@ def team_features(all_data):
 
 def clean_schedule_merge_with_features(team_features_complete):
 
-    # schedule_2025_df = pd.read_csv("csv_folder/2025_schedule.csv")
-
-    # week1_df = schedule_2025_df[schedule_2025_df['Week'] == 1]
-    # week1_df = week1_df[['Home', 'Visitor']]
-    # week1_df['Home'] = week1_df['Home'].str.lstrip('@').str.strip()
-
-    # city_abbr = {
-    #     "Arizona": "ARI",
-    #     "Atlanta": "ATL",
-    #     "Baltimore": "BAL",
-    #     "Buffalo": "BUF",
-    #     "Carolina": "CAR",
-    #     "Chicago": "CHI",
-    #     "Cincinnati": "CIN",
-    #     "Cleveland": "CLE",
-    #     "Dallas": "DAL",
-    #     "Denver": "DEN",
-    #     "Detroit": "DET",
-    #     "Green Bay": "GB",
-    #     "Houston": "HOU",
-    #     "Indianapolis": "IND",
-    #     "Jacksonville": "JAX",
-    #     "Kansas City": "KC",
-    #     "Las Vegas": "LV",
-    #     "Los Angeles1": "LAC",  
-    #     "Los Angeles2": "LA",  
-    #     "Miami": "MIA",
-    #     "Minnesota": "MIN",
-    #     "New England": "NE",
-    #     "New Orleans": "NO",
-    #     "New York1": "NYG",  
-    #     "New York2": "NYJ",  
-    #     "Philadelphia": "PHI",
-    #     "Pittsburgh": "PIT",
-    #     "San Francisco": "SF",
-    #     "Seattle": "SEA",
-    #     "Tampa Bay": "TB",
-    #     "Tennessee": "TEN",
-    #     "Washington": "WAS"
-    # }
-
-    # week1_df['Home'] = week1_df['Home'].map(city_abbr)
-    # week1_df['Visitor'] = week1_df['Visitor'].map(city_abbr)
-
-    conn = sqlite3.connect("nfl.db")
-    query = """
-        SELECT *
-        FROM "nfl2025schedule"
-    """
-
-    # Load directly into DataFrame
-    df = pd.read_sql_query(query, conn)
-    df_first = df.sort_values(["Week", "Date", "Time"]) \
-             .groupby("Week", as_index=False) \
-             .first()
-    
-    # Compute absolute difference in days
-    df_first["Date"] = pd.to_datetime(df_first["Date"], errors="coerce")
-
-    # Get today's date
-    today = pd.to_datetime(date.today())
-    df_first["Diff"] = (df_first["Date"] - today).abs()
-
-    # Find the row with the smallest difference
-    closest_week = df_first.loc[df_first["Diff"].idxmin(), "Week"]
-    
-    print(closest_week)
-    global global_week
+    # current week is a reference function and lives in the player_scrape folder in current_nfl_week.py file
+    closest_week = current_week()
     global_week = closest_week
 
     conn = sqlite3.connect("nfl.db")
     query = f"""
         SELECT *
         FROM "nfl2025schedule"
-        WHERE Week = 10
+        WHERE Week = {closest_week}
     """
-
-    
-
     # Load directly into DataFrame
     week_number_df = pd.read_sql_query(query, conn)
-    # print(week_number_df)
+    
     week_number_df = week_number_df[['Home', 'Visitor']]
-    # print(week1_df)
 
     # Close connection
     conn.close()
@@ -790,12 +697,9 @@ def clean_schedule_merge_with_features(team_features_complete):
     week_number_df['Home'] = week_number_df['Home'].replace('LAR', 'LA')
     week_number_df['Visitor'] = week_number_df['Visitor'].replace('LAR', 'LA')
 
-
-
     upcoming_encoded_home = week_number_df.merge(team_features_complete, left_on='Home', right_on='Team', how='left')
-    # print(upcoming_encoded_home)
     upcoming_encoded_both = upcoming_encoded_home.merge(team_features_complete, left_on='Visitor', right_on='Team', suffixes=('_Home', '_Visitor'), how='left')
-    # print(upcoming_encoded_both)
+    
 
     # Calculate the difference in features as this might be a more predictive representation
     for col in ['AvgPointsScored', 'WinRate', 'AvgPointsDefended', 'AvgConcededPlays', 'AvgForcedTurnovers',
@@ -805,7 +709,6 @@ def clean_schedule_merge_with_features(team_features_complete):
 
     # Selecting only the difference columns and the teams for clarity
     upcoming_encoded_final = upcoming_encoded_both[['Home', 'Visitor'] + [col for col in upcoming_encoded_both.columns if 'Diff_' in col]]
-    # print(upcoming_encoded_final)
     # After creating all_data in clean_data
     if upcoming_encoded_final.isna().any().any():
         print("DataFrame contains NaN values.")
@@ -820,7 +723,6 @@ def prep_and_train(upcoming_encoded_final, team_features_complete, all_data, tot
     # Merge the result with team features for visitor teams
     training_encoded_both = training_encoded_home.merge(team_features_complete, left_on='Visitor', right_on='Team', suffixes=('_Home', '_Visitor'), how='left')
 
-
     training_encoded_both = training_encoded_both.merge(
     total_hfa[['team', 'reg_diff_shrunk']], left_on='Home', right_on='team', how='left'
     ).rename(columns={'reg_diff_shrunk': 'HFA_HOME'}).drop(columns=['team'])
@@ -831,13 +733,6 @@ def prep_and_train(upcoming_encoded_final, team_features_complete, all_data, tot
 
     # Create combined HFA difference
     training_encoded_both['Diff_HFA'] = training_encoded_both['HFA_HOME'] - training_encoded_both['HFA_VISITOR']
-    # training_encoded_both.drop(columns=['Diff_HFA_Visitor'], inplace=True)
-
-    # upcoming_encoded_final.to_csv("upcoming_encoded_final.csv")
-    # team_features_complete.to_csv("team_features_complete.csv")
-    # all_data.to_csv("all_data.csv")
-
-    
 
     # Calculate the difference in features
     for col in ['AvgPointsScored', 'WinRate', 'AvgPointsDefended', 'AvgConcededPlays', 'AvgForcedTurnovers',
@@ -845,93 +740,22 @@ def prep_and_train(upcoming_encoded_final, team_features_complete, all_data, tot
                 'AvgYardsAllowedPerPlay', 'AvgYardsAllowedPerGame', 'AvgPassCompletionAllowedRate', 'AvgTouchdownsAllowedPerGame', 'AvgRushSuccessAllowedRate']:
         training_encoded_both[f'Diff_{col}'] = training_encoded_both[f'{col}_Home'] - training_encoded_both[f'{col}_Visitor']
 
-
-    # training_encoded_both.to_csv("training.csv")
-
-    
-
     # Filtering out the required columns
     # Feature matrix
     X_train = training_encoded_both[[col for col in training_encoded_both.columns if 'Diff_' in col]]
     X_train['Diff_HFA'] = training_encoded_both['Diff_HFA']  # Add HFA difference as a feature
 
-
-    # X_train = X_train.fillna(0)
-
     # Target vectors
     y_spread = all_data['Spread']
-    # print(y_spread)
     y_total = all_data['Total']
-    # print(y_total)
-
-    # y_spread = y_spread.fillna(0)
-    # y_total = y_total.fillna(0)
-
+   
     # ---- Apply Weights ----
-
-
-    qb_history = {
-        "ARI":[2024, 2025],
-        "ATL":[2025],
-        "BAL":[2023, 2024, 2025],
-        "BUF":[2023, 2024, 2025],
-        "CAR":[2023, 2024, 2025],
-        "CHI":[2024, 2025],
-        "CIN":[2023, 2025],
-        "CLE":[2025],
-        "DAL":[2023, 2024, 2025],
-        "DEN":[2025],
-        "DET":[2023, 2024, 2025],
-        "GB":[2023, 2024, 2025],
-        "HOU":[2023, 2024, 2025],
-        "IND":[2025],
-        "JAX":[2023, 2024, 2025],
-        "KC":[2023, 2024, 2025],
-        "LV":[2025],
-        "LAC":[2023, 2024, 2025], 
-        "LA":[2023, 2024, 2025],
-        "MIA":[2023, 2024, 2025],
-        "MIN":[2025],
-        "NE":[2025],
-        "NO":[2025],
-        "NYG":[2025],  
-        "NYJ":[2025],  
-        "PHI":[2023, 2024, 2025],
-        "PIT":[2025], 
-        "SF":[2023, 2024, 2025],
-        "SEA":[2025],
-        "TB":[2023, 2024, 2025],
-        "TEN":[2025],
-        "WAS":[2024, 2025],
-    }
-
     alpha = 0.7
     current_year = 2025
     weight_map = {year: alpha**(current_year - year) for year in [2023, 2024, 2025]}
 
     # Map weights to each row based on SeasonYear
     sample_weights = all_data['SeasonYear'].map(weight_map).fillna(1.0)
-
-    # def get_weight(row):
-    #     offense_team = row["OffenseTeam"]
-    #     year = row["SeasonYear"]
-
-    #     # If team not in QB history, neutral weight
-    #     if offense_team not in qb_history:
-    #         return 1.0
-
-    #     qb_years = qb_history[offense_team]
-
-    #     # ✅ Full weight only for years QB actually played
-    #     if year in qb_years:
-    #         return 1.0
-    #     else:
-    #         # Year QB didn’t play — small weight
-    #         return 0.05
-
-
-    # # Apply to your play-by-play or team-level data
-    # sample_weights = all_data.apply(get_weight, axis=1)
 
     spread_model = LinearRegression()
     total_model = LinearRegression()
@@ -940,9 +764,6 @@ def prep_and_train(upcoming_encoded_final, team_features_complete, all_data, tot
     total_model.fit(X_train, y_total, sample_weight=sample_weights)
 
     X_upcoming = upcoming_encoded_final[[col for col in upcoming_encoded_final.columns if 'Diff_' in col]]
-    # X_upcoming.to_csv("x_upcoming.csv")
-    # print(X_upcoming.isna().sum())
-
 
     upcoming_encoded_final = upcoming_encoded_final.merge(
         total_hfa[['team', 'reg_diff_shrunk']], left_on='Home', right_on='team', how='left'
@@ -965,7 +786,6 @@ def prep_and_train(upcoming_encoded_final, team_features_complete, all_data, tot
 
     print("Spread model R²:", spread_model.score(X_train, y_spread, sample_weight=sample_weights))
     print("Total model R²:", total_model.score(X_train, y_total, sample_weight=sample_weights))
-
 
     upcoming_encoded_final['PredictedSpread'] = predicted_spreads
     upcoming_encoded_final['PredictedTotal'] = predicted_totals
@@ -1010,7 +830,6 @@ def spread_percent_edge(complete_df):
     
     complete_df['spread_percent_edge'] = complete_df['spread_percent_edge'].fillna(0).astype(int)
 
-
     return complete_df
 
 def total_percent_edge(complete_df):
@@ -1024,7 +843,6 @@ def total_percent_edge(complete_df):
             complete_df.at[index, "total_percent_edge"] = spread_edge(row["diff_total"])
 
     complete_df['total_percent_edge'] = complete_df['total_percent_edge'].fillna(0).astype(int)
-
 
     return complete_df
 
@@ -1108,8 +926,6 @@ def best_bets(complete_df):
     complete_df["best_spread"] = None
     complete_df["diff_spread"] = None
     complete_df["diff_total"] = None
-    # complete_df["top_three_spread"] = None
-    # complete_df["top_three_total"] = None
 
     for index, row in complete_df.iterrows():
         complete_df.at[index, "diff_total"] = abs(row["PredictedTotal"] - row["o_total"])
@@ -1137,26 +953,6 @@ def best_bets(complete_df):
             complete_df.at[index, "best_spread"] = "Home" 
         else:
             complete_df.at[index, "best_spread"] = "Mininmal Edge"
-    
-
-    #     complete_df["top_three_spread"] = (
-    #     complete_df["diff_spread"]
-    #     .where(complete_df["diff_spread"] >= 5)
-    #     .rank(method="first", ascending=False)
-    #     .where(lambda x: x <= 3)
-    # )
-        
-    # complete_df["top_three_total"] = (
-    #     complete_df["diff_total"]
-    #     .where(complete_df["diff_total"] >= 5)
-    #     .rank(method="first", ascending=False)
-    #     .where(lambda x: x <= 3)
-    # )
-
-    # complete_df.drop(columns=["diff_spread", "diff_total"], inplace=True)
-
-    # complete_df['top_three_spread'] = complete_df['top_three_spread'].fillna(0).astype(int)
-    # complete_df['top_three_total'] = complete_df['top_three_total'].fillna(0).astype(int)
 
     complete_df["o_total"] = "o" + complete_df["o_total"].astype(str)
 
@@ -1197,81 +993,11 @@ def main():
     # pbp_2025_df = pbp_2025_df.drop(columns=['Season', 'Week'])
 
     vegas_odds = pd.read_csv("csv_folder/odds.csv")
-#     vegas_odds2 = pd.read_csv("vegas_lines.csv")
-#     vegas_odds2 = vegas_odds2[vegas_odds2["G#"] == 1]
-#     vegas_odds2['Opp'] = vegas_odds2['Opp'].str.lstrip('@')
-#     vegas_odds2.rename(columns={"Opp": "visitor_team"}, inplace=True)
-#     vegas_odds2.rename(columns={"Team": "home_team"}, inplace=True)
-#     vegas_odds2.rename(columns={"Spread": "home_spread"}, inplace=True)
-#     vegas_odds2.rename(columns={"Over/Under": "o_total"}, inplace=True)
-
-#     vegas_odds2['o_total'] = vegas_odds2['o_total'].astype(float)  # to float
-#     vegas_odds2['home_spread'] = vegas_odds2['home_spread'].astype(float)  # to float
-
-#     team_abbr = {
-#     "CRD": "ARI",
-#     "SDG": "LAC",
-#     "ARI": "ARI",
-#     "GNB": "GB",
-#     "HTX": "HOU",
-#     "IND": "IND",
-#     "JAX": "JAX",
-#     "KAN": "KC",
-#     "LVR": "LV",
-#     "LAR": "LA",
-#     "NWE": "NE",
-#     "NOR": "NO",
-#     "SFO": "SF",
-#     "TAM": "TB",
-#     "ATL": "ATL",
-#     "RAV": "BAL",
-#     "BAL": "BAL",
-#     "BUF": "BUF",
-#     "CAR": "CAR",
-#     "CHI": "CHI",
-#     "CIN": "CIN",
-#     "CLE": "CLE",
-#     "DAL": "DAL",
-#     "DEN": "DEN",
-#     "DET": "DET",
-#     "GNB": "GB",
-#     "LAC": "LAC",
-#     "MIA": "MIA",
-#     "MIN": "MIN",
-#     "NO": "NO",
-#     "NYG": "NYG",
-#     "NYJ": "NYJ",
-#     "PHI": "PHI",
-#     "PIT": "PIT",
-#     "SEA": "SEA",
-#     "OTI": "TEN",
-#     "WAS": "WAS",
-#     "CLT": "MIA",
-#     "TEN": "TEN",
-#     "RAM": "LA",
-#     "RAI": "LV",
-#     "HOU": "HOU"
-# }
-
-#     vegas_odds2['home_team'] = vegas_odds2['home_team'].map(team_abbr)
-#     vegas_odds2['visitor_team'] = vegas_odds2['visitor_team'].map(team_abbr)
-
-    # print(vegas_odds2)
 
     pbp_2022_df = pbp_2022_df[~(pbp_2022_df['OffenseTeam'].isna() & pbp_2022_df['DefenseTeam'].isna())]
 
-    # k_neighbors_classifier = pd.read_csv("supporting_files/k_neighbors_classifier.csv")
-
-    # k_neighbors_classifier[['Visitor', 'Home']] = k_neighbors_classifier['Game'].str.split(' @ ', expand=True)
-
-    #pinnacle_probs_df = pd.read_csv("csv_folder/Pinnacle_odds.csv")
-
     # Cleaned data
     all_data = clean_data(box_scores_2022_df, box_scores_2023_df, box_scores_2024_df, box_scores_2025_df, pbp_2022_df, pbp_2023_df, pbp_2024_df, pbp_2025_df)
-
-    # home_field_advantage = calculate_home_field_advantage(all_data)
-
-    # print(home_field_advantage)
 
     total_hfa = calculate_total_home_field_advantage(all_data, box_scores_2023_df, box_scores_2024_df, box_scores_2024_df)
     print(total_hfa)
@@ -1285,26 +1011,10 @@ def main():
     # Prepares data and uses Logistic Regression to train 
     upcoming_predictions = prep_and_train(upcoming_encoded_final, team_features_complete, all_data, total_hfa)
 
-    # test_model(upcoming_encoded_final, team_features_complete, all_data)
-
-    # Output prediciton to a csv file, eventually will be ouputing to a database
-
-    # upcoming_predictions["VegasSpread"] = pinnacle_probs_df['VegasSpread'].values
-    # upcoming_predictions["VegasTotal"] = pinnacle_probs_df['VegasTotal'].values
-
     upcoming_predictions['HomeSpread'] = upcoming_predictions['PredictedSpread'].apply(convert_spread_to_reg)
-    # upcoming_predictions['HomeVegasSpread'] = upcoming_predictions['VegasSpread'].apply(convert_spread_to_reg)
-    # upcoming_predictions['DiffSpread'] = upcoming_predictions['HomeSpread'] - upcoming_predictions['HomeVegasSpread']
 
     upcoming_predictions['VisitorSpread'] = upcoming_predictions['HomeSpread'].apply(lambda x: x*-1)
-    # upcoming_predictions['VisitorVegasSpread'] = upcoming_predictions['HomeVegasSpread'].apply(lambda x: x*-1)
-    # upcoming_predictions['DiffVisitorSpread'] = upcoming_predictions['VisitorSpread'] - upcoming_predictions['VisitorVegasSpread']
-
-    # upcoming_predictions['DiffTotal'] = upcoming_predictions['PredictedTotal'] - upcoming_predictions['VegasTotal']
-
-    # upcoming_predictions['DiffSpread'] = upcoming_predictions['DiffSpread'].apply(lambda x: x*-1 if x < 0 else x)
-    # upcoming_predictions['DiffTotal'] = upcoming_predictions['DiffTotal'].apply(lambda x: x*-1 if x < 0 else x)
-
+   
     upcoming_predictions = upcoming_predictions.drop(columns=['PredictedSpread']) 
 
     upcoming_predictions['HomeSpread'] = upcoming_predictions['HomeSpread'].round(1)
@@ -1312,22 +1022,8 @@ def main():
     upcoming_predictions['PredictedTotal'] = upcoming_predictions['PredictedTotal'].round(1)
     upcoming_predictions['o_PredictedTotal'] = upcoming_predictions['PredictedTotal'].apply(lambda x: f"o{x}" if pd.notnull(x) else None)
     upcoming_predictions['u_PredictedTotal'] = upcoming_predictions['PredictedTotal'].apply(lambda x: f"u{x}" if pd.notnull(x) else None)
-    # upcoming_predictions = upcoming_predictions.drop(columns=['PredictedTotal']) 
-
-    # print(vegas_odds)
-    # print(upcoming_predictions)
-    # print(k_neighbors_classifier)
-
-    # print(upcoming_predictions)
-    # print(vegas_odds)
 
     complete_df = upcoming_predictions.merge(vegas_odds, left_on=["Home", "Visitor"], right_on=["home_team", "visitor_team"], how="inner")
-
-    # print(complete_df)
-
-    # complete_df2 = upcoming_predictions.merge(vegas_odds2, left_on=["Home", "Visitor"], right_on=["home_team", "visitor_team"], how="inner")
-
-    # complete_df2 = best_bets(complete_df2)
 
     complete_df = best_bets(complete_df)
 
@@ -1340,26 +1036,7 @@ def main():
 
     print(complete_df)
 
-
-    # complete_df = complete_df.merge(k_neighbors_classifier, left_on=["Home", "Visitor"], right_on=["Home", "Visitor"], how="inner")
-
-    # complete_df = complete_df.drop(columns=["Unnamed: 0_y", "Game", "Spread", "Total"])
-    # # Sort by Unnamed: 0_x
-    # complete_df.rename(columns={"Unnamed: 0_x": "Index"}, inplace=True)
-    # complete_df.rename(columns={"KNC(7)": "knc"}, inplace=True)
-    # complete_df = complete_df.sort_values("Index").reset_index(drop=True)
-
-    # print(complete_df)
-
-
-
-
     complete_df.to_csv("csv_folder/complete_weights.csv", index=False)
-
-
-    # upcoming_predictions['DiffSpread'] = upcoming_predictions['DiffSpread'].round(1)
-    # upcoming_predictions['DiffVisitorSpread'] = upcoming_predictions['DiffVisitorSpread'].round(1)
-    # upcoming_predictions['DiffTotal'] = upcoming_predictions['DiffTotal'].round(1)
 
     global global_week
 
@@ -1401,7 +1078,6 @@ def main():
 
     # complete_df = complete_df.drop('spread_percent_edge', axis=1)
     # complete_df = complete_df.drop('total_percent_edge', axis=1)
-
 
     # complete_df.to_sql("predictions", conn, if_exists="append", index=False)
 

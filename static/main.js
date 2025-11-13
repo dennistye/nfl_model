@@ -349,7 +349,7 @@ function loadMatchupData(matchup) {
 
         starters.forEach((p) => {
           console.log(p.role);
-          if (p.injury == "Questionable") {
+          if (p.injury == "Questionable" || p.injury == "Doubtful") {
             // console.log(p.injury);
             // console.log(p.role);
             // console.log(p.acquisition);
