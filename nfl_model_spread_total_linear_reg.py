@@ -9,7 +9,7 @@ import sqlite3
 from datetime import date
 import math
 from scipy.stats import norm
-from players_scrape.current_nfl_week import current_week
+from current_nfl_week import current_week
 
 global_week = 0
 
