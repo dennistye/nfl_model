@@ -2,3 +2,22 @@ Traceback (most recent call last):
   File "/Users/dennistye/Desktop/nfl_model/players_scrape/action_player_prop_scrape.py", line 4, in <module>
     from players_scrape.current_nfl_week import current_week
 ModuleNotFoundError: No module named 'players_scrape'
+11
+      game_id open_total visitor_spread  ... visitor_team home_team week
+0   401772945      o44.5          +13.5  ...          NYJ        NE   11
+1   401772631      o47.5           +2.5  ...          WAS       MIA   11
+2   401772774      o50.5           +5.5  ...          CIN       PIT   11
+3   401772775       -1.5           -2.5  ...          LAC       JAX   11
+4   401772776      o50.5           +5.5  ...           TB       BUF   11
+5   401772880      o45.5           +3.5  ...          CHI       MIN   11
+6   401772881       -7.5           -6.5  ...          HOU       TEN   11
+7   401772882      o42.5           +3.5  ...          CAR       ATL   11
+8   401772883       -7.5           -7.5  ...           GB       NYG   11
+9   401772884      o48.5           +3.5  ...          SEA        LA   11
+10  401772885       -2.5           -2.5  ...           SF       ARI   11
+11  401772777       -9.5           -7.5  ...          BAL       CLE   11
+12  401772778       -3.5           -3.5  ...           KC       DEN   11
+13  401772928      o47.5           +2.5  ...          DET       PHI   11
+14  401772819       -3.5           -3.5  ...          DAL        LV   11
+
+[15 rows x 12 columns]
