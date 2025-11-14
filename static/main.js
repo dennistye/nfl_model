@@ -1133,11 +1133,11 @@ function best_props(props) {
         VegasOpenoddsItem.className = "game-item";
 
         const vegas_open_num1 = document.createElement("div");
-        vegas_open_num1.className = "prop-cell1";
+        vegas_open_num1.className = "prop-cell";
         vegas_open_num1.textContent = prop.player_abbr;
 
         const vegas_open_num2 = document.createElement("div");
-        vegas_open_num2.className = "prop-cell";
+        vegas_open_num2.className = "prop-cell1";
         vegas_open_num2.textContent = prop.prop_type;
 
         VegasOpenoddsItem.appendChild(vegas_open_num1);

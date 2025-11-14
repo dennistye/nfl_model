@@ -133,10 +133,10 @@ body {
 .header-row {
   display: grid;
   gap: 20px; /* Space between each header */
-  grid-template-columns: 72px 72px 72px 72px 72px 72px 72px 72px 72px;
+  grid-template-columns: 130px 72px 72px 72px 72px 72px;
   margin-bottom: 10px; /* Space below headers */
   justify-content: center;
-  margin-left: 50px; /* adjust px as needed */
+  /* margin-left: 5px;  */
   flex-wrap: wrap;
 }
 

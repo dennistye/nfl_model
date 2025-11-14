@@ -11,7 +11,6 @@ import math
 from scipy.stats import norm
 from current_nfl_week import current_week
 
-global_week = 0
 
 def clean_data(box_scores_2022_df, box_scores_2023_df, box_scores_2024_df, box_scores_2025_df, pbp_2022_df, pbp_2023_df, pbp_2024_df, pbp_2025_df):
     
@@ -678,7 +677,6 @@ def clean_schedule_merge_with_features(team_features_complete):
 
     # current week is a reference function and lives in the player_scrape folder in current_nfl_week.py file
     closest_week = current_week()
-    global_week = closest_week
 
     conn = sqlite3.connect("nfl.db")
     query = f"""
@@ -1038,11 +1036,11 @@ def main():
 
     complete_df.to_csv("csv_folder/complete_weights.csv", index=False)
 
-    global global_week
+    
 
-    complete_df["week"] = global_week
+    complete_df["week"] = current_week()
 
-    print(global_week)
+    print(current_week())
 
     conn = sqlite3.connect("nfl.db")
     cursor = conn.cursor()
@@ -1076,15 +1074,16 @@ def main():
     """)
     conn.commit()
 
-    # complete_df = complete_df.drop('spread_percent_edge', axis=1)
-    # complete_df = complete_df.drop('total_percent_edge', axis=1)
+    complete_df = complete_df.drop('spread_percent_edge', axis=1)
+    complete_df = complete_df.drop('total_percent_edge', axis=1)
 
-    # complete_df.to_sql("predictions", conn, if_exists="append", index=False)
+    complete_df.to_sql("predictions", conn, if_exists="append", index=False)
+
 
 
     upcoming_predictions.to_csv("csv_folder/week1_predictions_linear_reg.csv", index=False)
 
-    return upcoming_predictions, global_week
+    return upcoming_predictions, current_week()
 
 if __name__ == "__main__":
     main()
