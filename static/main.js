@@ -1,170 +1,208 @@
 const teamLogos = {
   ARI: {
+    id: 1,
     color: "#a53e56",
     logo: "/static/images/ARI.webp",
     fullName: "Arizona Cardinals",
   },
   ATL: {
+    id: 2,
     color: "#b53e51",
     logo: "/static/images/ATL.webp",
     fullName: "Atlanta Falcons",
   },
   BAL: {
+    id: 3,
     color: "#413485",
     logo: "/static/images/BAL.webp",
     fullName: "Baltimore Ravens",
   },
   BUF: {
+    id: 4,
     color: "#1e4c9c",
     logo: "/static/images/BUF.webp",
     fullName: "Buffalo Bills",
   },
   CAR: {
+    id: 5,
     color: "#2a98d2",
     logo: "/static/images/CAR.webp",
     fullName: "Carolina Panthers",
   },
   CHI: {
+    id: 6,
     color: "#333b4c",
     logo: "/static/images/CHI.webp",
     fullName: "Chicago Bears",
   },
   CIN: {
+    id: 7,
     color: "#fc6a3a",
     logo: "/static/images/CIN.webp",
     fullName: "Cincinnati Bengals",
   },
   CLE: {
+    id: 8,
     color: "#ff5929",
     logo: "/static/images/CLE.webp",
     fullName: "Cleveland Browns",
   },
   DAL: {
+    id: 9,
     color: "#1e3e5c",
     logo: "/static/images/DAL.webp",
     fullName: "Dallas Cowboys",
   },
   DEN: {
+    id: 10,
     color: "#1e3e5c",
     logo: "/static/images/DEN.webp",
     fullName: "Denver Broncos",
   },
   DET: {
+    id: 11,
     color: "#1e88c0",
     logo: "/static/images/DET.webp",
     fullName: "Detroit Lions",
   },
   GB: {
+    id: 12,
     color: "#3c4e4a",
     logo: "/static/images/GB.webp",
     fullName: "Green Bay Packers",
   },
   HOU: {
+    id: 13,
     color: "#1b292f",
     logo: "/static/images/HOU.webp",
     fullName: "Houston Texans",
   },
   IND: {
+    id: 14,
     color: "#1d4671",
     logo: "/static/images/IND.webp",
     fullName: "Indianapolis Colts",
   },
   JAX: {
+    id: 15,
     color: "#282828",
     logo: "/static/images/JAX.webp",
     fullName: "Jacksonville Jaguars",
   },
   KC: {
+    id: 16,
     color: "#e83e57",
     logo: "/static/images/KC.webp",
     fullName: "Kansas City Chiefs",
   },
   LV: {
+    id: 17,
     color: "#282828",
     logo: "/static/images/LV.webp",
     fullName: "Las Vegas Raiders",
   },
   LAC: {
+    id: 18,
     color: "#1f8fcb",
     logo: "/static/images/LAC.webp",
     fullName: "Los Angeles Chargers",
   },
   LA: {
+    id: 19,
     color: "#1f4ea2",
     logo: "/static/images/LA.webp",
     fullName: "Los Angeles Rams",
   },
   MIA: {
+    id: 20,
     color: "#209da5",
     logo: "/static/images/MIA.webp",
     fullName: "Miami Dolphins",
   },
   MIN: {
+    id: 21,
     color: "#643f92",
     logo: "/static/images/MIN.webp",
     fullName: "Minnesota Vikings",
   },
   NE: {
+    id: 22,
     color: "#1e3e5c",
     logo: "/static/images/NE.webp",
     fullName: "New England Patriots",
   },
   NO: {
+    id: 23,
     color: "#dcc9a4",
     logo: "/static/images/NO.webp",
     fullName: "New Orleans Saints",
   },
   NYG: {
+    id: 24,
     color: "#293d78",
     logo: "/static/images/NYG.webp",
     fullName: "New York Giants",
   },
   NYJ: {
+    id: 25,
     color: "#296853",
     logo: "/static/images/NYJ.webp",
     fullName: "New York Jets",
   },
   PHI: {
+    id: 26,
     color: "#206369",
     logo: "/static/images/PHI.webp",
     fullName: "Philadelphia Eagles",
   },
   PIT: {
+    id: 27,
     color: "#282828",
     logo: "/static/images/PIT.webp",
     fullName: "Pittsburgh Steelers",
   },
   SF: {
+    id: 28,
     color: "#b92929",
     logo: "/static/images/SF.webp",
     fullName: "San Francisco 49ers",
   },
   SEA: {
+    id: 29,
     color: "#1e3e5c",
     logo: "/static/images/SEA.webp",
     fullName: "Seattle Seahawks",
   },
   TB: {
+    id: 30,
     color: "#b23449",
     logo: "/static/images/TB.webp",
     fullName: "Tampa Bay Buccaneers",
   },
   TEN: {
+    id: 31,
     color: "#1e3e5c",
     logo: "/static/images/TEN.webp",
     fullName: "Tennessee Titans",
   },
   WAS: {
+    id: 32,
     color: "#6a2b2c",
     logo: "/static/images/WAS.webp",
     fullName: "Washington Commanders",
   },
   "": {
+    id: 0,
     color: "#fff8f2",
     logo: "/static/images/NYJ.webp",
     fullName: "Unknown Team",
   },
 };
+
+const idToAbbr = Object.entries(teamLogos).reduce((acc, [abbr, team]) => {
+  acc[team.id] = abbr;
+  return acc;
+}, {});
 
 function loadMatchupData(matchup) {
   // const matchup = document.getElementById('matchup').value;
@@ -1113,20 +1151,23 @@ function best_props(props) {
         // ImageItem.appendChild(logo);
         // ImageItem.appendChild(logo2);
 
-        // // Team names
-        // const gameItem = document.createElement("div");
-        // gameItem.className = "game-item";
+        const container = document.createElement("div");
+        container.className = "player-team-container";
 
-        // const visitor = document.createElement("div");
-        // visitor.className = "team-cell";
-        // visitor.textContent = game.Visitor;
+        const playerImg = document.createElement("img");
+        playerImg.src = prop.player_picture;
+        playerImg.alt = prop.full_name;
+        playerImg.className = "player-picture";
 
-        // const home = document.createElement("div");
-        // home.className = "team-cell";
-        // home.textContent = game.Home;
+        const teamImg = document.createElement("img");
+        const abbr = idToAbbr[prop.team_id];
+        const logo = teamLogos[abbr]?.logo;
+        teamImg.src = logo;
+        teamImg.alt = abbr || "Team logo";
+        teamImg.className = "team-picture";
 
-        // gameItem.appendChild(visitor);
-        // gameItem.appendChild(home);
+        container.appendChild(playerImg);
+        container.appendChild(teamImg);
 
         // Vegas open
         const VegasOpenoddsItem = document.createElement("div");
@@ -1135,6 +1176,7 @@ function best_props(props) {
         const vegas_open_num1 = document.createElement("div");
         vegas_open_num1.className = "prop-cell";
         vegas_open_num1.textContent = prop.player_abbr;
+        vegas_open_num1.style.fontWeight = "bold";
 
         const vegas_open_num2 = document.createElement("div");
         vegas_open_num2.className = "prop-cell1";
@@ -1263,7 +1305,7 @@ function best_props(props) {
 
         // Put both side by side inside wrapper
         // columnItem.appendChild(ImageItem);
-        // columnItem.appendChild(gameItem);
+        columnItem.appendChild(container);
         columnItem.appendChild(VegasOpenoddsItem);
         // columnItem.appendChild(VegasMLoddsItem);
         columnItem.appendChild(VegasSpreadoddsItem);

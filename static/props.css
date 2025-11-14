@@ -136,7 +136,7 @@ body {
   grid-template-columns: 130px 72px 72px 72px 72px 72px;
   margin-bottom: 10px; /* Space below headers */
   justify-content: center;
-  /* margin-left: 5px;  */
+  margin-left: 80px;
   flex-wrap: wrap;
 }
 
@@ -175,4 +175,30 @@ body {
   width: 100%;
   margin: 0 auto;
   box-sizing: border-box;
+}
+
+.player-team-container {
+  position: relative; /* container is relative for absolute positioning inside */
+  display: inline-block; /* shrink to fit images */
+  width: 60px; /* match player picture size */
+  height: 60px;
+}
+
+.player-picture {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block; /* removes inline gap */
+}
+
+.team-picture {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  bottom: 0; /* stick to bottom */
+  right: 0; /* stick to right */
+  border-radius: 50%;
+  border: 2px solid white; /* optional white border to separate from player pic */
+  background-color: white; /* optional, if transparent logo */
 }
