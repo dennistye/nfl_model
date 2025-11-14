@@ -5,7 +5,7 @@ import sqlite3
 from datetime import date
 import json
 from datetime import datetime
-from players_scrape.current_nfl_week import current_week
+from current_nfl_week import current_week
 
 app = Flask(__name__)
 
