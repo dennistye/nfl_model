@@ -21,9 +21,22 @@ def index():
 
 @app.route('/api/')
 def api_index():
-   odds = prediction_df.to_dict(orient='records')
-   return jsonify(odds)
+    odds = prediction_df.to_dict(orient='records')
 
+    conn = sqlite3.connect(DB_PATH)
+    query = "SELECT * FROM props;"
+    props_df = pd.read_sql_query(query, conn)
+    conn.close()
+
+    # Convert DataFrame → list of dictionaries
+    props = props_df.to_dict(orient='records')
+
+    response = {
+        "odds": odds,
+        "props": props
+    }
+    return jsonify(response)
+   
 @app.route('/matchups')
 def matchups():
     # Show list of week 1 matchups

@@ -934,24 +934,26 @@ function spread_edges(odds) {
   });
 }
 
-function weeks_best_value(odds) {
+function weeks_best_value(data) {
+  console.log(data.props);
+
   const gamesColumn = document.getElementById("weeks_best_value");
   const gamesColumn2 = document.getElementById("weeks_description");
   gamesColumn.innerHTML = ""; // Clear previous data
   gamesColumn2.innerHTML = ""; // Clear previous data
 
-  const maxSpread = Math.max(...odds.map((game) => game.diff_spread));
-  const maxTotal = Math.max(...odds.map((game) => game.diff_total));
+  const maxSpread = Math.max(...data.odds.map((game) => game.diff_spread));
+  const maxTotal = Math.max(...data.odds.map((game) => game.diff_total));
 
   console.log(maxSpread);
   console.log(maxTotal);
 
   if (maxSpread > maxTotal) {
-    odds.sort((a, b) => b.diff_spread - a.diff_spread);
+    data.odds.sort((a, b) => b.diff_spread - a.diff_spread);
 
     let num = 0;
 
-    odds.forEach((game) => {
+    data.odds.forEach((game) => {
       const columnItem = document.createElement("div");
       columnItem.className = "column-item";
 
@@ -1027,11 +1029,11 @@ function weeks_best_value(odds) {
       num++;
     });
   } else {
-    odds.sort((a, b) => b.diff_total - a.diff_total);
+    data.odds.sort((a, b) => b.diff_total - a.diff_total);
 
     let num = 0;
 
-    odds.forEach((game) => {
+    data.odds.forEach((game) => {
       const columnItem = document.createElement("div");
       columnItem.className = "column-item";
 
@@ -1341,8 +1343,8 @@ document.addEventListener("DOMContentLoaded", () => {
     fetch("/api/")
       .then((response) => response.json())
       .then((data) => {
-        totals_edges(data);
-        spread_edges(data);
+        totals_edges(data.odds);
+        spread_edges(data.odds);
         weeks_best_value(data);
       })
       .catch((error) => console.error("Error fetching total edges:", error));

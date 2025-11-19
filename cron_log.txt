@@ -21,3 +21,17 @@ ModuleNotFoundError: No module named 'players_scrape'
 14  401772819       -3.5           -3.5  ...          DAL        LV   11
 
 [15 rows x 12 columns]
+                 full_name        player_abbr  ...      edge  projection
+0               Bam Knight           Z.Knight  ...  0.275557        8.50
+1         Kenneth Gainwell         K.Gainwell  ...  0.269771        2.50
+2   Jacory Croskey-Merritt  J.Croskey-Merritt  ...  0.220637        7.00
+3              Brock Purdy            B.Purdy  ...  0.211509        2.20
+4                 R.Chosen           R.Chosen  ...  0.201940       19.00
+..                     ...                ...  ...       ...         ...
+93              Mike Brown            M.Brown  ...  0.088642        2.50
+94           Adam Trautman         A.Trautman  ...  0.088422        0.70
+95                 H.Mevis            H.Mevis  ...  0.088417        7.88
+96                Cam Ward             C.Ward  ...  0.087830        2.20
+97         Jacoby Brissett         J.Brissett  ...  0.087042       35.50
+
+[98 rows x 10 columns]
