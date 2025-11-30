@@ -1,14 +1,11 @@
 # Ignore model files
 models/
 
-# Igonre epa_pbp_2000-2024 data
+# Ignore EPA PBP data
 epa_pbp_2000-2024/
 
-# Ignore myenv
+# Ignore virtual environment
 myenv/
-
-# Ignore csv_folder
-# csv_folder/
 
 # Ignore Python cache
 __pycache__/
@@ -17,39 +14,26 @@ __pycache__/
 # Ignore VS Code settings
 .vscode/
 
-epa_model.ipynb
-
+# Ignore test and misc folders
 all_test_folder/
-
-play_by_play_scrape/
-
-2025_pbp_scrape/
-
-players_scrape/
 misc_folder/
 
-odds.py
+# Ignore scrape outputs
+play_by_play_scrape/
+players_scrape/
+2025_pbp_scrape/
+odds_scrape/
 
-player_info_scrape.py
-
-player_picture.py
-
-player_scrape.py
-
+# Ignore supporting files (if needed)
 supporting_files/
 
+# Ignore data files
 training.csv
-
-test.R
-
 team_stats.csv
-
 pbp-2025.csv
 
-action_prop_scrape.py
+# Notebook
+epa_model.ipynb
 
-espn_player_scrape.py
-
-espn_roster_scrape.py
-
-scrape_pbp_espn.py
+# R script
+test.R

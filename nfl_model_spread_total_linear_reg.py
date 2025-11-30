@@ -992,10 +992,23 @@ def main():
 
     vegas_odds = pd.read_csv("csv_folder/odds.csv")
 
+    # conn = sqlite3.connect("nfl.db")
+    # cursor = conn.cursor()
+
+    # query = f"""
+    #     SELECT *
+    #     FROM "odds"
+    #     WHERE Week = 11
+    # """
+    # # Load directly into DataFrame
+    # vegas_odds = pd.read_sql_query(query, conn)
+
     pbp_2022_df = pbp_2022_df[~(pbp_2022_df['OffenseTeam'].isna() & pbp_2022_df['DefenseTeam'].isna())]
 
     # Cleaned data
     all_data = clean_data(box_scores_2022_df, box_scores_2023_df, box_scores_2024_df, box_scores_2025_df, pbp_2022_df, pbp_2023_df, pbp_2024_df, pbp_2025_df)
+
+    all_data.to_csv("all_data.csv")
 
     total_hfa = calculate_total_home_field_advantage(all_data, box_scores_2023_df, box_scores_2024_df, box_scores_2024_df)
     print(total_hfa)
@@ -1025,7 +1038,7 @@ def main():
 
     complete_df = best_bets(complete_df)
 
-    complete_df = complete_df.drop(columns=["Unnamed: 0"])
+    # complete_df = complete_df.drop(columns=["Unnamed: 0"])
     complete_df = complete_df.drop(columns=["visitor_team"])
     complete_df = complete_df.drop(columns=["home_team"])
 
@@ -1039,6 +1052,7 @@ def main():
     
 
     complete_df["week"] = current_week()
+
 
     print(current_week())
 
@@ -1077,7 +1091,7 @@ def main():
     complete_df = complete_df.drop('spread_percent_edge', axis=1)
     complete_df = complete_df.drop('total_percent_edge', axis=1)
 
-    complete_df.to_sql("predictions", conn, if_exists="append", index=False)
+    # complete_df.to_sql("predictions", conn, if_exists="append", index=False)
 
 
 

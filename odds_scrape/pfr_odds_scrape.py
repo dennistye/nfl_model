@@ -34,6 +34,7 @@ for team in teams:
     lines_df.insert(loc=1, column='Team', value=team.upper())
 
     veg_df = pd.concat([veg_df, lines_df], ignore_index=True)
+    print(veg_df)
 
     time.sleep(random.randint(4, 5))
 

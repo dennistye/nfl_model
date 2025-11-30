@@ -144,4 +144,4 @@ print(spread_wins)
 print("Total win rate: " + str(round((total_wins/total_num_total_predictions)*100, 1)) + "%")
 print("Spread win rate: " + str(round((spread_wins/total_num_spread_predictions)*100, 1)) + "%")
 
-# merged_df.to_csv("win_rate.csv")
+merged_df.to_csv("win_rate.csv")

@@ -35,3 +35,144 @@ ModuleNotFoundError: No module named 'players_scrape'
 97         Jacoby Brissett         J.Brissett  ...  0.087042       35.50
 
 [98 rows x 10 columns]
+         full_name player_abbr  ...      edge  projection
+0   Michael Carter    M.Carter  ...  0.399745         2.0
+1       Bam Knight    B.Knight  ...  0.374046         6.0
+2       Bam Knight    B.Knight  ...  0.334033         1.2
+3   Michael Carter    M.Carter  ...  0.292573         1.1
+4       Bam Knight    B.Knight  ...  0.264330         8.0
+..             ...         ...  ...       ...         ...
+91   Khalil Shakir    K.Shakir  ...  0.076602         4.7
+92     Woody Marks     W.Marks  ...  0.076579         1.7
+93  Bhayshul Tuten     B.Tuten  ...  0.076565         1.0
+94  Ricky Pearsall  R.Pearsall  ...  0.076001         2.8
+95        Cam Ward      C.Ward  ...  0.075356         3.3
+
+[96 rows x 10 columns]
+13
+       game_id open_total  visitor_spread  ... visitor_team home_team week
+0    401772510        NaN             8.5  ...          DAL       PHI    1
+1    401772714        NaN            -3.0  ...           KC       LAC    1
+2    401772830        NaN             1.0  ...           TB       ATL    1
+3    401772829        NaN            -5.0  ...          CIN       CLE    1
+4    401772719        NaN             0.0  ...          MIA       IND    1
+..         ...        ...             ...  ...          ...       ...  ...
+207  401772947      o54.5             3.5  ...          DAL       DET   13
+208  401772791      o46.5             6.0  ...          PIT       BAL   13
+209  401772902      o53.5             6.5  ...          CIN       BUF   13
+210  401772897      o46.5             6.5  ...          CHI        GB   13
+211  401772932      o41.5             5.5  ...          HOU        KC   13
+
+[212 rows x 12 columns]
+GameId                            0
+GameDate                          0
+Quarter                           0
+Minute                            0
+Second                            0
+OffenseTeam                       0
+DefenseTeam                       0
+Down                              0
+ToGo                              0
+YardLine                          0
+SeriesFirstDown                   0
+NextScore                         0
+Description                       0
+TeamWin                           0
+SeasonYear                        0
+Yards                             0
+Formation                         0
+PlayType                          0
+IsRush                            0
+IsPass                            0
+IsIncomplete                      0
+IsTouchdown                       0
+PassType                          0
+IsSack                            0
+IsChallenge                       0
+IsChallengeReversed               0
+IsMeasurement                     0
+IsInterception                    0
+IsFumble                          0
+IsPenalty                         0
+IsTwoPointConversion              0
+IsTwoPointConversionSuccessful    0
+RushDirection                     0
+YardLineFixed                     0
+YardLineDirection                 0
+IsPenaltyAccepted                 0
+PenaltyTeam                       0
+IsNoPlay                          0
+PenaltyType                       0
+PenaltyYards                      0
+Visitor                           0
+Visitor_score                     0
+Home                              0
+Home_score                        0
+OTFlag                            0
+HomeWon                           0
+Spread                            0
+Total                             0
+Challenger                        0
+dtype: int64
+No NaN values in DataFrame.
+League HFA avg: 2.4923976608187135, Home Win %: 55.32%
+   team  regression_home  ...  away_games  reg_diff_shrunk
+0    KC        19.997922  ...          30        -3.978297
+1   MIN        28.520911  ...          27         8.623157
+2    NO        28.188114  ...          25        -2.550505
+3   ATL        19.393402  ...          25         1.511227
+4   BAL        34.694387  ...          28         9.454691
+5   PIT        36.530366  ...          29        16.170402
+6   WAS        37.049210  ...          31         8.093962
+7   CLE        23.723763  ...          27         8.740411
+8   IND        13.907233  ...          26         3.170038
+9   LAC        18.500829  ...          28        -3.227743
+10  SEA        22.265164  ...          25         4.351265
+11  DEN        27.519193  ...          28         4.147013
+12  CHI        21.718926  ...          25         1.309621
+13   NE        13.432220  ...          26        -2.446036
+14  NYG        11.670157  ...          25        -7.279499
+15  NYJ        18.717703  ...          26        -2.001773
+16  PHI        26.206320  ...          26        -1.446792
+17  HOU        27.318563  ...          29        -7.641428
+18  TEN        12.757791  ...          26        -4.488016
+19  DET        33.767674  ...          26         5.244550
+20  BUF        37.410725  ...          28        13.023593
+21  CIN        17.174418  ...          26         0.031753
+22  JAX        18.255272  ...          26        -3.025368
+23   TB        30.500369  ...          26         6.799237
+24  ARI        33.604186  ...          25        21.284708
+25   LA        16.194725  ...          28        -3.544683
+26  DAL        40.027815  ...          25         1.699091
+27  CAR         6.086173  ...          25        -7.525077
+28   SF        26.935504  ...          26        -4.169817
+29   GB        29.543968  ...          29         7.686582
+30  MIA        39.396847  ...          27        15.445910
+31   LV        17.580301  ...          26        -0.237818
+
+[32 rows x 7 columns]
+No NaN values in DataFrame.
+No NaN values in DataFrame.
+Spread model R²: 0.2002383167724897
+Total model R²: 0.03113099022724708
+19.448339606265108
+15.316647600722334
+15.050261993714741
+12.614036685454078
+14.245793612984281
+   Home Visitor  ...  spread_percent_edge  total_percent_edge
+0   CLE      SF  ...                    0                  15
+1   TEN     JAX  ...                    0                   0
+2   IND     HOU  ...                    0                   0
+3   MIA      NO  ...                    0                  15
+4   NYJ     ATL  ...                    0                   0
+5    TB     ARI  ...                    0                   0
+6   CAR      LA  ...                    0                   0
+7   SEA     MIN  ...                   19                   0
+8   PIT     BUF  ...                    0                   0
+9   LAC      LV  ...                    0                  12
+10  WAS     DEN  ...                    0                  14
+11   NE     NYG  ...                    0                   0
+
+[12 rows x 23 columns]
+13
