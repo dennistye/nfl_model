@@ -934,8 +934,107 @@ function spread_edges(odds) {
   });
 }
 
+function prop_edges(props) {
+  const gamesColumn = document.getElementById("props_edges");
+  gamesColumn.innerHTML = ""; // Clear previous data
+  let num = 0;
+
+  if (!props) {
+    // No props is empty will display no info
+    const columnItem = document.createElement("div");
+    columnItem.className = "column-item";
+    columnItem.textContent = "No Information At This Time";
+    columnItem.style.fontWeight = "bold";
+    columnItem.style.color = "darkgreen";
+    columnItem.style.textTransform = "uppercase";
+    gamesColumn.appendChild(columnItem);
+  } else {
+    props.forEach((prop) => {
+      if (num == 3) {
+        return;
+      } else {
+        // Wrapper for both sections
+        const columnItem = document.createElement("div");
+        columnItem.className = "column-item";
+
+        const ImageItem = document.createElement("div");
+        ImageItem.className = "game-item";
+
+        const container = document.createElement("div");
+        container.className = "player-team-container";
+
+        const playerImg = document.createElement("img");
+        playerImg.src = prop.player_picture;
+        playerImg.alt = prop.full_name;
+        playerImg.className = "player-picture";
+
+        const teamImg = document.createElement("img");
+        const abbr = idToAbbr[prop.team_id];
+        const logo = teamLogos[abbr]?.logo;
+        teamImg.src = logo;
+        teamImg.alt = abbr || "Team logo";
+        teamImg.className = "team-picture";
+
+        container.appendChild(playerImg);
+        container.appendChild(teamImg);
+
+        // Player abbreviated name and prop type
+        const PlayerItem = document.createElement("div");
+        PlayerItem.className = "game-item";
+
+        const player_abbr = document.createElement("div");
+        player_abbr.className = "prop-cell";
+        player_abbr.textContent = prop.player_abbr;
+        player_abbr.style.fontWeight = "bold";
+
+        const prop_type = document.createElement("div");
+        prop_type.className = "prop-cell1";
+        prop_type.textContent = prop.prop_type;
+
+        PlayerItem.appendChild(player_abbr);
+        PlayerItem.appendChild(prop_type);
+
+        // Player prop side and line value
+        const PlayerSideValueItem = document.createElement("div");
+        PlayerSideValueItem.className = "game-item2";
+
+        const side_line_value = document.createElement("div");
+        side_line_value.className = "team-cell2";
+        side_line_value.textContent = prop.side + " " + prop.line_value;
+        side_line_value.style.fontWeight = "bold";
+        side_line_value.style.color = "darkgreen";
+        side_line_value.style.textTransform = "uppercase";
+
+        PlayerSideValueItem.appendChild(side_line_value);
+
+        // Player prop percent
+        const PropPercentItem = document.createElement("div");
+        PropPercentItem.className = "game-item2";
+
+        const prop_percent = document.createElement("div");
+        prop_percent.className = "team-cell2";
+        prop_percent.textContent = "EDGE: " + Math.round(prop.edge * 100) + "%";
+        prop_percent.style.fontWeight = "bold";
+        prop_percent.style.color = "darkgreen";
+
+        PropPercentItem.appendChild(prop_percent);
+
+        // Append all column items
+        columnItem.appendChild(container);
+        columnItem.appendChild(PlayerItem);
+        columnItem.appendChild(PlayerSideValueItem);
+        columnItem.appendChild(PropPercentItem);
+        // Add to main column
+        gamesColumn.appendChild(columnItem);
+      }
+      num++;
+    });
+  }
+}
+
 function weeks_best_value(data) {
   console.log(data.props);
+  console.log(data.odds);
 
   const gamesColumn = document.getElementById("weeks_best_value");
   const gamesColumn2 = document.getElementById("weeks_description");
@@ -1115,10 +1214,15 @@ function best_props(props) {
   const gamesColumn = document.getElementById("props-column");
   gamesColumn.innerHTML = ""; // Clear previous data
 
-  // odds.sort((a, b) => b.diff_spread - a.diff_spread);
-
   if (!props) {
-    gamesColumn.textContent = "No Information At This Time";
+    // If props is empty will display no info
+    const columnItem = document.createElement("div");
+    columnItem.className = "column-item";
+    columnItem.textContent = "No Information At This Time";
+    columnItem.style.fontWeight = "bold";
+    columnItem.style.color = "darkgreen";
+    columnItem.style.textTransform = "uppercase";
+    gamesColumn.appendChild(columnItem);
   } else {
     let num = 0;
     props.forEach((prop) => {
@@ -1131,27 +1235,6 @@ function best_props(props) {
 
         const ImageItem = document.createElement("div");
         ImageItem.className = "game-item";
-
-        // const logo = document.createElement("img");
-        // logo.src = teamLogos[game.Visitor].logo; // logo URL
-        // if (game.Visitor == "NYJ") {
-        //   logo.src =
-        //     "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/nyj.png&h=200&w=200";
-        // }
-        // logo.alt = game.Visitor;
-        // logo.className = "team-logo-odds";
-
-        // const logo2 = document.createElement("img");
-        // logo2.src = teamLogos[game.Home].logo; // logo URL
-        // if (game.Home == "NYJ") {
-        //   logo2.src =
-        //     "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/nyj.png&h=200&w=200";
-        // }
-        // logo2.alt = game.Home;
-        // logo2.className = "team-logo-odds";
-
-        // ImageItem.appendChild(logo);
-        // ImageItem.appendChild(logo2);
 
         const container = document.createElement("div");
         container.className = "player-team-container";
@@ -1187,21 +1270,6 @@ function best_props(props) {
         VegasOpenoddsItem.appendChild(vegas_open_num1);
         VegasOpenoddsItem.appendChild(vegas_open_num2);
 
-        // Vegas MoneyLine
-        // const VegasMLoddsItem = document.createElement("div");
-        // VegasMLoddsItem.className = "game-item";
-
-        // const vegas_visitor_ml = document.createElement("div");
-        // vegas_visitor_ml.className = "prop-cell2";
-        // vegas_visitor_ml.textContent = prop.prop_type;
-
-        // const vegas_home_ml = document.createElement("div");
-        // vegas_home_ml.className = "team-cell";
-        // vegas_home_ml.textContent = game.home_ml;
-
-        // VegasMLoddsItem.appendChild(vegas_visitor_ml);
-        // VegasMLoddsItem.appendChild(vegas_home_ml);
-
         // Vegas Spread
         const VegasSpreadoddsItem = document.createElement("div");
         VegasSpreadoddsItem.className = "game-item";
@@ -1209,10 +1277,6 @@ function best_props(props) {
         const vegas_visitor_spread = document.createElement("div");
         vegas_visitor_spread.className = "team-cell";
         vegas_visitor_spread.textContent = prop.side;
-
-        // const vegas_home_spread = document.createElement("div");
-        // vegas_home_spread.className = "team-cell";
-        // vegas_home_spread.textContent = game.home_spread;
 
         VegasSpreadoddsItem.appendChild(vegas_visitor_spread);
         // VegasSpreadoddsItem.appendChild(vegas_home_spread);
@@ -1225,10 +1289,6 @@ function best_props(props) {
         vegas_total_o.className = "team-cell";
         vegas_total_o.textContent = prop.line_value;
 
-        // const vegas_total_u = document.createElement("div");
-        // vegas_total_u.className = "team-cell";
-        // vegas_total_u.textContent = game.u_total;
-
         VegasTotaloddsItem.appendChild(vegas_total_o);
         // VegasTotaloddsItem.appendChild(vegas_total_u);
 
@@ -1240,10 +1300,6 @@ function best_props(props) {
         model_visitor_spread.className = "team-cell";
         model_visitor_spread.textContent = prop.odds;
 
-        // const model_home_spread = document.createElement("div");
-        // model_home_spread.className = "team-cell";
-        // model_home_spread.textContent = game.HomeSpread;
-
         ModelSpreadoddsItem.appendChild(model_visitor_spread);
         // ModelSpreadoddsItem.appendChild(model_home_spread);
 
@@ -1254,10 +1310,6 @@ function best_props(props) {
         const model_total_o = document.createElement("div");
         model_total_o.className = "team-cell";
         model_total_o.textContent = Math.round(prop.edge * 100) + "%";
-
-        // const model_total_u = document.createElement("div");
-        // model_total_u.className = "team-cell";
-        // model_total_u.textContent = game.u_PredictedTotal;
 
         ModelTotaloddsItem.appendChild(model_total_o);
         // ModelTotaloddsItem.appendChild(model_total_u);
@@ -1276,46 +1328,14 @@ function best_props(props) {
         betting_spread1.textContent = prop.projection;
 
         BettingSpreadItem.appendChild(betting_spread1);
-        // BettingSpreadItem.appendChild(betting_spread2);
 
-        // // Betting Total
-
-        // const BettingTotalItem = document.createElement("div");
-        // BettingTotalItem.className = "game-item";
-
-        // const betting_total1 = document.createElement("div");
-        // betting_total1.className = "team-cell";
-
-        // const betting_total2 = document.createElement("div");
-        // betting_total2.className = "team-cell";
-
-        // if (game.best_total == "Over") {
-        //   betting_total1.style.backgroundColor = "lightgreen";
-        //   betting_total2.textContent = ".";
-        //   betting_total1.textContent = game.o_total;
-        // } else if (game.best_total == "Under") {
-        //   betting_total2.style.backgroundColor = "lightgreen";
-        //   betting_total1.textContent = ".";
-        //   betting_total2.textContent = game.u_total;
-        // } else {
-        //   betting_total1.textContent = ".";
-        //   betting_total2.textContent = ".";
-        // }
-
-        // BettingTotalItem.appendChild(betting_total1);
-        // BettingTotalItem.appendChild(betting_total2);
-
-        // Put both side by side inside wrapper
-        // columnItem.appendChild(ImageItem);
         columnItem.appendChild(container);
         columnItem.appendChild(VegasOpenoddsItem);
-        // columnItem.appendChild(VegasMLoddsItem);
         columnItem.appendChild(VegasSpreadoddsItem);
         columnItem.appendChild(VegasTotaloddsItem);
         columnItem.appendChild(ModelSpreadoddsItem);
         columnItem.appendChild(ModelTotaloddsItem);
         columnItem.appendChild(BettingSpreadItem);
-        // columnItem.appendChild(BettingTotalItem);
 
         // Add to main column
         gamesColumn.appendChild(columnItem);
@@ -1345,6 +1365,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .then((data) => {
         totals_edges(data.odds);
         spread_edges(data.odds);
+        prop_edges(data.props);
         weeks_best_value(data);
       })
       .catch((error) => console.error("Error fetching total edges:", error));

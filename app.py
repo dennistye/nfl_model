@@ -15,7 +15,6 @@ DB_PATH = "nfl.db"
 
 @app.route('/')
 def index():
-    # Show list of week 1 matchups
     games = prediction_df[['Home', 'Visitor']].to_dict(orient='records')
     return render_template('index.html', games=games)
 
@@ -39,7 +38,6 @@ def api_index():
    
 @app.route('/matchups')
 def matchups():
-    # Show list of week 1 matchups
     games = prediction_df[['Home', 'Visitor']].to_dict(orient='records')
     return render_template('matchups.html', games=games)
 

@@ -990,25 +990,23 @@ def main():
     pbp_2025_df['OffenseTeam'] = pbp_2025_df['OffenseTeam'].replace('LAR', 'LA')
     # pbp_2025_df = pbp_2025_df.drop(columns=['Season', 'Week'])
 
-    vegas_odds = pd.read_csv("csv_folder/odds.csv")
+    # vegas_odds = pd.read_csv("csv_folder/odds.csv")
 
-    # conn = sqlite3.connect("nfl.db")
-    # cursor = conn.cursor()
+    conn = sqlite3.connect("nfl.db")
+    cursor = conn.cursor()
 
-    # query = f"""
-    #     SELECT *
-    #     FROM "odds"
-    #     WHERE Week = 11
-    # """
-    # # Load directly into DataFrame
-    # vegas_odds = pd.read_sql_query(query, conn)
+    query = f"""
+        SELECT *
+        FROM "odds"
+        WHERE Week = 14
+    """
+    # Load directly into DataFrame
+    vegas_odds = pd.read_sql_query(query, conn)
 
     pbp_2022_df = pbp_2022_df[~(pbp_2022_df['OffenseTeam'].isna() & pbp_2022_df['DefenseTeam'].isna())]
 
     # Cleaned data
     all_data = clean_data(box_scores_2022_df, box_scores_2023_df, box_scores_2024_df, box_scores_2025_df, pbp_2022_df, pbp_2023_df, pbp_2024_df, pbp_2025_df)
-
-    all_data.to_csv("all_data.csv")
 
     total_hfa = calculate_total_home_field_advantage(all_data, box_scores_2023_df, box_scores_2024_df, box_scores_2024_df)
     print(total_hfa)
@@ -1048,8 +1046,6 @@ def main():
     print(complete_df)
 
     complete_df.to_csv("csv_folder/complete_weights.csv", index=False)
-
-    
 
     complete_df["week"] = current_week()
 
