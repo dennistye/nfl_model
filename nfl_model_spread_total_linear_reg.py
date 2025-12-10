@@ -998,7 +998,7 @@ def main():
     query = f"""
         SELECT *
         FROM "odds"
-        WHERE Week = 14
+        WHERE Week = {current_week()}
     """
     # Load directly into DataFrame
     vegas_odds = pd.read_sql_query(query, conn)

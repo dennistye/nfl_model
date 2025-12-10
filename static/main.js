@@ -987,16 +987,14 @@ function prop_edges(props) {
         player_abbr.textContent = prop.player_abbr;
         player_abbr.style.fontWeight = "bold";
 
-        const prop_type = document.createElement("div");
-        prop_type.className = "prop-cell1";
-        prop_type.textContent = prop.prop_type;
-
         PlayerItem.appendChild(player_abbr);
-        PlayerItem.appendChild(prop_type);
 
         // Player prop side and line value
         const PlayerSideValueItem = document.createElement("div");
         PlayerSideValueItem.className = "game-item2";
+        const prop_type = document.createElement("div");
+        prop_type.className = "prop-cell1";
+        prop_type.textContent = prop.prop_type;
 
         const side_line_value = document.createElement("div");
         side_line_value.className = "team-cell2";
@@ -1006,6 +1004,7 @@ function prop_edges(props) {
         side_line_value.style.textTransform = "uppercase";
 
         PlayerSideValueItem.appendChild(side_line_value);
+        PlayerSideValueItem.appendChild(prop_type);
 
         // Player prop percent
         const PropPercentItem = document.createElement("div");

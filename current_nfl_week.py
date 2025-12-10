@@ -48,8 +48,8 @@ def current_week():
     # print(df_last[["Week", "Date", "Diff"]])
     # print("Current NFL Week:", int(current_week))
 
-    # return current_week
-    return 14
+    return current_week
+    #return 13
 
 
 def main():
