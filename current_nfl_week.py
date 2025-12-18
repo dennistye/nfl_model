@@ -49,7 +49,7 @@ def current_week():
     # print("Current NFL Week:", int(current_week))
 
     return current_week
-    #return 13
+    # return 14
 
 
 def main():
