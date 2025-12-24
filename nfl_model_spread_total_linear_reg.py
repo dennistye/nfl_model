@@ -247,7 +247,7 @@ def clean_data(box_scores_2022_df, box_scores_2023_df, box_scores_2024_df, box_s
 
     merged_2025_df["YardLine"] = merged_2025_df["YardLine"].fillna(0).astype(int)
     
-    all_data = pd.concat([merged_2023_df, merged_2024_df, merged_2025_df])
+    all_data = pd.concat([merged_2024_df, merged_2025_df])
 
     all_data["Challenger"] = all_data["Challenger"].fillna(0).astype(int)
     
