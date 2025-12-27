@@ -9,7 +9,7 @@ import sqlite3
 from datetime import date
 import math
 from scipy.stats import norm
-from current_nfl_week import current_week
+from current_nfl_week.current_nfl_week import current_week
 
 
 def clean_data(box_scores_2022_df, box_scores_2023_df, box_scores_2024_df, box_scores_2025_df, pbp_2022_df, pbp_2023_df, pbp_2024_df, pbp_2025_df):
@@ -40,6 +40,11 @@ def clean_data(box_scores_2022_df, box_scores_2023_df, box_scores_2024_df, box_s
     pbp_2023_df = pbp_2023_df.dropna(axis=1, how='all')
     pbp_2024_df = pbp_2024_df.dropna(axis=1, how='all')
     pbp_2025_df = pbp_2025_df.dropna(axis=1, how='all')
+
+    #add the week columns for 2022, 2023 and 2024 seasons and fill them with 0 and put it 3rd in order
+    pbp_2022_df.insert(2, 'Week', 0)
+    pbp_2023_df.insert(2, 'Week', 0)
+    pbp_2024_df.insert(2, 'Week', 0)
 
     #fill any values that are empty to Unknown
     pbp_2022_df['Formation'] = pbp_2022_df['Formation'].fillna('UNKNOWN')
@@ -246,6 +251,9 @@ def clean_data(box_scores_2022_df, box_scores_2023_df, box_scores_2024_df, box_s
     merged_2025_df.rename(columns={"IsMeaurement": "IsMeasurement"}, inplace=True)
 
     merged_2025_df["YardLine"] = merged_2025_df["YardLine"].fillna(0).astype(int)
+
+    #only keep rows up to current week
+    merged_2025_df = merged_2025_df[merged_2025_df['Week'] < current_week()]
     
     all_data = pd.concat([merged_2024_df, merged_2025_df])
 
@@ -257,6 +265,8 @@ def clean_data(box_scores_2022_df, box_scores_2023_df, box_scores_2024_df, box_s
         print("all_data DataFrame contains NaN values.")
     else:
         print("No NaN values in DataFrame.")
+
+    all_data.to_csv("all_data.csv")
 
     return all_data
 

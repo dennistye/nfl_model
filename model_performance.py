@@ -136,6 +136,8 @@ total_wins = (merged_df["Total_win"] == 1).sum()
 
 total_num_total_predictions = overs + unders
 
+merged_df = merged_df.sort_values(by=merged_df.columns[0])
+
 print(total_num_total_predictions)
 print(total_wins)
 print(total_num_spread_predictions)
@@ -143,5 +145,7 @@ print(spread_wins)
 
 print("Total win rate: " + str(round((total_wins/total_num_total_predictions)*100, 1)) + "%")
 print("Spread win rate: " + str(round((spread_wins/total_num_spread_predictions)*100, 1)) + "%")
+
+# merged_df = merged_df.drop(merged_df[0], axis=1)
 
 merged_df.to_csv("win_rate.csv")

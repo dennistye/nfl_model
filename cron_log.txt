@@ -312,3 +312,7 @@ Total model R²: 0.028341066817749172
 16
 Week 16 already exists — replacing it.
 Week 16 successfully updated.
+Traceback (most recent call last):
+  File "/Users/dennistye/Desktop/nfl_model/players_scrape/action_player_prop_scrape.py", line 4, in <module>
+    from current_nfl_week.current_nfl_week import current_week
+ModuleNotFoundError: No module named 'current_nfl_week.current_nfl_week'; 'current_nfl_week' is not a package
