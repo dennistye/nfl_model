@@ -54,6 +54,7 @@ def current_week():
 
 def main():
     num = current_week()
+    print(num)
 
 if __name__ == "__main__":
     main()

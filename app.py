@@ -136,6 +136,11 @@ def predict():
     
     def get_date_time_locaiton(home, away, x):
 
+        if(home == "LA"):
+            home = "LAR"
+        elif(away == "LA"):
+             away = "LAR"
+
         closest_week = current_week()
         conn = sqlite3.connect("nfl.db")
         cursor = conn.cursor()
@@ -146,6 +151,8 @@ def predict():
                     WHERE Week = ? AND Home = ? AND Visitor = ?
                 """, (int(closest_week), home, away))
                 dtl = cursor.fetchall()
+                print(home)
+                print(away)
                 if dtl:
                     dtl = dtl[0][0]
         elif(x == "time"):
@@ -257,7 +264,7 @@ def predict():
     home_starters = get_starters(home)
     visitor_starters = get_starters(away)
 
-
+    print(date)
     date_obj = datetime.strptime(date, "%m/%d/%Y")
 
     # Get full day name

@@ -146,6 +146,58 @@ print(spread_wins)
 print("Total win rate: " + str(round((total_wins/total_num_total_predictions)*100, 1)) + "%")
 print("Spread win rate: " + str(round((spread_wins/total_num_spread_predictions)*100, 1)) + "%")
 
-# merged_df = merged_df.drop(merged_df[0], axis=1)
+merged_df = merged_df.reset_index(drop=True)
+
+merged_df = merged_df.drop(columns=[6, 7, 8, 9, 12, 13, 15, 16, 21, 22, "Visitor", "Home", "Box Score"])
+
+merged_df = merged_df.rename(columns={
+    0: "Week",
+    1: "Home",
+    2: "Visitor",
+    3: "Predicted_Total",
+    4: "Predicted_Spread_Home",
+    5: "Predicted_Spread_Visitor",
+    10: "Vegas_Spread_Visitor",
+    11: "Vegas_Total",
+    14: "Vegas_Spread_Home",
+    17: "Total_Edge_Flag",
+    18: "Spread_Edge_Flag",
+    19: "Spread_Diff",
+    20: "Total_Diff"
+})
+
+merged_df['Vegas_Total'] = merged_df['Vegas_Total'].str.replace(r"^o", "", regex=True)
+
+
+merged_df = merged_df.round(1)
+
+merged_df = merged_df[
+    [
+        "Date",
+        "Week",
+        "Home",
+        "Visitor",
+        "Predicted_Total",
+        "Vegas_Total",
+        "Predicted_Spread_Home",
+        "Vegas_Spread_Home",
+        "Predicted_Spread_Visitor",
+        "Vegas_Spread_Visitor",
+        "Total_Diff",
+        "Spread_Diff",
+        "Total_Edge_Flag",
+        "Spread_Edge_Flag",
+        "Home_score",
+        "Visitor_score",
+        "OTFlag",
+        "total_actual",
+        "spread_actual",
+        "Home_win",
+        "Visitor_win",
+        "Total_win",
+        "Spread_win",
+    ]
+]
+
 
 merged_df.to_csv("win_rate.csv")

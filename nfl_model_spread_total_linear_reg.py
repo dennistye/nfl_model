@@ -266,8 +266,6 @@ def clean_data(box_scores_2022_df, box_scores_2023_df, box_scores_2024_df, box_s
     else:
         print("No NaN values in DataFrame.")
 
-    all_data.to_csv("all_data.csv")
-
     return all_data
 
 def calculate_home_field_advantage(all_data):
@@ -853,77 +851,6 @@ def total_percent_edge(complete_df):
     complete_df['total_percent_edge'] = complete_df['total_percent_edge'].fillna(0).astype(int)
 
     return complete_df
-
-def test_model(upcoming_encoded_final, team_features_complete, all_data):
-     # Merge play-by-play data with team features for home teams
-    training_encoded_home = all_data.merge(team_features_complete, left_on='Home', right_on='Team', how='left')
-    # Merge the result with team features for visitor teams
-    training_encoded_both = training_encoded_home.merge(team_features_complete, left_on='Visitor', right_on='Team', suffixes=('_Home', '_Visitor'), how='left')
-
-    # upcoming_encoded_final.to_csv("upcoming_encoded_final.csv")
-    # team_features_complete.to_csv("team_features_complete.csv")
-    # all_data.to_csv("all_data.csv")
-
-    
-
-    # Calculate the difference in features
-    for col in ['AvgPointsScored', 'WinRate', 'AvgPointsDefended', 'AvgConcededPlays', 'AvgForcedTurnovers',
-                'AvgYardsPerPlay', 'AvgYardsPerGame', 'AvgPassCompletionRate', 'AvgTouchdownsPerGame', 'AvgRushSuccessRate',
-                'AvgYardsAllowedPerPlay', 'AvgYardsAllowedPerGame', 'AvgPassCompletionAllowedRate', 'AvgTouchdownsAllowedPerGame', 'AvgRushSuccessAllowedRate']:
-        training_encoded_both[f'Diff_{col}'] = training_encoded_both[f'{col}_Home'] - training_encoded_both[f'{col}_Visitor']
-
-
-    # training_encoded_both.to_csv("training.csv")
-
-    
-
-    # Filtering out the required columns
-    # Feature matrix
-    X_train = training_encoded_both[[col for col in training_encoded_both.columns if 'Diff_' in col]]
-    # X_train['Diff_HFA'] = training_encoded_both['Diff_HFA']
-
-    # X_train.to_csv("xtrain.csv")
-    # print(X_train.isna().sum())
-
-
-    # X_train = X_train.fillna(0)
-
-    # Target vectors
-    y_spread = all_data['Spread']
-    # print(y_spread)
-    y_total = all_data['Total']
-    # print(y_total)
-
-    # y_spread = y_spread.fillna(0)
-    # y_total = y_total.fillna(0)
-
-    # ---- Apply Weights ----
-    alpha = 0.7
-    current_year = 2025
-    weight_map = {year: alpha**(current_year - year) for year in [2023, 2024, 2025]}
-
-    # Map weights to each row based on SeasonYear
-    sample_weights = all_data['SeasonYear'].map(weight_map).fillna(1.0)
-
-    spread_model = LinearRegression()
-    total_model = LinearRegression()
-
-    spread_model.fit(X_train, y_spread, sample_weight=sample_weights)
-    total_model.fit(X_train, y_total, sample_weight=sample_weights)
-
-    X_upcoming = upcoming_encoded_final[[col for col in upcoming_encoded_final.columns if 'Diff_' in col]]
-    # X_upcoming.to_csv("x_upcoming.csv")
-    # print(X_upcoming.isna().sum())
-
-    predicted_spreads = spread_model.predict(X_upcoming)
-    predicted_totals = total_model.predict(X_upcoming)
-
-    upcoming_encoded_final['PredictedSpread'] = predicted_spreads
-    upcoming_encoded_final['PredictedTotal'] = predicted_totals
-
-    final_predictions = upcoming_encoded_final[['Home', 'Visitor', 'PredictedSpread', 'PredictedTotal']]
-
-    return final_predictions
     
 def best_bets(complete_df):
 
@@ -935,6 +862,8 @@ def best_bets(complete_df):
     complete_df["diff_spread"] = None
     complete_df["diff_total"] = None
 
+
+    # best bet for totals
     for index, row in complete_df.iterrows():
         complete_df.at[index, "diff_total"] = abs(row["PredictedTotal"] - row["o_total"])
         if row["PredictedTotal"] - row["o_total"] >= 5:
@@ -944,20 +873,24 @@ def best_bets(complete_df):
         else:
             complete_df.at[index, "best_total"] = "Mininmal Edge"
 
-
+    # best bet for spreads
     for index, row in complete_df.iterrows():
-        complete_df.at[index, "diff_spread"] = abs(abs(row["HomeSpread"]) - abs(row["home_spread"]))
-        if row["HomeSpread"] - row["home_spread"] >= 5 and row["HomeSpread"] > 0 and row["home_spread"] > 0:
+        if (row["HomeSpread"] >= 0 and row["home_spread"] <= 0) or (row["HomeSpread"] <= 0 and row["home_spread"] >= 0):
+            complete_df.at[index, "diff_spread"] = abs(abs(row["HomeSpread"]) + abs(row["home_spread"]))
+        else:
+            complete_df.at[index, "diff_spread"] = abs(abs(row["HomeSpread"]) - abs(row["home_spread"]))
+
+        if row["HomeSpread"] - row["home_spread"] >= 5 and row["HomeSpread"] >= 0 and row["home_spread"] >= 0:
             complete_df.at[index, "best_spread"] = "Away"
-        elif row["HomeSpread"] - row["home_spread"] <= -5 and row["HomeSpread"] < 0 and row["home_spread"] < 0:
+        elif row["HomeSpread"] - row["home_spread"] <= -5 and row["HomeSpread"] <= 0 and row["home_spread"] <= 0:
             complete_df.at[index, "best_spread"] = "Home" 
-        elif row["HomeSpread"] - row["home_spread"] >= 5 and row["HomeSpread"] < 0 and row["home_spread"] < 0:
+        elif row["HomeSpread"] - row["home_spread"] >= 5 and row["HomeSpread"] <= 0 and row["home_spread"] <= 0:
             complete_df.at[index, "best_spread"] = "Away" 
-        elif row["HomeSpread"] - row["home_spread"] <= -5 and row["HomeSpread"] > 0 and row["home_spread"] > 0:
+        elif row["HomeSpread"] - row["home_spread"] <= -5 and row["HomeSpread"] >= 0 and row["home_spread"] >= 0:
             complete_df.at[index, "best_spread"] = "Home" 
-        elif row["HomeSpread"] - row["home_spread"] >= 5 and row["HomeSpread"] > 0 and row["home_spread"] < 0:
+        elif row["HomeSpread"] - row["home_spread"] >= 5 and row["HomeSpread"] >= 0 and row["home_spread"] <= 0:
             complete_df.at[index, "best_spread"] = "Away" 
-        elif row["HomeSpread"] - row["home_spread"] <= -5 and row["HomeSpread"] < 0 and row["home_spread"] > 0:
+        elif row["HomeSpread"] - row["home_spread"] <= -5 and row["HomeSpread"] <= 0 and row["home_spread"] >= 0:
             complete_df.at[index, "best_spread"] = "Home" 
         else:
             complete_df.at[index, "best_spread"] = "Mininmal Edge"

@@ -316,3 +316,20 @@ Traceback (most recent call last):
   File "/Users/dennistye/Desktop/nfl_model/players_scrape/action_player_prop_scrape.py", line 4, in <module>
     from current_nfl_week.current_nfl_week import current_week
 ModuleNotFoundError: No module named 'current_nfl_week.current_nfl_week'; 'current_nfl_week' is not a package
+17
+Week 17 already exists — replacing it.
+Week 17 successfully updated.
+              full_name  player_abbr  ...      edge  projection
+0          Stone Smartt     S.Smartt  ...  0.308818        0.40
+1          Stone Smartt     S.Smartt  ...  0.292130        4.00
+2         Dylan Sampson    D.Sampson  ...  0.251695       10.60
+3           Tank Bigsby     T.Bigsby  ...  0.220629        4.10
+4   Rhamondre Stevenson  R.Stevenson  ...  0.203704        2.80
+..                  ...          ...  ...       ...         ...
+94         Tyler Warren     T.Warren  ...  0.085105        4.70
+95              D.Sills      D.Sills  ...  0.084982        0.90
+96         Trey McBride    T.McBride  ...  0.083817        7.10
+97        Audric Estime     A.Estime  ...  0.083442        0.38
+98              L.Allen      L.Allen  ...  0.083026       17.00
+
+[99 rows x 10 columns]
