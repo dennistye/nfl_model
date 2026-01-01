@@ -64,7 +64,7 @@ box_scores_2025_df['Home'] = box_scores_2025_df['Home'].map(team_abbr)
 merged_df = pd.merge(
     df,
     box_scores_2025_df,
-    left_on=[2, 1],   # column names in df1
+    left_on=[2,1],   # column names in df1
     right_on=["Visitor", "Home"],              # column names in df2
     how="left"
 )
@@ -103,13 +103,13 @@ def calc_spread(row):
     home_spread = row[14]
     visitor_spread = row[10]
 
-    if row[18] == "Home" and home_spread < 0 and row["Home_win"] and row["spread_actual"] >= home_spread:
+    if row[18] == "Home" and home_spread <= 0 and row["Home_win"] and row["spread_actual"] >= home_spread:
         spread_win = 1
-    elif row[18] == "Away" and visitor_spread < 0 and row["Visitor_win"] and row["spread_actual"] >= visitor_spread:
+    elif row[18] == "Away" and visitor_spread <= 0 and row["Visitor_win"] and row["spread_actual"] >= visitor_spread:
         spread_win = 1
-    elif row[18] == "Home" and home_spread > 0 and row["Visitor_win"] and row["spread_actual"] >= home_spread:
+    elif row[18] == "Home" and home_spread >= 0 and row["Visitor_win"] and row["spread_actual"] >= home_spread:
         spread_win = 1
-    elif row[18] == "Away" and visitor_spread > 0 and row["Home_win"] and row["spread_actual"] >= home_spread:
+    elif row[18] == "Away" and visitor_spread >= 0 and row["Home_win"] and row["spread_actual"] >= home_spread:
         spread_win = 1
     else:
         spread_win = 0

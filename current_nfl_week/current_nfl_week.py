@@ -4,7 +4,7 @@ from datetime import date
 
 
 
-def current_week():
+def current_week(val=None):
     # Connect to the database
     conn = sqlite3.connect("nfl.db")
 
@@ -47,14 +47,17 @@ def current_week():
     # print("Today:", today.date())
     # print(df_last[["Week", "Date", "Diff"]])
     # print("Current NFL Week:", int(current_week))
+    val = 18
 
-    return current_week
-    # return 16
+    if val:
+        return val
+    else:
+        return current_week
 
 
 def main():
-    num = current_week()
-    print(num)
+    current_week()
+
 
 if __name__ == "__main__":
     main()

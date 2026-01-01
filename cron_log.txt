@@ -333,3 +333,5 @@ Week 17 successfully updated.
 98              L.Allen      L.Allen  ...  0.083026       17.00
 
 [99 rows x 10 columns]
+Week 18 already exists — replacing it.
+Week 18 successfully updated.

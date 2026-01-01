@@ -12,7 +12,7 @@ from scipy.stats import norm
 from current_nfl_week.current_nfl_week import current_week
 
 
-def clean_data(box_scores_2022_df, box_scores_2023_df, box_scores_2024_df, box_scores_2025_df, pbp_2022_df, pbp_2023_df, pbp_2024_df, pbp_2025_df):
+def clean_data(box_scores_2022_df, box_scores_2023_df, box_scores_2024_df, box_scores_2025_df, pbp_2022_df, pbp_2023_df, pbp_2024_df, pbp_2025_df, curr_week):
     
     #change the box scores from NaN to REG for the OTFLag column
     pbp_2022_df['DefenseTeam'] = pbp_2022_df['DefenseTeam'].replace('LAR', 'LA')
@@ -253,7 +253,7 @@ def clean_data(box_scores_2022_df, box_scores_2023_df, box_scores_2024_df, box_s
     merged_2025_df["YardLine"] = merged_2025_df["YardLine"].fillna(0).astype(int)
 
     #only keep rows up to current week
-    merged_2025_df = merged_2025_df[merged_2025_df['Week'] < current_week()]
+    merged_2025_df = merged_2025_df[merged_2025_df['Week'] < curr_week]
     
     all_data = pd.concat([merged_2024_df, merged_2025_df])
 
@@ -681,16 +681,13 @@ def team_features(all_data):
 
     return team_features_complete
 
-def clean_schedule_merge_with_features(team_features_complete):
-
-    # current week is a reference function and lives in the player_scrape folder in current_nfl_week.py file
-    closest_week = current_week()
+def clean_schedule_merge_with_features(team_features_complete, curr_week):
 
     conn = sqlite3.connect("nfl.db")
     query = f"""
         SELECT *
         FROM "nfl2025schedule"
-        WHERE Week = {closest_week}
+        WHERE Week = {curr_week}
     """
     # Load directly into DataFrame
     week_number_df = pd.read_sql_query(query, conn)
@@ -906,7 +903,7 @@ def convert_spread_to_reg(spread):
         spread = spread * -1
     return spread
 
-def main():
+def main(val = None):
 
     # Load data
     box_scores_2022_df = pd.read_csv("csv_folder/2022_box_scores.csv")
@@ -938,10 +935,15 @@ def main():
     conn = sqlite3.connect("nfl.db")
     cursor = conn.cursor()
 
+    if val:
+        curr_week = val
+    else:
+        curr_week = current_week()
+
     query = f"""
         SELECT *
         FROM "odds"
-        WHERE Week = {current_week()}
+        WHERE Week = {curr_week}
     """
     # Load directly into DataFrame
     vegas_odds = pd.read_sql_query(query, conn)
@@ -949,7 +951,7 @@ def main():
     pbp_2022_df = pbp_2022_df[~(pbp_2022_df['OffenseTeam'].isna() & pbp_2022_df['DefenseTeam'].isna())]
 
     # Cleaned data
-    all_data = clean_data(box_scores_2022_df, box_scores_2023_df, box_scores_2024_df, box_scores_2025_df, pbp_2022_df, pbp_2023_df, pbp_2024_df, pbp_2025_df)
+    all_data = clean_data(box_scores_2022_df, box_scores_2023_df, box_scores_2024_df, box_scores_2025_df, pbp_2022_df, pbp_2023_df, pbp_2024_df, pbp_2025_df, curr_week)
 
     total_hfa = calculate_total_home_field_advantage(all_data, box_scores_2023_df, box_scores_2024_df, box_scores_2024_df)
     print(total_hfa)
@@ -958,7 +960,7 @@ def main():
     team_features_complete = team_features(all_data)
 
     # Cleaning the schedule and merging with features
-    upcoming_encoded_final = clean_schedule_merge_with_features(team_features_complete)
+    upcoming_encoded_final = clean_schedule_merge_with_features(team_features_complete, curr_week)
 
     # Prepares data and uses Logistic Regression to train 
     upcoming_predictions = prep_and_train(upcoming_encoded_final, team_features_complete, all_data, total_hfa)
@@ -990,10 +992,10 @@ def main():
 
     complete_df.to_csv("csv_folder/complete_weights.csv", index=False)
 
-    complete_df["week"] = current_week()
+    complete_df["week"] = curr_week
 
 
-    print(current_week())
+    print(curr_week)
 
     conn = sqlite3.connect("nfl.db")
     cursor = conn.cursor()
@@ -1037,6 +1039,7 @@ def main():
     upcoming_predictions.to_csv("csv_folder/week1_predictions_linear_reg.csv", index=False)
 
     return upcoming_predictions, current_week()
+
 
 if __name__ == "__main__":
     main()
