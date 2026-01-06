@@ -47,7 +47,6 @@ def current_week(val=None):
     # print("Today:", today.date())
     # print(df_last[["Week", "Date", "Diff"]])
     # print("Current NFL Week:", int(current_week))
-    val = 18
 
     if val:
         return val

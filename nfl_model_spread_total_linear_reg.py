@@ -255,7 +255,7 @@ def clean_data(box_scores_2022_df, box_scores_2023_df, box_scores_2024_df, box_s
     #only keep rows up to current week
     merged_2025_df = merged_2025_df[merged_2025_df['Week'] < curr_week]
     
-    all_data = pd.concat([merged_2024_df, merged_2025_df])
+    all_data = pd.concat([merged_2025_df])
 
     all_data["Challenger"] = all_data["Challenger"].fillna(0).astype(int)
     

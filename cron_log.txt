@@ -335,3 +335,19 @@ Week 17 successfully updated.
 [99 rows x 10 columns]
 Week 18 already exists — replacing it.
 Week 18 successfully updated.
+           full_name  player_abbr  ...      edge  projection
+0     Darnell Mooney     D.Mooney  ...  0.597438       29.00
+1     Tyler Allgeier   T.Allgeier  ...  0.457910        6.00
+2      Ryan Flournoy   R.Flournoy  ...  0.317530       17.00
+3   Matthew Stafford   M.Stafford  ...  0.255430      215.00
+4   Daniel Bellinger  D.Bellinger  ...  0.255310        2.10
+..               ...          ...  ...       ...         ...
+92      Tanner McKee      T.McKee  ...  0.080267        0.88
+93      Jalen Nailor     J.Nailor  ...  0.079638        1.40
+94     J.J. McCarthy   J.McCarthy  ...  0.079376        3.70
+95          C.Austin     C.Austin  ...  0.079260       25.00
+96    Raheim Sanders    R.Sanders  ...  0.078634        7.50
+
+[97 rows x 10 columns]
+Week 18 already exists — replacing it.
+Week 18 successfully updated.
