@@ -1,0 +1,278 @@
+,Date,Visitor,Home,Time,Location,Week,ID
+0,9/4/2025,Cowboys,Eagles,5:20 PM,"Lincoln Financial Field, Philadelphia, PA",1,401772510
+1,9/5/2025,Chiefs,Chargers,5:00 PM,"Corinthians Arena, Sao Paulo, Brazil",1,401772714
+2,9/7/2025,Buccaneers,Falcons,10:00 AM,"Mercedes-Benz Stadium, Atlanta, GA",1,401772830
+3,9/7/2025,Bengals,Browns,10:00 AM,"Huntington Bank Field, Cleveland, OH",1,401772829
+4,9/7/2025,Dolphins,Colts,10:00 AM,"Lucas Oil Stadium, Indianapolis, IN",1,401772719
+5,9/7/2025,Raiders,Patriots,10:00 AM,"Gillette Stadium, Foxborough, MA",1,401772720
+6,9/7/2025,Cardinals,Saints,10:00 AM,"Caesars Superdome, New Orleans, LA",1,401772718
+7,9/7/2025,Steelers,Jets,10:00 AM,"MetLife Stadium, East Rutherford, NJ",1,401772721
+8,9/7/2025,Giants,Commanders,10:00 AM,"Northwest Stadium, Landover, MD",1,401772827
+9,9/7/2025,Panthers,Jaguars,10:00 AM,"EverBank Stadium, Jacksonville, FL",1,401772828
+10,9/7/2025,Titans,Broncos,1:05 PM,"Empower Field at Mile High, Denver, CO",1,401772832
+11,9/7/2025,49ers,Seahawks,1:05 PM,"Lumen Field, Seattle, WA",1,401772831
+12,9/7/2025,Lions,Packers,1:25 PM,"Lambeau Field, Green Bay, WI",1,401772722
+13,9/7/2025,Texans,Rams,1:25 PM,"SoFi Stadium, Inglewood, CA",1,401772723
+14,9/7/2025,Ravens,Bills,5:20 PM,"Highmark Stadium, Orchard Park, NY",1,401772918
+15,9/8/2025,Vikings,Bears,5:15 PM,"Soldier Field, Chicago, IL",1,401772810
+16,9/11/2025,Commanders,Packers,5:15 PM,"Lambeau Field, Green Bay, WI",2,401772936
+17,9/14/2025,Jaguars,Bengals,10:00 AM,"Paycor Stadium, Cincinnati, OH",2,401772725
+18,9/14/2025,Giants,Cowboys,10:00 AM,"AT&T Stadium, Arlington, TX",2,401772834
+19,9/14/2025,Bears,Lions,10:00 AM,"Ford Field, Detroit, MI",2,401772835
+20,9/14/2025,Rams,Titans,10:00 AM,"Nissan Stadium, Nashville, TN",2,401772724
+21,9/14/2025,Patriots,Dolphins,10:00 AM,"Hard Rock Stadium, Miami Gardens, FL",2,401772728
+22,9/14/2025,49ers,Saints,10:00 AM,"Caesars Superdome, New Orleans, LA",2,401772833
+23,9/14/2025,Bills,Jets,10:00 AM,"MetLife Stadium, East Rutherford, NJ",2,401772727
+24,9/14/2025,Seahawks,Steelers,10:00 AM,"Acrisure Stadium, Pittsburgh, PA",2,401772836
+25,9/14/2025,Browns,Ravens,10:00 AM,"M&T Bank Stadium, Baltimore, MD",2,401772726
+26,9/14/2025,Broncos,Colts,1:05 PM,"Lucas Oil Stadium, Indianapolis, IN",2,401772729
+27,9/14/2025,Panthers,Cardinals,1:05 PM,"State Farm Stadium, Glendale, AZ",2,401772730
+28,9/14/2025,Eagles,Chiefs,1:25 PM,"GEHA Field at Arrowhead Stadium, Kansas City, MO",2,401772837
+29,9/14/2025,Falcons,Vikings,5:20 PM,"U.S. Bank Stadium, Minneapolis, MN",2,401772919
+30,9/15/2025,Buccaneers,Texans,4:00 PM,"NRG Stadium, Houston, TX",2,401772715
+31,9/15/2025,Chargers,Raiders,7:00 PM,"Allegiant Stadium, Las Vegas, NV",2,401772811
+32,9/18/2025,Dolphins,Bills,5:15 PM,"Highmark Stadium, Orchard Park, NY",3,401772937
+33,9/21/2025,Packers,Browns,10:00 AM,"Huntington Bank Field, Cleveland, OH",3,401772842
+34,9/21/2025,Colts,Titans,10:00 AM,"Nissan Stadium, Nashville, TN",3,401772733
+35,9/21/2025,Bengals,Vikings,10:00 AM,"U.S. Bank Stadium, Minneapolis, MN",3,401772731
+36,9/21/2025,Steelers,Patriots,10:00 AM,"Gillette Stadium, Foxborough, MA",3,401772732
+37,9/21/2025,Rams,Eagles,10:00 AM,"Lincoln Financial Field, Philadelphia, PA",3,401772839
+38,9/21/2025,Jets,Buccaneers,10:00 AM,"Raymond James Stadium, Tampa, FL",3,401772840
+39,9/21/2025,Raiders,Commanders,10:00 AM,"Northwest Stadium, Landover, MD",3,401772841
+40,9/21/2025,Falcons,Panthers,10:00 AM,"Bank of America Stadium, Charlotte, NC",3,401772838
+41,9/21/2025,Texans,Jaguars,10:00 AM,"EverBank Stadium, Jacksonville, FL",3,401772734
+42,9/21/2025,Broncos,Chargers,1:05 PM,"SoFi Stadium, Inglewood, CA",3,401772735
+43,9/21/2025,Saints,Seahawks,1:05 PM,"Lumen Field, Seattle, WA",3,401772736
+44,9/21/2025,Cowboys,Bears,1:25 PM,"Soldier Field, Chicago, IL",3,401772844
+45,9/21/2025,Cardinals,49ers,1:25 PM,"Levi's Stadium, Santa Clara, CA",3,401772843
+46,9/21/2025,Chiefs,Giants,5:20 PM,"MetLife Stadium, East Rutherford, NJ",3,401772920
+47,9/22/2025,Lions,Ravens,5:15 PM,"M&T Bank Stadium, Baltimore, MD",3,401772812
+48,9/25/2025,Seahawks,Cardinals,5:15 PM,"State Farm Stadium, Glendale, AZ",4,401772938
+49,9/28/2025,Vikings,Steelers,6:30 AM,"Croke Park, Dublin, Ireland",4,401772632
+50,9/28/2025,Commanders,Falcons,10:00 AM,"Mercedes-Benz Stadium, Atlanta, GA",4,401772739
+51,9/28/2025,Saints,Bills,10:00 AM,"Highmark Stadium, Orchard Park, NY",4,401772740
+52,9/28/2025,Browns,Lions,10:00 AM,"Ford Field, Detroit, MI",4,401772846
+53,9/28/2025,Panthers,Patriots,10:00 AM,"Gillette Stadium, Foxborough, MA",4,401772847
+54,9/28/2025,Chargers,Giants,10:00 AM,"MetLife Stadium, East Rutherford, NJ",4,401772737
+55,9/28/2025,Eagles,Buccaneers,10:00 AM,"Raymond James Stadium, Tampa, FL",4,401772845
+56,9/28/2025,Titans,Texans,10:00 AM,"NRG Stadium, Houston, TX",4,401772738
+57,9/28/2025,Colts,Rams,1:05 PM,"SoFi Stadium, Inglewood, CA",4,401772849
+58,9/28/2025,Jaguars,49ers,1:05 PM,"Levi's Stadium, Santa Clara, CA",4,401772848
+59,9/28/2025,Ravens,Chiefs,1:25 PM,"GEHA Field at Arrowhead Stadium, Kansas City, MO",4,401772741
+60,9/28/2025,Bears,Raiders,1:25 PM,"Allegiant Stadium, Las Vegas, NV",4,401772742
+61,9/28/2025,Packers,Cowboys,5:20 PM,"AT&T Stadium, Arlington, TX",4,401772921
+62,9/29/2025,Jets,Dolphins,4:15 PM,"Hard Rock Stadium, Miami Gardens, FL",4,401772813
+63,9/29/2025,Bengals,Broncos,5:15 PM,"Empower Field at Mile High, Denver, CO",4,401772716
+64,10/2/2025,49ers,Rams,5:15 PM,"SoFi Stadium, Inglewood, CA",5,401772939
+65,10/5/2025,Vikings,Browns,6:30 AM,"Tottenham Hotspur Stadium, London, England",5,401772633
+66,10/5/2025,Raiders,Colts,10:00 AM,"Lucas Oil Stadium, Indianapolis, IN",5,401772851
+67,10/5/2025,Giants,Saints,10:00 AM,"Caesars Superdome, New Orleans, LA",5,401772744
+68,10/5/2025,Cowboys,Jets,10:00 AM,"MetLife Stadium, East Rutherford, NJ",5,401772850
+69,10/5/2025,Broncos,Eagles,10:00 AM,"Lincoln Financial Field, Philadelphia, PA",5,401772745
+70,10/5/2025,Dolphins,Panthers,10:00 AM,"Bank of America Stadium, Charlotte, NC",5,401772852
+71,10/5/2025,Texans,Ravens,10:00 AM,"M&T Bank Stadium, Baltimore, MD",5,401772743
+72,10/5/2025,Titans,Cardinals,1:05 PM,"State Farm Stadium, Glendale, AZ",5,401772747
+73,10/5/2025,Buccaneers,Seahawks,1:05 PM,"Lumen Field, Seattle, WA",5,401772746
+74,10/5/2025,Lions,Bengals,1:25 PM,"Paycor Stadium, Cincinnati, OH",5,401772854
+75,10/5/2025,Commanders,Chargers,1:25 PM,"SoFi Stadium, Inglewood, CA",5,401772853
+76,10/5/2025,Patriots,Bills,5:20 PM,"Highmark Stadium, Orchard Park, NY",5,401772922
+77,10/6/2025,Chiefs,Jaguars,5:15 PM,"EverBank Stadium, Jacksonville, FL",5,401772814
+78,10/9/2025,Eagles,Giants,5:15 PM,"MetLife Stadium, East Rutherford, NJ",6,401772940
+79,10/12/2025,Broncos,Jets,6:30 AM,"Tottenham Hotspur Stadium, London, England",6,401772634
+80,10/12/2025,Cardinals,Colts,10:00 AM,"Lucas Oil Stadium, Indianapolis, IN",6,401772856
+81,10/12/2025,Chargers,Dolphins,10:00 AM,"Hard Rock Stadium, Miami Gardens, FL",6,401772750
+82,10/12/2025,Browns,Steelers,10:00 AM,"Acrisure Stadium, Pittsburgh, PA",6,401772748
+83,10/12/2025,49ers,Buccaneers,10:00 AM,"Raymond James Stadium, Tampa, FL",6,401772749
+84,10/12/2025,Cowboys,Panthers,10:00 AM,"Bank of America Stadium, Charlotte, NC",6,401772858
+85,10/12/2025,Seahawks,Jaguars,10:00 AM,"EverBank Stadium, Jacksonville, FL",6,401772857
+86,10/12/2025,Rams,Ravens,10:00 AM,"M&T Bank Stadium, Baltimore, MD",6,401772855
+87,10/12/2025,Titans,Raiders,1:05 PM,"Allegiant Stadium, Las Vegas, NV",6,401772859
+88,10/12/2025,Bengals,Packers,1:25 PM,"Lambeau Field, Green Bay, WI",6,401772752
+89,10/12/2025,Patriots,Saints,1:25 PM,"Caesars Superdome, New Orleans, LA",6,401772751
+90,10/12/2025,Lions,Chiefs,5:20 PM,"GEHA Field at Arrowhead Stadium, Kansas City, MO",6,401772923
+91,10/13/2025,Bills,Falcons,4:15 PM,"Mercedes-Benz Stadium, Atlanta, GA",6,401772815
+92,10/13/2025,Bears,Commanders,5:15 PM,"Northwest Stadium, Landover, MD",6,401772717
+93,10/16/2025,Steelers,Bengals,5:15 PM,"Paycor Stadium, Cincinnati, OH",7,401772941
+94,10/19/2025,Rams,Jaguars,6:30 AM,"Wembley Stadium, London, England",7,401772635
+95,10/19/2025,Saints,Bears,10:00 AM,"Soldier Field, Chicago, IL",7,401772861
+96,10/19/2025,Dolphins,Browns,10:00 AM,"Huntington Bank Field, Cleveland, OH",7,401772754
+97,10/19/2025,Patriots,Titans,10:00 AM,"Nissan Stadium, Nashville, TN",7,401772755
+98,10/19/2025,Raiders,Chiefs,10:00 AM,"GEHA Field at Arrowhead Stadium, Kansas City, MO",7,401772753
+99,10/19/2025,Eagles,Vikings,10:00 AM,"U.S. Bank Stadium, Minneapolis, MN",7,401772862
+100,10/19/2025,Panthers,Jets,10:00 AM,"MetLife Stadium, East Rutherford, NJ",7,401772860
+101,10/19/2025,Giants,Broncos,1:05 PM,"Empower Field at Mile High, Denver, CO",7,401772757
+102,10/19/2025,Colts,Chargers,1:05 PM,"SoFi Stadium, Inglewood, CA",7,401772756
+103,10/19/2025,Commanders,Cowboys,1:25 PM,"AT&T Stadium, Arlington, TX",7,401772864
+104,10/19/2025,Packers,Cardinals,1:25 PM,"State Farm Stadium, Glendale, AZ",7,401772863
+105,10/19/2025,Falcons,49ers,5:20 PM,"Levi's Stadium, Santa Clara, CA",7,401772924
+106,10/20/2025,Buccaneers,Lions,4:00 PM,"Ford Field, Detroit, MI",7,401772816
+107,10/20/2025,Texans,Seahawks,7:00 PM,"Lumen Field, Seattle, WA",7,401772826
+108,10/23/2025,Vikings,Chargers,5:15 PM,"SoFi Stadium, Inglewood, CA",8,401772942
+109,10/26/2025,Dolphins,Falcons,10:00 AM,"Mercedes-Benz Stadium, Atlanta, GA",8,401772760
+110,10/26/2025,Jets,Bengals,10:00 AM,"Paycor Stadium, Cincinnati, OH",8,401772758
+111,10/26/2025,Browns,Patriots,10:00 AM,"Gillette Stadium, Foxborough, MA",8,401772868
+112,10/26/2025,Giants,Eagles,10:00 AM,"Lincoln Financial Field, Philadelphia, PA",8,401772867
+113,10/26/2025,Bills,Panthers,10:00 AM,"Bank of America Stadium, Charlotte, NC",8,401772865
+114,10/26/2025,Bears,Ravens,10:00 AM,"M&T Bank Stadium, Baltimore, MD",8,401772759
+115,10/26/2025,49ers,Texans,10:00 AM,"NRG Stadium, Houston, TX",8,401772866
+116,10/26/2025,Buccaneers,Saints,1:05 PM,"Caesars Superdome, New Orleans, LA",8,401772869
+117,10/26/2025,Cowboys,Broncos,1:25 PM,"Empower Field at Mile High, Denver, CO",8,401772762
+118,10/26/2025,Titans,Colts,1:25 PM,"Lucas Oil Stadium, Indianapolis, IN",8,401772761
+119,10/26/2025,Packers,Steelers,5:20 PM,"Acrisure Stadium, Pittsburgh, PA",8,401772925
+120,10/27/2025,Commanders,Chiefs,5:15 PM,"GEHA Field at Arrowhead Stadium, Kansas City, MO",8,401772817
+121,10/30/2025,Ravens,Dolphins,5:15 PM,"Hard Rock Stadium, Miami Gardens, FL",9,401772943
+122,11/2/2025,Bears,Bengals,10:00 AM,"Paycor Stadium, Cincinnati, OH",9,401772765
+123,11/2/2025,Vikings,Lions,10:00 AM,"Ford Field, Detroit, MI",9,401772871
+124,11/2/2025,Panthers,Packers,10:00 AM,"Lambeau Field, Green Bay, WI",9,401772872
+125,11/2/2025,Chargers,Titans,10:00 AM,"Nissan Stadium, Nashville, TN",9,401772764
+126,11/2/2025,Falcons,Patriots,10:00 AM,"Gillette Stadium, Foxborough, MA",9,401772763
+127,11/2/2025,49ers,Giants,10:00 AM,"MetLife Stadium, East Rutherford, NJ",9,401772767
+128,11/2/2025,Colts,Steelers,10:00 AM,"Acrisure Stadium, Pittsburgh, PA",9,401772766
+129,11/2/2025,Broncos,Texans,10:00 AM,"NRG Stadium, Houston, TX",9,401772870
+130,11/2/2025,Jaguars,Raiders,1:05 PM,"Allegiant Stadium, Las Vegas, NV",9,401772873
+131,11/2/2025,Saints,Rams,1:05 PM,"SoFi Stadium, Inglewood, CA",9,401772874
+132,11/2/2025,Chiefs,Bills,1:25 PM,"Highmark Stadium, Orchard Park, NY",9,401772768
+133,11/2/2025,Seahawks,Commanders,5:20 PM,"Northwest Stadium, Landover, MD",9,401772926
+134,11/3/2025,Cardinals,Cowboys,5:15 PM,"AT&T Stadium, Arlington, TX",9,401772818
+135,11/6/2025,Raiders,Broncos,5:15 PM,"Empower Field at Mile High, Denver, CO",10,401772944
+136,11/9/2025,Falcons,Colts,6:30 AM,"Olympic Stadium Berlin, Berlin, Germany",10,401772636
+137,11/9/2025,Giants,Bears,10:00 AM,"Soldier Field, Chicago, IL",10,401772875
+138,11/9/2025,Bills,Dolphins,10:00 AM,"Hard Rock Stadium, Miami Gardens, FL",10,401772771
+139,11/9/2025,Ravens,Vikings,10:00 AM,"U.S. Bank Stadium, Minneapolis, MN",10,401772876
+140,11/9/2025,Browns,Jets,10:00 AM,"MetLife Stadium, East Rutherford, NJ",10,401772769
+141,11/9/2025,Patriots,Buccaneers,10:00 AM,"Raymond James Stadium, Tampa, FL",10,401772772
+142,11/9/2025,Saints,Panthers,10:00 AM,"Bank of America Stadium, Charlotte, NC",10,401772877
+143,11/9/2025,Jaguars,Texans,10:00 AM,"NRG Stadium, Houston, TX",10,401772770
+144,11/9/2025,Cardinals,Seahawks,1:05 PM,"Lumen Field, Seattle, WA",10,401772773
+145,11/9/2025,Rams,49ers,1:25 PM,"Levi's Stadium, Santa Clara, CA",10,401772879
+146,11/9/2025,Lions,Commanders,1:25 PM,"Northwest Stadium, Landover, MD",10,401772878
+147,11/9/2025,Steelers,Chargers,5:20 PM,"SoFi Stadium, Inglewood, CA",10,401772927
+148,11/10/2025,Eagles,Packers,5:15 PM,"Lambeau Field, Green Bay, WI",10,401772630
+149,11/13/2025,Jets,Patriots,5:15 PM,"Gillette Stadium, Foxborough, MA",11,401772945
+150,11/16/2025,Commanders,Dolphins,6:30 AM,"Santiago Bernabéu, Madrid, Spain",11,401772631
+151,11/16/2025,Panthers,Falcons,10:00 AM,"Mercedes-Benz Stadium, Atlanta, GA",11,401772882
+152,11/16/2025,Buccaneers,Bills,10:00 AM,"Highmark Stadium, Orchard Park, NY",11,401772776
+153,11/16/2025,Texans,Titans,10:00 AM,"Nissan Stadium, Nashville, TN",11,401772881
+154,11/16/2025,Bears,Vikings,10:00 AM,"U.S. Bank Stadium, Minneapolis, MN",11,401772880
+155,11/16/2025,Packers,Giants,10:00 AM,"MetLife Stadium, East Rutherford, NJ",11,401772883
+156,11/16/2025,Bengals,Steelers,10:00 AM,"Acrisure Stadium, Pittsburgh, PA",11,401772774
+157,11/16/2025,Chargers,Jaguars,10:00 AM,"EverBank Stadium, Jacksonville, FL",11,401772775
+158,11/16/2025,Seahawks,Rams,1:05 PM,"SoFi Stadium, Inglewood, CA",11,401772884
+159,11/16/2025,49ers,Cardinals,1:05 PM,"State Farm Stadium, Glendale, AZ",11,401772885
+160,11/16/2025,Ravens,Browns,1:25 PM,"Huntington Bank Field, Cleveland, OH",11,401772777
+161,11/16/2025,Chiefs,Broncos,1:25 PM,"Empower Field at Mile High, Denver, CO",11,401772778
+162,11/16/2025,Lions,Eagles,5:20 PM,"Lincoln Financial Field, Philadelphia, PA",11,401772928
+163,11/17/2025,Cowboys,Raiders,5:15 PM,"Allegiant Stadium, Las Vegas, NV",11,401772819
+164,11/20/2025,Bills,Texans,5:15 PM,"NRG Stadium, Houston, TX",12,401772946
+165,11/23/2025,Steelers,Bears,10:00 AM,"Soldier Field, Chicago, IL",12,401772780
+166,11/23/2025,Patriots,Bengals,10:00 AM,"Paycor Stadium, Cincinnati, OH",12,401772781
+167,11/23/2025,Giants,Lions,10:00 AM,"Ford Field, Detroit, MI",12,401772888
+168,11/23/2025,Vikings,Packers,10:00 AM,"Lambeau Field, Green Bay, WI",12,401772887
+169,11/23/2025,Seahawks,Titans,10:00 AM,"Nissan Stadium, Nashville, TN",12,401772886
+170,11/23/2025,Colts,Chiefs,10:00 AM,"GEHA Field at Arrowhead Stadium, Kansas City, MO",12,401772779
+171,11/23/2025,Jets,Ravens,10:00 AM,"M&T Bank Stadium, Baltimore, MD",12,401772782
+172,11/23/2025,Browns,Raiders,1:05 PM,"Allegiant Stadium, Las Vegas, NV",12,401772784
+173,11/23/2025,Jaguars,Cardinals,1:05 PM,"State Farm Stadium, Glendale, AZ",12,401772783
+174,11/23/2025,Eagles,Cowboys,1:25 PM,"AT&T Stadium, Arlington, TX",12,401772890
+175,11/23/2025,Falcons,Saints,1:25 PM,"Caesars Superdome, New Orleans, LA",12,401772889
+176,11/23/2025,Buccaneers,Rams,5:20 PM,"SoFi Stadium, Inglewood, CA",12,401772929
+177,11/24/2025,Panthers,49ers,5:15 PM,"Levi's Stadium, Santa Clara, CA",12,401772820
+178,11/27/2025,Packers,Lions,10:00 AM,"Ford Field, Detroit, MI",13,401772891
+179,11/27/2025,Chiefs,Cowboys,1:30 PM,"AT&T Stadium, Arlington, TX",13,401772694
+180,11/27/2025,Bengals,Ravens,5:20 PM,"M&T Bank Stadium, Baltimore, MD",13,401772930
+181,11/28/2025,Bears,Eagles,12:00 PM,"Lincoln Financial Field, Philadelphia, PA",13,401772621
+182,11/30/2025,49ers,Browns,10:00 AM,"Huntington Bank Field, Cleveland, OH",13,401772785
+183,11/30/2025,Jaguars,Titans,10:00 AM,"Nissan Stadium, Nashville, TN",13,401772786
+184,11/30/2025,Texans,Colts,10:00 AM,"Lucas Oil Stadium, Indianapolis, IN",13,401772787
+185,11/30/2025,Saints,Dolphins,10:00 AM,"Hard Rock Stadium, Miami Gardens, FL",13,401772892
+186,11/30/2025,Falcons,Jets,10:00 AM,"MetLife Stadium, East Rutherford, NJ",13,401772893
+187,11/30/2025,Cardinals,Buccaneers,10:00 AM,"Raymond James Stadium, Tampa, FL",13,401772895
+188,11/30/2025,Rams,Panthers,10:00 AM,"Bank of America Stadium, Charlotte, NC",13,401772894
+189,11/30/2025,Rams,Panthers,10:00 AM,"Bank of America Stadium, Charlotte, NC",13,401772979
+190,11/30/2025,Vikings,Seahawks,1:05 PM,"Lumen Field, Seattle, WA",13,401772896
+191,11/30/2025,Bills,Steelers,1:25 PM,"Acrisure Stadium, Pittsburgh, PA",13,401772789
+192,11/30/2025,Raiders,Chargers,1:25 PM,"SoFi Stadium, Inglewood, CA",13,401772788
+193,11/30/2025,Broncos,Commanders,5:20 PM,"Northwest Stadium, Landover, MD",13,401772931
+194,12/1/2025,Giants,Patriots,5:15 PM,"Gillette Stadium, Foxborough, MA",13,401772821
+195,12/4/2025,Cowboys,Lions,5:15 PM,"Ford Field, Detroit, MI",14,401772947
+196,12/7/2025,Seahawks,Falcons,10:00 AM,"Mercedes-Benz Stadium, Atlanta, GA",14,401772900
+197,12/7/2025,Titans,Browns,10:00 AM,"Huntington Bank Field, Cleveland, OH",14,401772898
+198,12/7/2025,Bears,Packers,10:00 AM,"Lambeau Field, Green Bay, WI",14,401772897
+199,12/7/2025,Commanders,Vikings,10:00 AM,"U.S. Bank Stadium, Minneapolis, MN",14,401772899
+200,12/7/2025,Dolphins,Jets,10:00 AM,"MetLife Stadium, East Rutherford, NJ",14,401772790
+201,12/7/2025,Saints,Buccaneers,10:00 AM,"Raymond James Stadium, Tampa, FL",14,401772792
+202,12/7/2025,Colts,Jaguars,10:00 AM,"EverBank Stadium, Jacksonville, FL",14,401772793
+203,12/7/2025,Steelers,Ravens,10:00 AM,"M&T Bank Stadium, Baltimore, MD",14,401772791
+204,12/7/2025,Broncos,Raiders,1:05 PM,"Allegiant Stadium, Las Vegas, NV",14,401772794
+205,12/7/2025,Bengals,Bills,1:25 PM,"Highmark Stadium, Orchard Park, NY",14,401772902
+206,12/7/2025,Rams,Cardinals,1:25 PM,"State Farm Stadium, Glendale, AZ",14,401772901
+207,12/7/2025,Texans,Chiefs,5:20 PM,"GEHA Field at Arrowhead Stadium, Kansas City, MO",14,401772932
+208,12/8/2025,Eagles,Chargers,5:15 AM,"SoFi Stadium, Inglewood, CA",14,401772822
+209,12/11/2025,Falcons,Buccaneers,5:15 AM,"Raymond James Stadium, Tampa, FL",15,401772948
+210,12/14/2025,Browns,Bears,10:00 AM,"Soldier Field, Chicago, IL",15,401772904
+211,12/14/2025,Ravens,Bengals,10:00 AM,"Paycor Stadium, Cincinnati, OH",15,401772796
+212,12/14/2025,Chargers,Chiefs,10:00 AM,"GEHA Field at Arrowhead Stadium, Kansas City, MO",15,401772798
+213,12/14/2025,Bills,Patriots,10:00 AM,"Gillette Stadium, Foxborough, MA",15,401772795
+214,12/14/2025,Commanders,Giants,10:00 AM,"MetLife Stadium, East Rutherford, NJ",15,401772905
+215,12/14/2025,Raiders,Eagles,10:00 AM,"Lincoln Financial Field, Philadelphia, PA",15,401772906
+216,12/14/2025,Jets,Jaguars,10:00 AM,"EverBank Stadium, Jacksonville, FL",15,401772797
+217,12/14/2025,Cardinals,Texans,10:00 AM,"NRG Stadium, Houston, TX",15,401772903
+218,12/14/2025,Packers,Broncos,1:25 PM,"Empower Field at Mile High, Denver, CO",15,401772800
+219,12/14/2025,Lions,Rams,1:25 PM,"SoFi Stadium, Inglewood, CA",15,401772909
+220,12/14/2025,Panthers,Saints,1:25 PM,"Caesars Superdome, New Orleans, LA",15,401772908
+221,12/14/2025,Titans,49ers,1:25 PM,"Levi's Stadium, Santa Clara, CA",15,401772907
+222,12/14/2025,Colts,Seahawks,1:25 PM,"Lumen Field, Seattle, WA",15,401772799
+223,12/14/2025,Vikings,Cowboys,5:20 PM,"AT&T Stadium, Arlington, TX",15,401772933
+224,12/15/2025,Dolphins,Steelers,5:15 PM,"Acrisure Stadium, Pittsburgh, PA",15,401772823
+225,12/18/2025,Rams,Seahawks,5:15 PM,"Lumen Field, Seattle, WA",16,401772949
+226,12/21/2025,Bills,Browns,10:00 AM,"Huntington Bank Field, Cleveland, OH",16,401772802
+227,12/21/2025,Chargers,Cowboys,10:00 AM,"AT&T Stadium, Arlington, TX",16,401772910
+228,12/21/2025,Chiefs,Titans,10:00 AM,"Nissan Stadium, Nashville, TN",16,401772803
+229,12/21/2025,Jets,Saints,10:00 AM,"Caesars Superdome, New Orleans, LA",16,401772801
+230,12/21/2025,Vikings,Giants,10:00 AM,"MetLife Stadium, East Rutherford, NJ",16,401772911
+231,12/21/2025,Buccaneers,Panthers,10:00 AM,"Bank of America Stadium, Charlotte, NC",16,401772912
+232,12/21/2025,Patriots,Ravens,10:00 AM,"M&T Bank Stadium, Baltimore, MD",16,401772804
+233,12/21/2025,Jaguars,Broncos,1:05 PM,"Empower Field at Mile High, Denver, CO",16,401772913
+234,12/21/2025,Falcons,Cardinals,1:05 PM,"State Farm Stadium, Glendale, AZ",16,401772914
+235,12/21/2025,Steelers,Lions,1:25 PM,"Ford Field, Detroit, MI",16,401772806
+236,12/21/2025,Raiders,Texans,1:25 PM,"NRG Stadium, Houston, TX",16,401772805
+237,12/21/2025,Bengals,Dolphins,5:20 PM,"Hard Rock Stadium, Miami Gardens, FL",16,401772934
+238,12/22/2025,49ers,Colts,5:15 AM,"Lucas Oil Stadium, Indianapolis, IN",16,401772824
+239,12/25/2025,Cowboys,Commanders,10:00 AM,"Northwest Stadium, Landover, MD",17,401772710
+240,12/25/2025,Lions,Vikings,1:30 PM,"U.S. Bank Stadium, Minneapolis, MN",17,401772711
+241,12/25/2025,Broncos,Chiefs,5:15 PM,"GEHA Field at Arrowhead Stadium, Kansas City, MO",17,401772622
+242,12/27/2025,Texans,Chargers,1:30 PM,"SoFi Stadium, Inglewood, CA",17,401772951
+243,12/27/2025,Ravens,Packers,5:00 PM,"Lambeau Field, Green Bay, WI",17,401772953
+244,12/28/2025,Cardinals,Bengals,10:00 AM,"Paycor Stadium, Cincinnati, OH1",17,401772954
+245,12/28/2025,Steelers,Browns,10:00 AM,"Huntington Bank Field, Cleveland, OH",17,401772807
+246,12/28/2025,Saints,Titans,10:00 AM,"Nissan Stadium, Nashville, TN",17,401772809
+247,12/28/2025,Jaguars,Colts,10:00 AM,"Lucas Oil Stadium, Indianapolis, IN",17,401772915
+248,12/28/2025,Buccaneers,Dolphins,10:00 AM,"Hard Rock Stadium, Miami Gardens, FL",17,401772916
+249,12/28/2025,Patriots,Jets,10:00 AM,"MetLife Stadium, East Rutherford, NJ",17,401772808
+250,12/28/2025,Seahawks,Panthers,10:00 AM,"Bank of America Stadium, Charlotte, NC",17,401772952
+251,12/28/2025,Giants,Raiders,1:05 PM,"Allegiant Stadium, Las Vegas, NV",17,401772950
+252,12/28/2025,Eagles,Bills,1:25 PM,"Highmark Stadium, Orchard Park, NY",17,401772917
+253,12/28/2025,Bears,49ers,5:20 PM,"Levi's Stadium, Santa Clara, CA",17,401772935
+254,12/29/2025,Rams,Falcons,5:15 PM,"Mercedes-Benz Stadium, Atlanta, GA",17,401772825
+255,01/03/2026,Panthers,Buccaneers,1:30 PM,"Raymond James Stadium, Tampa, FL",18,401772969
+256,01/03/2026,Seahawks,49ers,5:00 PM,"Levi's Stadium, Santa Clara, CA",18,401772961
+257,01/04/2026,Saints,Falcons,10:00 AM,"Mercedes-Benz Stadium, Atlanta, GA",18,401772966
+258,01/04/2026,Browns,Bengals,10:00 AM,"Paycor Stadium, Cincinnati, OH",18,401772964
+259,01/04/2026,Packers,Vikings,10:00 AM,"U.S. Bank Stadium, Minneapolis, MN",18,401772968
+260,01/04/2026,Cowboys,Giants,10:00 AM,"MetLife Stadium, East Rutherford, NJ",18,401772963
+261,01/04/2026,Titans,Jaguars,10:00 AM,"EverBank Stadium, Jacksonville, FL",18,401772970
+262,01/04/2026,Colts,Texans,10:00 AM,"NRG Stadium, Houston, TX",18,401772962
+263,01/04/2026,Jets,Bills,1:25 PM,"Highmark Stadium, Orchard Park, NY",18,401772967
+264,01/04/2026,Lions,Bears,1:25 PM,"Soldier Field, Chicago, IL",18,401772965
+265,01/04/2026,Chargers,Broncos,1:25 PM,"Empower Field at Mile High, Denver, CO",18,401772956
+266,01/04/2026,Chiefs,Raiders,1:25 PM,"Allegiant Stadium, Las Vegas, NV",18,401772957
+267,01/04/2026,Cardinals,Rams,1:25 PM,"SoFi Stadium, Inglewood, CA",18,401772955
+268,01/04/2026,Dolphins,Patriots,1:25 PM,"Gillette Stadium, Foxborough, MA",18,401772958
+269,01/04/2026,Commanders,Eagles,1:25 PM,"Lincoln Financial Field, Philadelphia, PA",18,401772959
+270,01/04/2026,Ravens,Steelers,5:20 PM,"Acrisure Stadium, Pittsburgh, PA",18,401772960
+272,01/10/2026,Rams,Panthers,1:30 PM,Bank of America Stadium,19,401772979
+273,01/10/2026,Packers,Bears,5:00 PM,Soldier Field,19,401772981
+274,01/11/2026,Bills,Jaguars,10:00 AM,EverBank Stadium,19,401772977
+275,01/11/2026,49ers,Eagles,1:30 PM,Lincoln Financial Field,19,401772980
+276,01/11/2026,Chargers,Patriots,5:00 PM,Gillette Stadium,19,401772978
+277,01/12/2026,Texans,Steelers,5:15 PM,Acrisure Stadium,19,401772976

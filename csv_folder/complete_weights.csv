@@ -1,7 +1,5 @@
 Home,Visitor,PredictedTotal,HomeSpread,VisitorSpread,o_PredictedTotal,u_PredictedTotal,game_id,open_total,visitor_spread,o_total,visitor_ml,open_spread,home_spread,u_total,home_ml,week,best_total,best_spread,diff_spread,diff_total,spread_percent_edge,total_percent_edge
 CAR,LA,50.0,12.1,-12.1,o50.0,u50.0,401772979,-10,-9.5,o46.5,-550,u46.5,9.5,u46.5,+410,19,Mininmal Edge,Mininmal Edge,2.5999999999999996,3.5,0,0
-CAR,LA,50.0,12.1,-12.1,o50.0,u50.0,401772979,-10,-9.5,o46.5,-550,u46.5,9.5,u46.5,+410,19,Mininmal Edge,Mininmal Edge,2.5999999999999996,3.5,0,0
-CHI,GB,47.1,-1.9,1.9,o47.1,u47.1,401772981,-1.5,-1.5,o45.5,-112,u46.5,1.5,u45.5,-108,19,Mininmal Edge,Mininmal Edge,3.4,1.6000000000000014,0,0
 CHI,GB,47.1,-1.9,1.9,o47.1,u47.1,401772981,-1.5,-1.5,o45.5,-112,u46.5,1.5,u45.5,-108,19,Mininmal Edge,Mininmal Edge,3.4,1.6000000000000014,0,0
 JAX,BUF,45.8,-5.2,5.2,o45.8,u45.8,401772977,-1.5,-1.5,o51.5,-118,u51.5,1.5,u51.5,-102,19,Under,Home,6.7,5.700000000000003,16,13
 PHI,SF,47.2,-1.6,1.6,o47.2,u47.2,401772980,o46.5,3.5,o46.5,+180,-3,-3.5,u46.5,-218,19,Mininmal Edge,Mininmal Edge,1.9,0.7000000000000028,0,0
