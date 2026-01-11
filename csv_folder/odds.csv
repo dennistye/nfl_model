@@ -1,7 +1,5 @@
 ,game_id,matchup,moneyline
-0,401772979,Los Angeles Rams vs Carolina Panthers,"['-10', '-10.5', 'o46.5', '-600', 'u46.5', '+10.5', 'u46.5', '+440']"
-1,401772981,Green Bay Packers vs Chicago Bears,"['-1.5', '-1.5', 'o45.5', '-118', 'u46.5', '+1.5', 'u45.5', '-102']"
-2,401772977,Buffalo Bills vs Jacksonville Jaguars,"['-1.5', '-1.5', 'o52.5', '-112', 'u51.5', '+1.5', 'u52.5', '-108']"
-3,401772980,San Francisco 49ers vs Philadelphia Eagles,"['o46.5', '+4.5', 'o44.5', '+190', '-3', '-4.5', 'u44.5', '-230']"
-4,401772978,Los Angeles Chargers vs New England Patriots,"['o45.5', '+3.5', 'o46.5', '+160', '-3.5', '-3.5', 'u46.5', '-192']"
-5,401772976,Houston Texans vs Pittsburgh Steelers,"['-2.5', '-3', 'o39.5', '-170', 'u39.5', '+3', 'u39.5', '+140']"
+0,401772977,Buffalo Bills vs Jacksonville Jaguars,"['-1.5', '+1.5', 'o51.5', '+102', 'u51.5', '-1.5', 'u51.5', '-122']"
+1,401772980,San Francisco 49ers vs Philadelphia Eagles,"['o46.5', '+6', 'o44.5', '+220', '-3', '-6', 'u44.5', '-270']"
+2,401772978,Los Angeles Chargers vs New England Patriots,"['o45.5', '+3.5', 'o45.5', '+160', '-3.5', '-3.5', 'u45.5', '-192']"
+3,401772976,Houston Texans vs Pittsburgh Steelers,"['-2.5', '-3', 'o38.5', '-162', 'u39.5', '+3', 'u38.5', '+136']"

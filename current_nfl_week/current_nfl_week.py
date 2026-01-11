@@ -3,7 +3,6 @@ import pandas as pd
 from datetime import date
 
 
-
 def current_week(val=None):
     # Connect to the database
     conn = sqlite3.connect("nfl.db")
