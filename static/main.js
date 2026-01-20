@@ -450,6 +450,7 @@ function loadMatchupData(matchup) {
 }
 
 function loadOddsData(odds) {
+  console.log(odds);
   const gamesColumn = document.getElementById("odds-column");
   gamesColumn.innerHTML = ""; // Clear previous data
 

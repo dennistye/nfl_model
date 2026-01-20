@@ -940,6 +940,8 @@ def main(val = None):
     else:
         curr_week = current_week()
 
+    print(curr_week)
+
     query = f"""
         SELECT *
         FROM "odds"
@@ -947,6 +949,8 @@ def main(val = None):
     """
     # Load directly into DataFrame
     vegas_odds = pd.read_sql_query(query, conn)
+    vegas_odds = vegas_odds.iloc[:, 1:]
+    print(vegas_odds)
 
     pbp_2022_df = pbp_2022_df[~(pbp_2022_df['OffenseTeam'].isna() & pbp_2022_df['DefenseTeam'].isna())]
 
@@ -993,9 +997,6 @@ def main(val = None):
     complete_df.to_csv("csv_folder/complete_weights.csv", index=False)
 
     complete_df["week"] = curr_week
-
-
-    print(curr_week)
 
     conn = sqlite3.connect("nfl.db")
     cursor = conn.cursor()

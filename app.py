@@ -44,6 +44,7 @@ def matchups():
 @app.route('/api/best_odds')
 def best_odds():
    odds = prediction_df.to_dict(orient='records')
+   print(odds)
    return jsonify(odds)
 
 @app.route('/best_odds')
@@ -108,7 +109,7 @@ def predict():
                 cursor.execute("""
                     SELECT home_spread
                     FROM odds
-                    WHERE home_team = ? AND visitor_team = ?
+                    WHERE home_team = ? AND visitor_team = ? AND week = 21
                 """, (home, away))
                 odds = cursor.fetchall()
                 if odds:
@@ -117,7 +118,7 @@ def predict():
                 cursor.execute("""
                     SELECT visitor_spread
                     FROM odds
-                    WHERE home_team = ? AND visitor_team = ?
+                    WHERE home_team = ? AND visitor_team = ? AND week = 21
                 """, (home, away))
                 odds = cursor.fetchall()
                 if odds:
@@ -126,7 +127,7 @@ def predict():
                 cursor.execute("""
                     SELECT o_total
                     FROM odds
-                    WHERE home_team = ? AND visitor_team = ?
+                    WHERE home_team = ? AND visitor_team = ? AND week = 21
                 """, (home, away))
                 odds = cursor.fetchall()
                 if odds:
@@ -135,11 +136,6 @@ def predict():
         return odds
     
     def get_date_time_locaiton(home, away, x):
-
-        if(home == "LA"):
-            home = "LAR"
-        elif(away == "LA"):
-             away = "LAR"
 
         closest_week = current_week()
         conn = sqlite3.connect("nfl.db")
