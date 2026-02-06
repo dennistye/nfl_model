@@ -965,7 +965,7 @@ def main(val = None):
 
     # Cleaning the schedule and merging with features
     upcoming_encoded_final = clean_schedule_merge_with_features(team_features_complete, curr_week)
-
+    
     # Prepares data and uses Logistic Regression to train 
     upcoming_predictions = prep_and_train(upcoming_encoded_final, team_features_complete, all_data, total_hfa)
 
@@ -974,7 +974,7 @@ def main(val = None):
     upcoming_predictions['VisitorSpread'] = upcoming_predictions['HomeSpread'].apply(lambda x: x*-1)
    
     upcoming_predictions = upcoming_predictions.drop(columns=['PredictedSpread']) 
-
+    
     upcoming_predictions['HomeSpread'] = upcoming_predictions['HomeSpread'].round(1)
     upcoming_predictions['VisitorSpread'] = upcoming_predictions['VisitorSpread'].round(1)
     upcoming_predictions['PredictedTotal'] = upcoming_predictions['PredictedTotal'].round(1)

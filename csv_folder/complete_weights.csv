@@ -1,3 +1,2 @@
 Home,Visitor,PredictedTotal,HomeSpread,VisitorSpread,o_PredictedTotal,u_PredictedTotal,game_id,open_total,visitor_spread,o_total,visitor_ml,open_spread,home_spread,u_total,home_ml,week,best_total,best_spread,diff_spread,diff_total,spread_percent_edge,total_percent_edge
-DEN,NE,46.8,1.9,-1.9,o46.8,u46.8,401772986,-4.5,-5.5,o41.5,-258.0,u41.5,5.5,u41.5,210.0,21,Over,Mininmal Edge,3.6,5.299999999999997,0,12
-SEA,LA,48.7,-4.6,4.6,o48.7,u48.7,401772987,o47.5,2.5,o47.5,130.0,-1.5,-2.5,u47.5,-155.0,21,Mininmal Edge,Mininmal Edge,2.0999999999999996,1.2000000000000028,0,0
+NE,SEA,47.3,0.6,-0.6,o47.3,u47.3,401772988,-3.5,-4.5,o46.5,-230.0,u46.5,4.5,u46.5,190.0,22,Mininmal Edge,Mininmal Edge,3.9,0.7999999999999972,0,0
